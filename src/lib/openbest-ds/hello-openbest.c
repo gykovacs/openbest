@@ -2,5 +2,5 @@
 
 void helloOpenBEST()
 {
-    printf("Hello Open BEST build environment");
+    printf("Hello Open BEST build environment\n");
 }
