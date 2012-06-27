@@ -4,8 +4,6 @@
 #include <openbest-ds/matrix3.h>
 #include <openbest-ds/temperatureGlobals.h>
 
-//const float earth_radius;
-
 geoPoint* createGeoPointN()
 {
   geoPoint* p= (geoPoint*)malloc(sizeof(geoPoint));

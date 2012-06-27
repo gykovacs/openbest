@@ -69,8 +69,19 @@ void display(geoPoint* pt);
  */ 
 float distance(geoPoint* p1, geoPoint* p2);
 
+/**
+ * Rotates the geoPoint with matrix rot
+ * @param pt geoPoint to rotate
+ * @param rot rotation matrix
+ */ 
 void rotateGP(geoPoint* pt, matrix3 rot);
 
+/**
+ * Rotates the geoPoint and returns a new, rotated instance
+ * @param pt geoPoint to rotate
+ * @param rot rotation matrix
+ * @returns rotated geoPoint
+ */ 
 geoPoint rotateGPN(geoPoint* pt, matrix3 rot);
 
 #endif
