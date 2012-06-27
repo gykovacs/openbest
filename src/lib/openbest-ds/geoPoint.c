@@ -1,6 +1,10 @@
 #include <stdlib.h>
 
 #include <openbest-ds/geoPoint.h>
+#include <openbest-ds/matrix3.h>
+#include <openbest-ds/temperatureGlobals.h>
+
+//const float earth_radius;
 
 geoPoint* createGeoPointN()
 {
@@ -60,6 +64,7 @@ void computeXYZ(geoPoint* pt)
 void display(geoPoint* pt)
 {
   printf("(%f %f %f)", pt->latitude, pt->longitude, pt->elevation);
+  fflush(stdout);
 }
 
 float distance(geoPoint* pt1, geoPoint* pt2)
@@ -82,4 +87,41 @@ float distance(geoPoint* pt1, geoPoint* pt2)
   float x= sin(lat1)*sin(lat2) + cos(lat1)*cos(lat2)*cos(dL);
   
   return earth_radius * atan2(y, x);
+}
+
+void rotateGP(geoPoint* pt, matrix3 rot)
+{
+  vector3 i;
+  i.x= pt->x; i.y= pt->y; i.z= pt->z;
+  vector3 o= mpv(rot, i);
+  pt->x= o.x; pt->y= o.y; pt->z= o.z;
+  
+  float dist= sqrt(pt->x * (pt->x) + (pt->y) * (pt->y) + (pt->z) * (pt->z));
+  
+  float lat= asin(pt->z/dist)*180.0/M_PI;
+  float longitude= atan2(pt->y/dist, pt->x/dist)*180.0/M_PI;
+  
+  pt->latitude= lat;
+  pt->longitude= longitude;
+}
+
+geoPoint rotateGPN(geoPoint* pt, matrix3 rot)
+{
+  vector3 i;
+  i.x= pt->x; i.y= pt->y; i.z= pt->z;
+  vector3 o= mpv(rot, i);
+  pt->x= o.x; pt->y= o.y; pt->z= o.z;
+  
+  float dist= sqrt(pt->x * (pt->x) + (pt->y) * (pt->y) + (pt->z) * (pt->z));
+  
+  float lat= asin(pt->z/dist)*180.0/M_PI;
+  float longitude= atan2(pt->y/dist, pt->x/dist)*180.0/M_PI;
+  
+  geoPoint gp;
+  
+  gp.latitude= lat;
+  gp.longitude= longitude;
+  gp.elevation= pt->elevation;
+  
+  return gp;
 }

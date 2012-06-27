@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include <openbest-ds/temperatureGlobals.h>
+#include <openbest-ds/matrix3.h>
 
 typedef struct 
 {
@@ -67,5 +68,9 @@ void display(geoPoint* pt);
  * @returns the distance of the parameters
  */ 
 float distance(geoPoint* p1, geoPoint* p2);
+
+void rotateGP(geoPoint* pt, matrix3 rot);
+
+geoPoint rotateGPN(geoPoint* pt, matrix3 rot);
 
 #endif
