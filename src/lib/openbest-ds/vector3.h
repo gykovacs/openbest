@@ -1,14 +1,16 @@
 #ifndef _VECTOR3_H_
 #define _VECTOR3_H_
 
+#include "config.h"
+
 /**
  * struct to represent 3D vectors
  */
 typedef struct
 {
-  float x;
-  float y;
-  float z;
+  real x;
+  real y;
+  real z;
 } vector3;
 
 /**
@@ -18,7 +20,7 @@ typedef struct
  * @param z z coordinate
  * @returns initialized vector3
  */ 
-vector3 createVector3(float x, float y, float z);
+vector3 createVector3(real x, real y, real z);
 
 /**
  * set the fields of a vector3 instance
@@ -27,6 +29,6 @@ vector3 createVector3(float x, float y, float z);
  * @param y y coordinate
  * @param z z coordinate
  */ 
-void setVector3(vector3* v, float x, float y, float z);
+void setVector3(vector3* v, real x, real y, real z);
 
 #endif

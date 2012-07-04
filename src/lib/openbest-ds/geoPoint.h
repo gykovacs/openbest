@@ -5,18 +5,28 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <openbest-ds/temperatureGlobals.h>
-#include <openbest-ds/matrix3.h>
+#include "openbest-ds/config.h"
+#include "openbest-ds/temperatureGlobals.h"
+#include "openbest-ds/matrix3.h"
 
+/**
+ * geoPoint structure
+ */ 
 typedef struct 
 {
-  float latitude;
-  float longitude;
-  float elevation;
+  /** latitude coordinate */
+  real latitude;
+  /** longitude coordinate */
+  real longitude;
+  /** elevation coordinate */
+  real elevation;
   
-  float x;
-  float y;
-  float z;
+  /** x coordinate */
+  real x;
+  /** y coordinate */
+  real y;
+  /** z coordinate */
+  real z;
 } geoPoint;
 
 /**
@@ -38,7 +48,7 @@ geoPoint* createGeoPointC(geoPoint* g);
  * @param longitude longitude of the point
  * @returns new geoPoint object with the given fields
  */ 
-geoPoint* createGeoPoint2(float latitude, float longitude);
+geoPoint* createGeoPoint2(real latitude, real longitude);
 
 /**
  * create new geoPoint object with latitude, longitude and elevation given
@@ -47,19 +57,21 @@ geoPoint* createGeoPoint2(float latitude, float longitude);
  * @param elevation elevation of the point
  * @returns new geoPoint object with given fields
  */
-geoPoint* createGeoPoint3(float latitude, float longitude, float elevation);
+geoPoint* createGeoPoint3(real latitude, real longitude, real elevation);
+
+void destroyGeoPoint(geoPoint* g);
 
 /**
  * computes spherical polar coordinates
  * @param geoPoint geoPoint object to fill its x, y and z fields
  */ 
-void computeXYZ(geoPoint* pt);
+void computeXYZ_GP(geoPoint* pt);
 
 /**
  * displays the properties of a geoPoint object
  * @param pt parameter to display it's properties
  */ 
-void display(geoPoint* pt);
+void displayGP(geoPoint* pt);
 
 /**
  * Computes the distance between the points. Distance is computed as a great circle on a spherical Earth. Elevation changes are not considered.
@@ -67,7 +79,7 @@ void display(geoPoint* pt);
  * @param p2 point #2
  * @returns the distance of the parameters
  */ 
-float distance(geoPoint* p1, geoPoint* p2);
+real distanceGP(geoPoint* p1, geoPoint* p2);
 
 /**
  * Rotates the geoPoint with matrix rot

@@ -3,8 +3,8 @@
 
 #include <stdlib.h>
 
-#include <openbest-ds/geoPoint.h>
-#include <openbest-ds/matrix3.h>
+#include "openbest-ds/geoPoint.h"
+#include "openbest-ds/matrix3.h"
 
 /**
  * struct to represent geoPointVector
@@ -28,6 +28,8 @@ geoPointVector* createGeoPointVectorN();
  */ 
 geoPointVector* createGeoPointVector1(int n);
 
+void destroyGeoPointVector(geoPointVector* gpv);
+
 /**
  * prints the properties of the parameter to the stdout
  * @param p parameter geoPointVector
@@ -40,14 +42,14 @@ void displayGPV(geoPointVector* p);
  * @param p to compute the distances to
  * @returns distance array
  */ 
-float* distanceGPV(geoPointVector* pv, geoPoint* p);
+real* distanceGPV(geoPointVector* pv, geoPoint* p);
 
 /**
  * computes the center of a geoPointVector
  * @param pv pointer to a geoPointVector instance
  * @returns the center
  */ 
-geoPoint* center(geoPointVector* pv);
+geoPoint* centerGPV(geoPointVector* pv);
 
 /**
  * returns the index of the closest element in pv to p
@@ -55,7 +57,7 @@ geoPoint* center(geoPointVector* pv);
  * @param pv geoPointVector to find the closest element from
  * @returns index of the closest element
  */ 
-int nearest1(geoPoint* p, geoPointVector* pv);
+int nearest1GPV(geoPoint* p, geoPointVector* pv);
 
 /**
  * returns the indeces of the closest n elements in pv to p
@@ -63,7 +65,7 @@ int nearest1(geoPoint* p, geoPointVector* pv);
  * @param pv geoPointVector to find the closest elements from
  * @returns array of indeces
  */ 
-int* nearestN(geoPoint* p, geoPointVector* pv, int n);
+int* nearestNGPV(geoPoint* p, geoPointVector* pv, int n);
 
 /**
  * rotates the points in the parameter geoPointVector
@@ -71,5 +73,9 @@ int* nearestN(geoPoint* p, geoPointVector* pv, int n);
  * @param rot rotation matrix3
  */ 
 void rotateGPV(geoPointVector* g, matrix3 rot);
+
+/**
+ * TODO: implement subsref and subsasgn on demand
+ */
 
 #endif

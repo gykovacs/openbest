@@ -1,13 +1,13 @@
-#include <openbest-ds/matrix3.h>
+#include "openbest-ds/matrix3.h"
 
-matrix3 createMatrix3(float a, float b, float c, float d, float e, float f, float g, float h, float i)
+matrix3 createMatrix3(real a, real b, real c, real d, real e, real f, real g, real h, real i)
 {
   matrix3 m;
   setMatrix3(&m, a, b, c, d, e, f, g, h, i);
   return m;
 }
 
-void setMatrix3(matrix3* m, float a, float b, float c, float d, float e, float f, float g, float h, float i)
+void setMatrix3(matrix3* m, real a, real b, real c, real d, real e, real f, real g, real h, real i)
 {
   m->t[0]= a;
   m->t[1]= b;
@@ -59,7 +59,7 @@ matrix3 mpm(matrix3 a, matrix3 b)
   return res;
 }
 
-float vpv_i(vector3 a, vector3 b)
+real vpv_i(vector3 a, vector3 b)
 {
   return a.x*b.x + a.y*b.y + a.z*b.z;
 }
@@ -89,4 +89,19 @@ void displayM(matrix3* m)
 void displayV(vector3* v)
 {
   printf("%f %f %f\n", v->x, v->y, v->z);
+}
+
+matrix3 initRotX(real a)
+{
+  return createMatrix3(1, 0, 0, 0, cos(a), -sin(a), 0, sin(a), cos(a));
+}
+
+matrix3 initRotY(real a)
+{
+  return createMatrix3(cos(a), 0, sin(a), 0, 1, 0, -sin(a), 0, cos(a));
+}
+
+matrix3 initRotZ(real a)
+{
+  return createMatrix3(cos(a), -sin(a), 0, sin(a), cos(a), 0, 0, 0, 1);
 }

@@ -3,14 +3,14 @@
 
 #include <stdio.h>
 
-#include <openbest-ds/vector3.h>
+#include "openbest-ds/vector3.h"
 
 /**
  * struct to represent a 3x3 matrix3
  */ 
 typedef struct
 {
-  float t[9];
+  real t[9];
 } matrix3;
 
 /**
@@ -26,7 +26,7 @@ typedef struct
  * @param i (2,2)
  * @returns initialized matrix3
  */ 
-matrix3 createMatrix3(float a, float b, float c, float d, float e, float f, float g, float h, float i);
+matrix3 createMatrix3(real a, real b, real c, real d, real e, real f, real g, real h, real i);
 
 /**
  * sets the fields of the parameter matrix3 instance
@@ -41,7 +41,7 @@ matrix3 createMatrix3(float a, float b, float c, float d, float e, float f, floa
  * @param h (2,1)
  * @param i (2,2)
  */ 
-void setMatrix3(matrix3* m, float a, float b, float c, float d, float e, float f, float g, float h, float i);
+void setMatrix3(matrix3* m, real a, real b, real c, real d, real e, real f, real g, real h, real i);
 
 /**
  * vector x matrix product
@@ -73,7 +73,7 @@ matrix3 mpm(matrix3 a, matrix3 b);
  * @param b vector b
  * @returns (a,b)
  */ 
-float vpv_i(vector3 a, vector3 b);
+real vpv_i(vector3 a, vector3 b);
 
 /**
  * row-column composition product of vectors
@@ -94,5 +94,11 @@ void displayM(matrix3* m);
  * @param v pointer to vector to display
  */ 
 void displayV(vector3* v);
+
+matrix3 initRotX(real a);
+
+matrix3 initRotY(real a);
+
+matrix3 initRotZ(real a);
 
 #endif

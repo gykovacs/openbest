@@ -1,9 +1,13 @@
-#include <openbest-ds/geoPointVector.h>
-#include <openbest-ds/temperatureGlobals.h>
+#include "openbest-ds/geoPointVector.h"
+#include "openbest-ds/temperatureGlobals.h"
 
 geoPointVector* createGeoPointVectorN()
 {
   geoPointVector* p= (geoPointVector*)malloc(sizeof(geoPointVector));
+  
+  if ( !p )
+    eprintf("malloc failed in createGeoPointVectorN");
+  
   p->t= NULL;
   p->n= 0;
 }
@@ -12,8 +16,19 @@ geoPointVector* createGeoPointVector1(int n)
 {
   geoPointVector* p= createGeoPointVectorN();
   p->t= (geoPoint*)(malloc(sizeof(geoPoint)*n));
+  
+  if ( ! (p->t) )
+    eprintf("malloc failed in createGeoPointVector1");
   p->n= n;
   return p;
+}
+
+void destroyGeoPointVector(geoPointVector* gpv)
+{
+  int i;
+  for ( i= 0; i < gpv->n; ++i )
+    free(gpv->t + i);
+  free(gpv);
 }
 
 void displayGPV(geoPointVector* p)
@@ -22,17 +37,21 @@ void displayGPV(geoPointVector* p)
   fflush(stdout);
 }
 
-float* distanceGPV(geoPointVector* pv, geoPoint* p)
+real* distanceGPV(geoPointVector* pv, geoPoint* p)
 {
-  float* res= (float*)malloc(sizeof(float)*(pv->n));
+  real* res= (real*)malloc(sizeof(real)*(pv->n));
+  
+  if ( !res )
+    eprintf("malloc failed in distanceGPV");
+  
   int i;
   for ( i= 0; i < pv->n; ++i )
-    res[i]= distance(pv->t + i, p);
+    res[i]= distanceGP(pv->t + i, p);
 }
 
-geoPoint* center(geoPointVector* pv)
+geoPoint* centerGPV(geoPointVector* pv)
 {
-  float x, y, z;
+  real x, y, z;
   x= y= z= 0;
   
   int i;
@@ -46,26 +65,26 @@ geoPoint* center(geoPointVector* pv)
   y/= pv->n;
   z/= pv->n;
   
-  float d= sqrt(x*x + y*y + z*z);
+  real d= sqrt(x*x + y*y + z*z);
   x/= d;
   y/= d;
   z/= d;
   
-  float lat= 90 - acos(z)*180/M_PI;
-  float longitude= atan2(y, x)*180/M_PI;
+  real lat= 90 - acos(z)*180/M_PI;
+  real longitude= atan2(y, x)*180/M_PI;
   
   return createGeoPoint2(lat, longitude);
 }
 
-int nearest1(geoPoint* p, geoPointVector* pv)
+int nearest1GPV(geoPoint* p, geoPointVector* pv)
 {
-  float minDist= FLT_MAX;
+  real minDist= FLT_MAX;
   int minIdx= 0;
-  float tmp;
+  real tmp;
   int i;
   for ( i= 0; i < pv->n; ++i )
   {
-    tmp= distance(pv->t + i, p);
+    tmp= distanceGP(pv->t + i, p);
     if ( tmp < minDist )
     {
       minDist= tmp;
@@ -76,14 +95,17 @@ int nearest1(geoPoint* p, geoPointVector* pv)
   return minIdx;
 }
 
-int* nearestN(geoPoint* p, geoPointVector* pv, int n)
+int* nearestNGPV(geoPoint* p, geoPointVector* pv, int n)
 {
-  float* dist= distanceGPV(pv, p);
+  real* dist= distanceGPV(pv, p);
   int* res= (int*)(malloc(sizeof(int)*n));
   
-  float minDist= FLT_MAX;
+  if ( !res )
+    eprintf("malloc failed in nearestN");
+  
+  real minDist= FLT_MAX;
   int minIdx= 0;
-  float tmp;
+  real tmp;
   while ( n > 0 )
   {
       --n;
