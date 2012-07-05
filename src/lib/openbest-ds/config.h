@@ -6,7 +6,7 @@
 #define false 0
 #define true 1
 
-typedef float real;
+typedef double real;
 typedef unsigned char bool;
 
 #endif

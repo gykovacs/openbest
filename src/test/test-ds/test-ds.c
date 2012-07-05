@@ -7,6 +7,10 @@
 #include "openbest-ds/geoPoint2.h"
 #include "openbest-ds/geoPoint2Vector.h"
 #include "openbest-ds/matrix3.h"
+#include "openbest-ds/timeInstant.h"
+#include "openbest-ds/timeRange.h"
+#include "openbest-ds/primaryKeyTable.h"
+#include "openbest-ds/init.h"
 
 #include "openbest-ds/optionTable.h"
 
@@ -68,6 +72,82 @@ int breakOverlapTest(int argc, char** argv)
   return 0;
 }
 
+int timeInstantTest(int argc, char** argv)
+{
+  timeInstant ti;
+  ti.year= atoi(argv[1]);
+  ti.month= atoi(argv[2]);
+  ti.day= atoi(argv[3]);
+  ti.hour= atoi(argv[4]);
+  ti.minute= atoi(argv[5]);
+  ti.second= atoi(argv[6]);
+  
+  real t= datenum(&ti);
+  printf("%f\n", t);
+  
+  timeInstant ti2;
+  convertFromSerialTime(t, &ti2);
+  displayTI(&ti2);
+  
+  return 0;
+}
+
+int timeRangeTest(int argc, char** argv)
+{
+  timeInstant t1= createTimeInstantN(1984, 5, 9, 2, 10, 17);
+  timeInstant t2= createTimeInstantN(2012, 7, 5, 13, 4, 58);
+  
+  displayTI(&t1);
+  newline();
+  displayTI(&t2);
+  newline();
+  
+  timeRange tr= createTimeRangeN2a(&t1, &t2);
+  displayTR(&tr);
+  newline();
+  
+  return 0;
+}
+
+int primaryKeyTableTest(int argc, char** argv)
+{
+  primaryKeyTable pkt= createPrimaryKeyTableN();
+  
+  insertIntoPKT(&pkt, "apple", 10);
+  insertIntoPKT(&pkt, "appletree", 10);
+  insertIntoPKT(&pkt, "grape", 10);
+  insertIntoPKT(&pkt, "cherry", 11);
+  insertIntoPKT(&pkt, "pineapple", 12);
+  insertIntoPKT(&pkt, "banana", 14);
+  
+  printf("%d\n", lookupValuePKT(&pkt, "apple"));
+  printf("%d\n", lookupValuePKT(&pkt, "grape"));
+  printf("%d\n", lookupValuePKT(&pkt, "cherry"));
+  
+  char** tmp;
+  tmp= lookupKeysPKT(&pkt, 10);
+  int i= 0;
+  while ( tmp[i] != NULL )
+    printf("%s\n", tmp[i++]);
+  
+  displayPKTbyValue(&pkt);
+  printf("----------------\n");
+  displayPKTbyKeys(&pkt);
+  
+  destroyPKT(&pkt);
+  
+  return 0;
+}
+
+int stationSourceTest(int argc, char** argv)
+{
+  initOpenBEST();
+  
+  displayPKTbyValue(stationSourcePKT);
+  
+  return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -82,11 +162,19 @@ int main(int argc, char** argv)
     bool gp= false;
     bool mv= false;
     bool breakOverlap= false;
+    bool time= false;
+    bool timer= false;
+    bool pkt= false;
+    bool stationSource= false;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
     addOption(ot, "--gp", OPTION_BOOL, (char*)&gp, 0, "geoPoint test");
     addOption(ot, "--mv", OPTION_BOOL, (char*)&mv, 0, "vector3 and matrix3 test");
     addOption(ot, "--breakOverlap", OPTION_BOOL, (char*)&breakOverlap, 0, "breakOverlap function test");
+    addOption(ot, "--time", OPTION_BOOL, (char*)&time, 0, "time instant test - args: y m d h min s");
+    addOption(ot, "--timerange", OPTION_BOOL, (char*)&timer, 0, "time range test");
+    addOption(ot, "--pkt", OPTION_BOOL, (char*)&pkt, 0, "primary key table test");
+    addOption(ot, "--stationSource", OPTION_BOOL, (char*)&stationSource, 0, "station source type");
     
     if ( processArgs(ot, &argc, argv) )
       return -1;
@@ -99,6 +187,14 @@ int main(int argc, char** argv)
       return mvTest(argc, argv);
     else if ( breakOverlap )
       return breakOverlapTest(argc, argv);
+    else if ( time )
+      return timeInstantTest(argc, argv);
+    else if ( timer )
+      return timeRangeTest(argc, argv);
+    else if ( pkt )
+      return primaryKeyTableTest(argc, argv);
+    else if ( stationSource )
+      return stationSourceTest(argc, argv);
     
     return 0;
 }
