@@ -1,0 +1,31 @@
+Station is known to have been relocated,RELOCATED
+Changing location with time suggests possible relocation,POSSIBLE_RELOCATION
+Conflicting locations from different sources,LOCATION_CONFLICT
+Station location conflict greater than 15 km,LARGE_LOCATION_CONFLICT
+Station location conflict greater than 100 km,EXTREME_LOCATION_CONFLICT
+Multiple sources reported this site,MULTIPLE_SOURCES
+Multiple names associated with this site,MULTIPLE_NAMES
+Site includes daily data reports,DAILY_DATA
+Site includes monthly data with no daily analog,UNIQUE_MONTHLY_DATA
+Site has country identification conflict,COUNTRY_CONFLICT
+Site has no country identification,MISSING_COUNTRY
+Country name was remapped,COUNTRY_REMAP
+Site has state identification conflict,STATE_CONFLICT
+Site has county identification conflict,COUNTY_CONFLICT
+Site is more than 10 km from land,MARINE
+Site is more than 100 km from land,ISOLATED_MARINE
+Site is more than 10 km from water,INLAND
+Site is more than 100 km from water,ISOLATED INLAND
+Site elevation concern: > 10 m and < 100 m from topographic expectation,ELEVATION_QUESTIONED
+Site elevation probably wrong: > 100 m from topographic expectation,ELEVATION_BAD
+Site in top 10% of surrounding 100 km^2,LOCAL_HIGH
+Site in bottom 10% of surrounding 100 km^2,LOCAL_LOW
+Part of the US Climate Reference Network,US_CRN
+Part of the US Historical Climate Network,US_HCN
+Part of the Global Climate Observing System,GCOS
+Composite Record Created by the USHCN,USHCN_COMPOSITE
+Source Archive had no Metadata,MISSING_SITE
+No location data,MISSING_LOCATION
+Metadata for Missing Site found in Alternative Archive,MISSING_SITE_ALTERNATIVE_FOUND
+Site Partially based on Supplemental Records,SUPPLEMENTAL_RECORDS
+Station record was manually corrected,EDITED_RECORD

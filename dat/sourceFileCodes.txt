@@ -1,0 +1,15 @@
+14
+0,USS0D_fo
+0,USS0D_coop
+0,GS0D
+0,GHCN-D
+1,GHCN_M
+1,HadCRU
+1,SCAR
+1,USHCN-M
+1,USSOM
+1,WMSSC
+0,Daily_Merged
+1,Monthly_Merged
+0,Daily
+1,Monthly

@@ -1,0 +1,1023 @@
+Maximum Temperature,TMAX,C
+Minimum Temperature,TMIN,C
+Average Temperature,TAVG,C
+Temperature at Observation,TOBS,C
+Precipitation,PRCP,mm
+Weather Events,DYSW,Weather Codes
+Evaporation,EVAP,mm
+Minimum Temperature in Water Pan,MNPN,C
+Maximum Temperature in Water Pan,MXPN,C
+Snowfall,SNOW,mm
+Snow Depth,SNWD,mm
+Wind Movement,WDMV,km
+Water Equivalent of Snow Depth,WTEQ,mm
+Average Cloudiness Midnight to Midnight,ASMM,%
+Average Cloudiness Sunrise to Sunset,ASSS,%
+Average Wind Speed,AWND,m / s
+Cooling Degree Day (base 18.33 C),CLDG,C
+Heating Degree Day (base 18.33 C),HTDG,C
+Departure from Normal Temperature,DPNT,C
+Dew-Point Temperature,DPTP,C
+Days with Weather in Vicinity,DYVC,Weather Codes
+Fastest 2-min Wind,F2MN,Wind Speed and Direction
+Fastest 2-min Wind Speed,F2MN-S,m / s
+Fastest 2-min Wind Direction,F2MN-D,direction
+Fastest 5-sec Wind,F5SC,Wind Speed and Direction
+Fastest 5-sec Wind Speed,F5SC-S,m / s
+Fastest 5-sec Wind Direction,F5SC-D,degrees
+Time of Fastest Mile,FMTM,hr
+Base Depth of Frozen Ground,FRGB,m
+Top Depth of Frozen Ground,FRGT,m
+Thickness of Frozen Ground,FRTH,m
+Fastest Instantaneous Wind,FSIN,Wind Speed and Direction
+Fastest Instantaneous Wind,FSIN-S,m / s
+Fastest Instantaneous Wind,FSIN-D,degrees
+Fastest Mile Wind,FSMI,Wind Speed and Direction
+Fastest Mile Wind Speed,FSMI-S,m / s
+Fastest Mile Wind Direction,FSMI-D,degrees
+Fastest Observed 1-min Wind,FSMN,Wind Speed and Direction
+Fastest Observed 1-min Wind Speed,FSMN-S,m / s
+Fastest Observed 1-min Wind Direction,FSMN-D,degrees
+River Gauge Height,GAHT,m
+Minimum Relative Humidity,MNRH,%
+Maximum Relative Humidity,MXRH,%
+Mean Temperature (2),MNTP,C
+Peak Gust Time,PGTM,hr
+Peak Gust,PKGS,Wind Speed and Direction
+Peak Gust Speed,PKGS-S,km / hr
+Peak Gust Direction,PKGS-D,degrees
+Pressure,PRES,Pa
+Percent of Possible Sunshine,PSUN,%
+Resultant Wind Direction,RDIR,degrees
+Resultant Wind Speed,RWND,m / s
+Average Cloudiness Midnight to Midnight (2),SAMM,%
+Average Cloudiness Sunrise to Sunset (2),SASS,%
+Average Sky Cover Midnight to Midnight,SCMM,%
+Average Sky Cover Sunrise to Sunset,SCSS,%
+Average Cloudiness Midnight to Midnight (regional),SGMM,%
+Average Cloudiness Sunrise to Sunset (regional),SGSS,%
+Sea Level Pressure,SLVP,Pa
+Average Sky Cover Midnight to Midnight (2),SMMM,%
+Average Sky Cover Sunrise to Sunset (2),SMSS,%
+Average Sky Cover Sunrise to Sunset,SCSS,%
+Average Sky Cover Sunrise to Sunset,SCSS,%
+Average Cloudiness Midnight to Midnight (regional 2),STMM,%
+Average Cloudiness Sunrise to Sunset (regional 2),STSS,%
+Thickness of Ice on Water,THIC,mm
+Wet-Bulb Temperature,TMPW,C
+Total Sunshine,TSUN,hr
+Prevailing Daily Wind Direction,PWND,degrees
+Daily Cloudiness,SKYC,unknown
+Daily Temperature Range,TRNG,C
+UNKNOWN DATA TYPE,WT00,unknown
+UNKNOWN DATA TYPE,WT01,unknown
+UNKNOWN DATA TYPE,WT02,unknown
+UNKNOWN DATA TYPE,WT03,unknown
+UNKNOWN DATA TYPE,WT04,unknown
+UNKNOWN DATA TYPE,WT05,unknown
+UNKNOWN DATA TYPE,WT06,unknown
+UNKNOWN DATA TYPE,WT07,unknown
+UNKNOWN DATA TYPE,WT08,unknown
+UNKNOWN DATA TYPE,WT09,unknown
+UNKNOWN DATA TYPE,WT10,unknown
+UNKNOWN DATA TYPE,WT11,unknown
+UNKNOWN DATA TYPE,WT12,unknown
+UNKNOWN DATA TYPE,WT13,unknown
+UNKNOWN DATA TYPE,WT14,unknown
+UNKNOWN DATA TYPE,WT15,unknown
+UNKNOWN DATA TYPE,WT16,unknown
+UNKNOWN DATA TYPE,WT17,unknown
+UNKNOWN DATA TYPE,WT18,unknown
+UNKNOWN DATA TYPE,WT19,unknown
+UNKNOWN DATA TYPE,WT20,unknown
+UNKNOWN DATA TYPE,WT21,unknown
+UNKNOWN DATA TYPE,WT22,unknown
+UNKNOWN DATA TYPE,WT23,unknown
+UNKNOWN DATA TYPE,WT24,unknown
+Visibility,VISI,km
+Monthly cooling degree days (base 65F),CLDD,C-day
+Monthly heating degree days (base 65F),HTDD,C-day
+Days with >= 0.1 inch precipitation,DP01,NA
+Days with >= 3 mm precipitation,DP03,NA
+Days with >= 0.5 inch precipitation,DP05,NA
+Days with >= 0.01 inch precipitation,DP0H,NA
+Days with >= 0.25 inch precipitation,DP0Q,NA
+Days with >= 1 inch precipitation,DP10,NA
+Days with >= 25 mm precipitation,DP25,NA
+Days with >= 50 mm precipitation,DP50,NA
+Departure from normal monthly precipitation,DPNP,mm
+Departure from normal monthly temperature,DPNT,C
+Days with snow depth >= 1 inch,DSNW,NA
+Days with min temperature <= 0 F,DT00,NA
+Days with max temperature <= 15 C,DT15,NA
+Days with max temperature >= 30 C,DT30,NA
+Days with min temperature <= 32 F,DT32,NA
+Days with min temperature <= 59 F,DT60,NA
+Days with max temperature >= 70 F,DT70,NA
+Days with max temperature >= 90 F,DT90,NA
+Days with max temperature <= 15 C,DX15,NA
+Days with max temperature <= 32 F,DX32,NA
+Days with max temperature <= 59 F,DX60,NA
+Highest precip in month,EMXP,mm
+Lowest min temperature in month,EMNT,C
+Highest max temperature in month,EMXT,C
+Maximum snow depth in month,MXSD,mm
+Freeze Dates,FRZD,Freeze Data
+Monthly mean minimum temperature of evaporation pan,MMNP,C
+Monthly mean minimum temperature,MMNT,C
+Monthly mean maximum temperature of evaporation pan,MMXP,C
+Monthly mean maximum temperature,MMXT,C
+Monthly mean temperature,MNTM,C
+Total monthly evaporation,TEVP,mm
+Total monthly precipitation,TPCP,mm
+Total monthly snowfall,TSNW,mm
+Total wind movement,TWND,km
+Soil Minimum Temperature in Unknown at 5 cm Depth,SN00,C
+Soil Maximum Temperature in Unknown at 5 cm Depth,SX00,C
+Soil Temperature at Observation in Unknown at 5 cm Depth,SO00,C
+Monthly Mean Minimum Soil Temperature in Unknown at 5 cm Depth,MN00,C
+Highest Minimum Soil Temperature in Unknown at 5 cm Depth,HN00,C
+Lowest Minimum Soil Temperature in Unknown at 5 cm Depth,LN00,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 5 cm Depth,MO00,C
+Highest Soil Temperature at Observation Time in Unknown at 5 cm Depth,HO00,C
+Lowest Soil Temperature at Observation Time in Unknown at 5 cm Depth,LO00,C
+Monthly Mean Maximum Soil Temperature in Unknown at 5 cm Depth,MX00,C
+Highest Maximum Soil Temperature in Unknown at 5 cm Depth,HX00,C
+Lowest Maximum Soil Temperature in Unknown at 5 cm Depth,LX00,C
+Soil Minimum Temperature in Unknown at 10 cm Depth,SN01,C
+Soil Maximum Temperature in Unknown at 10 cm Depth,SX01,C
+Soil Temperature at Observation in Unknown at 10 cm Depth,SO01,C
+Monthly Mean Minimum Soil Temperature in Unknown at 10 cm Depth,MN01,C
+Highest Minimum Soil Temperature in Unknown at 10 cm Depth,HN01,C
+Lowest Minimum Soil Temperature in Unknown at 10 cm Depth,LN01,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 10 cm Depth,MO01,C
+Highest Soil Temperature at Observation Time in Unknown at 10 cm Depth,HO01,C
+Lowest Soil Temperature at Observation Time in Unknown at 10 cm Depth,LO01,C
+Monthly Mean Maximum Soil Temperature in Unknown at 10 cm Depth,MX01,C
+Highest Maximum Soil Temperature in Unknown at 10 cm Depth,HX01,C
+Lowest Maximum Soil Temperature in Unknown at 10 cm Depth,LX01,C
+Soil Minimum Temperature in Unknown at 20 cm Depth,SN02,C
+Soil Maximum Temperature in Unknown at 20 cm Depth,SX02,C
+Soil Temperature at Observation in Unknown at 20 cm Depth,SO02,C
+Monthly Mean Minimum Soil Temperature in Unknown at 20 cm Depth,MN02,C
+Highest Minimum Soil Temperature in Unknown at 20 cm Depth,HN02,C
+Lowest Minimum Soil Temperature in Unknown at 20 cm Depth,LN02,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 20 cm Depth,MO02,C
+Highest Soil Temperature at Observation Time in Unknown at 20 cm Depth,HO02,C
+Lowest Soil Temperature at Observation Time in Unknown at 20 cm Depth,LO02,C
+Monthly Mean Maximum Soil Temperature in Unknown at 20 cm Depth,MX02,C
+Highest Maximum Soil Temperature in Unknown at 20 cm Depth,HX02,C
+Lowest Maximum Soil Temperature in Unknown at 20 cm Depth,LX02,C
+Soil Minimum Temperature in Unknown at 50 cm Depth,SN03,C
+Soil Maximum Temperature in Unknown at 50 cm Depth,SX03,C
+Soil Temperature at Observation in Unknown at 50 cm Depth,SO03,C
+Monthly Mean Minimum Soil Temperature in Unknown at 50 cm Depth,MN03,C
+Highest Minimum Soil Temperature in Unknown at 50 cm Depth,HN03,C
+Lowest Minimum Soil Temperature in Unknown at 50 cm Depth,LN03,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 50 cm Depth,MO03,C
+Highest Soil Temperature at Observation Time in Unknown at 50 cm Depth,HO03,C
+Lowest Soil Temperature at Observation Time in Unknown at 50 cm Depth,LO03,C
+Monthly Mean Maximum Soil Temperature in Unknown at 50 cm Depth,MX03,C
+Highest Maximum Soil Temperature in Unknown at 50 cm Depth,HX03,C
+Lowest Maximum Soil Temperature in Unknown at 50 cm Depth,LX03,C
+Soil Minimum Temperature in Unknown at 100 cm Depth,SN04,C
+Soil Maximum Temperature in Unknown at 100 cm Depth,SX04,C
+Soil Temperature at Observation in Unknown at 100 cm Depth,SO04,C
+Monthly Mean Minimum Soil Temperature in Unknown at 100 cm Depth,MN04,C
+Highest Minimum Soil Temperature in Unknown at 100 cm Depth,HN04,C
+Lowest Minimum Soil Temperature in Unknown at 100 cm Depth,LN04,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 100 cm Depth,MO04,C
+Highest Soil Temperature at Observation Time in Unknown at 100 cm Depth,HO04,C
+Lowest Soil Temperature at Observation Time in Unknown at 100 cm Depth,LO04,C
+Monthly Mean Maximum Soil Temperature in Unknown at 100 cm Depth,MX04,C
+Highest Maximum Soil Temperature in Unknown at 100 cm Depth,HX04,C
+Lowest Maximum Soil Temperature in Unknown at 100 cm Depth,LX04,C
+Soil Minimum Temperature in Unknown at 150 cm Depth,SN05,C
+Soil Maximum Temperature in Unknown at 150 cm Depth,SX05,C
+Soil Temperature at Observation in Unknown at 150 cm Depth,SO05,C
+Monthly Mean Minimum Soil Temperature in Unknown at 150 cm Depth,MN05,C
+Highest Minimum Soil Temperature in Unknown at 150 cm Depth,HN05,C
+Lowest Minimum Soil Temperature in Unknown at 150 cm Depth,LN05,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 150 cm Depth,MO05,C
+Highest Soil Temperature at Observation Time in Unknown at 150 cm Depth,HO05,C
+Lowest Soil Temperature at Observation Time in Unknown at 150 cm Depth,LO05,C
+Monthly Mean Maximum Soil Temperature in Unknown at 150 cm Depth,MX05,C
+Highest Maximum Soil Temperature in Unknown at 150 cm Depth,HX05,C
+Lowest Maximum Soil Temperature in Unknown at 150 cm Depth,LX05,C
+Soil Minimum Temperature in Unknown at 180 cm Depth,SN06,C
+Soil Maximum Temperature in Unknown at 180 cm Depth,SX06,C
+Soil Temperature at Observation in Unknown at 180 cm Depth,SO06,C
+Monthly Mean Minimum Soil Temperature in Unknown at 180 cm Depth,MN06,C
+Highest Minimum Soil Temperature in Unknown at 180 cm Depth,HN06,C
+Lowest Minimum Soil Temperature in Unknown at 180 cm Depth,LN06,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at 180 cm Depth,MO06,C
+Highest Soil Temperature at Observation Time in Unknown at 180 cm Depth,HO06,C
+Lowest Soil Temperature at Observation Time in Unknown at 180 cm Depth,LO06,C
+Monthly Mean Maximum Soil Temperature in Unknown at 180 cm Depth,MX06,C
+Highest Maximum Soil Temperature in Unknown at 180 cm Depth,HX06,C
+Lowest Maximum Soil Temperature in Unknown at 180 cm Depth,LX06,C
+Soil Minimum Temperature in Unknown at Unknown Depth,SN07,C
+Soil Maximum Temperature in Unknown at Unknown Depth,SX07,C
+Soil Temperature at Observation in Unknown at Unknown Depth,SO07,C
+Monthly Mean Minimum Soil Temperature in Unknown at Unknown Depth,MN07,C
+Highest Minimum Soil Temperature in Unknown at Unknown Depth,HN07,C
+Lowest Minimum Soil Temperature in Unknown at Unknown Depth,LN07,C
+Monthly Mean Soil Temperature at Observation Time in Unknown at Unknown Depth,MO07,C
+Highest Soil Temperature at Observation Time in Unknown at Unknown Depth,HO07,C
+Lowest Soil Temperature at Observation Time in Unknown at Unknown Depth,LO07,C
+Monthly Mean Maximum Soil Temperature in Unknown at Unknown Depth,MX07,C
+Highest Maximum Soil Temperature in Unknown at Unknown Depth,HX07,C
+Lowest Maximum Soil Temperature in Unknown at Unknown Depth,LX07,C
+Soil Minimum Temperature in Grass at 5 cm Depth,SN10,C
+Soil Maximum Temperature in Grass at 5 cm Depth,SX10,C
+Soil Temperature at Observation in Grass at 5 cm Depth,SO10,C
+Monthly Mean Minimum Soil Temperature in Grass at 5 cm Depth,MN10,C
+Highest Minimum Soil Temperature in Grass at 5 cm Depth,HN10,C
+Lowest Minimum Soil Temperature in Grass at 5 cm Depth,LN10,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 5 cm Depth,MO10,C
+Highest Soil Temperature at Observation Time in Grass at 5 cm Depth,HO10,C
+Lowest Soil Temperature at Observation Time in Grass at 5 cm Depth,LO10,C
+Monthly Mean Maximum Soil Temperature in Grass at 5 cm Depth,MX10,C
+Highest Maximum Soil Temperature in Grass at 5 cm Depth,HX10,C
+Lowest Maximum Soil Temperature in Grass at 5 cm Depth,LX10,C
+Soil Minimum Temperature in Grass at 10 cm Depth,SN11,C
+Soil Maximum Temperature in Grass at 10 cm Depth,SX11,C
+Soil Temperature at Observation in Grass at 10 cm Depth,SO11,C
+Monthly Mean Minimum Soil Temperature in Grass at 10 cm Depth,MN11,C
+Highest Minimum Soil Temperature in Grass at 10 cm Depth,HN11,C
+Lowest Minimum Soil Temperature in Grass at 10 cm Depth,LN11,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 10 cm Depth,MO11,C
+Highest Soil Temperature at Observation Time in Grass at 10 cm Depth,HO11,C
+Lowest Soil Temperature at Observation Time in Grass at 10 cm Depth,LO11,C
+Monthly Mean Maximum Soil Temperature in Grass at 10 cm Depth,MX11,C
+Highest Maximum Soil Temperature in Grass at 10 cm Depth,HX11,C
+Lowest Maximum Soil Temperature in Grass at 10 cm Depth,LX11,C
+Soil Minimum Temperature in Grass at 20 cm Depth,SN12,C
+Soil Maximum Temperature in Grass at 20 cm Depth,SX12,C
+Soil Temperature at Observation in Grass at 20 cm Depth,SO12,C
+Monthly Mean Minimum Soil Temperature in Grass at 20 cm Depth,MN12,C
+Highest Minimum Soil Temperature in Grass at 20 cm Depth,HN12,C
+Lowest Minimum Soil Temperature in Grass at 20 cm Depth,LN12,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 20 cm Depth,MO12,C
+Highest Soil Temperature at Observation Time in Grass at 20 cm Depth,HO12,C
+Lowest Soil Temperature at Observation Time in Grass at 20 cm Depth,LO12,C
+Monthly Mean Maximum Soil Temperature in Grass at 20 cm Depth,MX12,C
+Highest Maximum Soil Temperature in Grass at 20 cm Depth,HX12,C
+Lowest Maximum Soil Temperature in Grass at 20 cm Depth,LX12,C
+Soil Minimum Temperature in Grass at 50 cm Depth,SN13,C
+Soil Maximum Temperature in Grass at 50 cm Depth,SX13,C
+Soil Temperature at Observation in Grass at 50 cm Depth,SO13,C
+Monthly Mean Minimum Soil Temperature in Grass at 50 cm Depth,MN13,C
+Highest Minimum Soil Temperature in Grass at 50 cm Depth,HN13,C
+Lowest Minimum Soil Temperature in Grass at 50 cm Depth,LN13,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 50 cm Depth,MO13,C
+Highest Soil Temperature at Observation Time in Grass at 50 cm Depth,HO13,C
+Lowest Soil Temperature at Observation Time in Grass at 50 cm Depth,LO13,C
+Monthly Mean Maximum Soil Temperature in Grass at 50 cm Depth,MX13,C
+Highest Maximum Soil Temperature in Grass at 50 cm Depth,HX13,C
+Lowest Maximum Soil Temperature in Grass at 50 cm Depth,LX13,C
+Soil Minimum Temperature in Grass at 100 cm Depth,SN14,C
+Soil Maximum Temperature in Grass at 100 cm Depth,SX14,C
+Soil Temperature at Observation in Grass at 100 cm Depth,SO14,C
+Monthly Mean Minimum Soil Temperature in Grass at 100 cm Depth,MN14,C
+Highest Minimum Soil Temperature in Grass at 100 cm Depth,HN14,C
+Lowest Minimum Soil Temperature in Grass at 100 cm Depth,LN14,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 100 cm Depth,MO14,C
+Highest Soil Temperature at Observation Time in Grass at 100 cm Depth,HO14,C
+Lowest Soil Temperature at Observation Time in Grass at 100 cm Depth,LO14,C
+Monthly Mean Maximum Soil Temperature in Grass at 100 cm Depth,MX14,C
+Highest Maximum Soil Temperature in Grass at 100 cm Depth,HX14,C
+Lowest Maximum Soil Temperature in Grass at 100 cm Depth,LX14,C
+Soil Minimum Temperature in Grass at 150 cm Depth,SN15,C
+Soil Maximum Temperature in Grass at 150 cm Depth,SX15,C
+Soil Temperature at Observation in Grass at 150 cm Depth,SO15,C
+Monthly Mean Minimum Soil Temperature in Grass at 150 cm Depth,MN15,C
+Highest Minimum Soil Temperature in Grass at 150 cm Depth,HN15,C
+Lowest Minimum Soil Temperature in Grass at 150 cm Depth,LN15,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 150 cm Depth,MO15,C
+Highest Soil Temperature at Observation Time in Grass at 150 cm Depth,HO15,C
+Lowest Soil Temperature at Observation Time in Grass at 150 cm Depth,LO15,C
+Monthly Mean Maximum Soil Temperature in Grass at 150 cm Depth,MX15,C
+Highest Maximum Soil Temperature in Grass at 150 cm Depth,HX15,C
+Lowest Maximum Soil Temperature in Grass at 150 cm Depth,LX15,C
+Soil Minimum Temperature in Grass at 180 cm Depth,SN16,C
+Soil Maximum Temperature in Grass at 180 cm Depth,SX16,C
+Soil Temperature at Observation in Grass at 180 cm Depth,SO16,C
+Monthly Mean Minimum Soil Temperature in Grass at 180 cm Depth,MN16,C
+Highest Minimum Soil Temperature in Grass at 180 cm Depth,HN16,C
+Lowest Minimum Soil Temperature in Grass at 180 cm Depth,LN16,C
+Monthly Mean Soil Temperature at Observation Time in Grass at 180 cm Depth,MO16,C
+Highest Soil Temperature at Observation Time in Grass at 180 cm Depth,HO16,C
+Lowest Soil Temperature at Observation Time in Grass at 180 cm Depth,LO16,C
+Monthly Mean Maximum Soil Temperature in Grass at 180 cm Depth,MX16,C
+Highest Maximum Soil Temperature in Grass at 180 cm Depth,HX16,C
+Lowest Maximum Soil Temperature in Grass at 180 cm Depth,LX16,C
+Soil Minimum Temperature in Grass at Unknown Depth,SN17,C
+Soil Maximum Temperature in Grass at Unknown Depth,SX17,C
+Soil Temperature at Observation in Grass at Unknown Depth,SO17,C
+Monthly Mean Minimum Soil Temperature in Grass at Unknown Depth,MN17,C
+Highest Minimum Soil Temperature in Grass at Unknown Depth,HN17,C
+Lowest Minimum Soil Temperature in Grass at Unknown Depth,LN17,C
+Monthly Mean Soil Temperature at Observation Time in Grass at Unknown Depth,MO17,C
+Highest Soil Temperature at Observation Time in Grass at Unknown Depth,HO17,C
+Lowest Soil Temperature at Observation Time in Grass at Unknown Depth,LO17,C
+Monthly Mean Maximum Soil Temperature in Grass at Unknown Depth,MX17,C
+Highest Maximum Soil Temperature in Grass at Unknown Depth,HX17,C
+Lowest Maximum Soil Temperature in Grass at Unknown Depth,LX17,C
+Soil Minimum Temperature in Fallow at 5 cm Depth,SN20,C
+Soil Maximum Temperature in Fallow at 5 cm Depth,SX20,C
+Soil Temperature at Observation in Fallow at 5 cm Depth,SO20,C
+Monthly Mean Minimum Soil Temperature in Fallow at 5 cm Depth,MN20,C
+Highest Minimum Soil Temperature in Fallow at 5 cm Depth,HN20,C
+Lowest Minimum Soil Temperature in Fallow at 5 cm Depth,LN20,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 5 cm Depth,MO20,C
+Highest Soil Temperature at Observation Time in Fallow at 5 cm Depth,HO20,C
+Lowest Soil Temperature at Observation Time in Fallow at 5 cm Depth,LO20,C
+Monthly Mean Maximum Soil Temperature in Fallow at 5 cm Depth,MX20,C
+Highest Maximum Soil Temperature in Fallow at 5 cm Depth,HX20,C
+Lowest Maximum Soil Temperature in Fallow at 5 cm Depth,LX20,C
+Soil Minimum Temperature in Fallow at 10 cm Depth,SN21,C
+Soil Maximum Temperature in Fallow at 10 cm Depth,SX21,C
+Soil Temperature at Observation in Fallow at 10 cm Depth,SO21,C
+Monthly Mean Minimum Soil Temperature in Fallow at 10 cm Depth,MN21,C
+Highest Minimum Soil Temperature in Fallow at 10 cm Depth,HN21,C
+Lowest Minimum Soil Temperature in Fallow at 10 cm Depth,LN21,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 10 cm Depth,MO21,C
+Highest Soil Temperature at Observation Time in Fallow at 10 cm Depth,HO21,C
+Lowest Soil Temperature at Observation Time in Fallow at 10 cm Depth,LO21,C
+Monthly Mean Maximum Soil Temperature in Fallow at 10 cm Depth,MX21,C
+Highest Maximum Soil Temperature in Fallow at 10 cm Depth,HX21,C
+Lowest Maximum Soil Temperature in Fallow at 10 cm Depth,LX21,C
+Soil Minimum Temperature in Fallow at 20 cm Depth,SN22,C
+Soil Maximum Temperature in Fallow at 20 cm Depth,SX22,C
+Soil Temperature at Observation in Fallow at 20 cm Depth,SO22,C
+Monthly Mean Minimum Soil Temperature in Fallow at 20 cm Depth,MN22,C
+Highest Minimum Soil Temperature in Fallow at 20 cm Depth,HN22,C
+Lowest Minimum Soil Temperature in Fallow at 20 cm Depth,LN22,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 20 cm Depth,MO22,C
+Highest Soil Temperature at Observation Time in Fallow at 20 cm Depth,HO22,C
+Lowest Soil Temperature at Observation Time in Fallow at 20 cm Depth,LO22,C
+Monthly Mean Maximum Soil Temperature in Fallow at 20 cm Depth,MX22,C
+Highest Maximum Soil Temperature in Fallow at 20 cm Depth,HX22,C
+Lowest Maximum Soil Temperature in Fallow at 20 cm Depth,LX22,C
+Soil Minimum Temperature in Fallow at 50 cm Depth,SN23,C
+Soil Maximum Temperature in Fallow at 50 cm Depth,SX23,C
+Soil Temperature at Observation in Fallow at 50 cm Depth,SO23,C
+Monthly Mean Minimum Soil Temperature in Fallow at 50 cm Depth,MN23,C
+Highest Minimum Soil Temperature in Fallow at 50 cm Depth,HN23,C
+Lowest Minimum Soil Temperature in Fallow at 50 cm Depth,LN23,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 50 cm Depth,MO23,C
+Highest Soil Temperature at Observation Time in Fallow at 50 cm Depth,HO23,C
+Lowest Soil Temperature at Observation Time in Fallow at 50 cm Depth,LO23,C
+Monthly Mean Maximum Soil Temperature in Fallow at 50 cm Depth,MX23,C
+Highest Maximum Soil Temperature in Fallow at 50 cm Depth,HX23,C
+Lowest Maximum Soil Temperature in Fallow at 50 cm Depth,LX23,C
+Soil Minimum Temperature in Fallow at 100 cm Depth,SN24,C
+Soil Maximum Temperature in Fallow at 100 cm Depth,SX24,C
+Soil Temperature at Observation in Fallow at 100 cm Depth,SO24,C
+Monthly Mean Minimum Soil Temperature in Fallow at 100 cm Depth,MN24,C
+Highest Minimum Soil Temperature in Fallow at 100 cm Depth,HN24,C
+Lowest Minimum Soil Temperature in Fallow at 100 cm Depth,LN24,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 100 cm Depth,MO24,C
+Highest Soil Temperature at Observation Time in Fallow at 100 cm Depth,HO24,C
+Lowest Soil Temperature at Observation Time in Fallow at 100 cm Depth,LO24,C
+Monthly Mean Maximum Soil Temperature in Fallow at 100 cm Depth,MX24,C
+Highest Maximum Soil Temperature in Fallow at 100 cm Depth,HX24,C
+Lowest Maximum Soil Temperature in Fallow at 100 cm Depth,LX24,C
+Soil Minimum Temperature in Fallow at 150 cm Depth,SN25,C
+Soil Maximum Temperature in Fallow at 150 cm Depth,SX25,C
+Soil Temperature at Observation in Fallow at 150 cm Depth,SO25,C
+Monthly Mean Minimum Soil Temperature in Fallow at 150 cm Depth,MN25,C
+Highest Minimum Soil Temperature in Fallow at 150 cm Depth,HN25,C
+Lowest Minimum Soil Temperature in Fallow at 150 cm Depth,LN25,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 150 cm Depth,MO25,C
+Highest Soil Temperature at Observation Time in Fallow at 150 cm Depth,HO25,C
+Lowest Soil Temperature at Observation Time in Fallow at 150 cm Depth,LO25,C
+Monthly Mean Maximum Soil Temperature in Fallow at 150 cm Depth,MX25,C
+Highest Maximum Soil Temperature in Fallow at 150 cm Depth,HX25,C
+Lowest Maximum Soil Temperature in Fallow at 150 cm Depth,LX25,C
+Soil Minimum Temperature in Fallow at 180 cm Depth,SN26,C
+Soil Maximum Temperature in Fallow at 180 cm Depth,SX26,C
+Soil Temperature at Observation in Fallow at 180 cm Depth,SO26,C
+Monthly Mean Minimum Soil Temperature in Fallow at 180 cm Depth,MN26,C
+Highest Minimum Soil Temperature in Fallow at 180 cm Depth,HN26,C
+Lowest Minimum Soil Temperature in Fallow at 180 cm Depth,LN26,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at 180 cm Depth,MO26,C
+Highest Soil Temperature at Observation Time in Fallow at 180 cm Depth,HO26,C
+Lowest Soil Temperature at Observation Time in Fallow at 180 cm Depth,LO26,C
+Monthly Mean Maximum Soil Temperature in Fallow at 180 cm Depth,MX26,C
+Highest Maximum Soil Temperature in Fallow at 180 cm Depth,HX26,C
+Lowest Maximum Soil Temperature in Fallow at 180 cm Depth,LX26,C
+Soil Minimum Temperature in Fallow at Unknown Depth,SN27,C
+Soil Maximum Temperature in Fallow at Unknown Depth,SX27,C
+Soil Temperature at Observation in Fallow at Unknown Depth,SO27,C
+Monthly Mean Minimum Soil Temperature in Fallow at Unknown Depth,MN27,C
+Highest Minimum Soil Temperature in Fallow at Unknown Depth,HN27,C
+Lowest Minimum Soil Temperature in Fallow at Unknown Depth,LN27,C
+Monthly Mean Soil Temperature at Observation Time in Fallow at Unknown Depth,MO27,C
+Highest Soil Temperature at Observation Time in Fallow at Unknown Depth,HO27,C
+Lowest Soil Temperature at Observation Time in Fallow at Unknown Depth,LO27,C
+Monthly Mean Maximum Soil Temperature in Fallow at Unknown Depth,MX27,C
+Highest Maximum Soil Temperature in Fallow at Unknown Depth,HX27,C
+Lowest Maximum Soil Temperature in Fallow at Unknown Depth,LX27,C
+Soil Minimum Temperature in Bare Ground at 5 cm Depth,SN30,C
+Soil Maximum Temperature in Bare Ground at 5 cm Depth,SX30,C
+Soil Temperature at Observation in Bare Ground at 5 cm Depth,SO30,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 5 cm Depth,MN30,C
+Highest Minimum Soil Temperature in Bare Ground at 5 cm Depth,HN30,C
+Lowest Minimum Soil Temperature in Bare Ground at 5 cm Depth,LN30,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 5 cm Depth,MO30,C
+Highest Soil Temperature at Observation Time in Bare Ground at 5 cm Depth,HO30,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 5 cm Depth,LO30,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 5 cm Depth,MX30,C
+Highest Maximum Soil Temperature in Bare Ground at 5 cm Depth,HX30,C
+Lowest Maximum Soil Temperature in Bare Ground at 5 cm Depth,LX30,C
+Soil Minimum Temperature in Bare Ground at 10 cm Depth,SN31,C
+Soil Maximum Temperature in Bare Ground at 10 cm Depth,SX31,C
+Soil Temperature at Observation in Bare Ground at 10 cm Depth,SO31,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 10 cm Depth,MN31,C
+Highest Minimum Soil Temperature in Bare Ground at 10 cm Depth,HN31,C
+Lowest Minimum Soil Temperature in Bare Ground at 10 cm Depth,LN31,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 10 cm Depth,MO31,C
+Highest Soil Temperature at Observation Time in Bare Ground at 10 cm Depth,HO31,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 10 cm Depth,LO31,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 10 cm Depth,MX31,C
+Highest Maximum Soil Temperature in Bare Ground at 10 cm Depth,HX31,C
+Lowest Maximum Soil Temperature in Bare Ground at 10 cm Depth,LX31,C
+Soil Minimum Temperature in Bare Ground at 20 cm Depth,SN32,C
+Soil Maximum Temperature in Bare Ground at 20 cm Depth,SX32,C
+Soil Temperature at Observation in Bare Ground at 20 cm Depth,SO32,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 20 cm Depth,MN32,C
+Highest Minimum Soil Temperature in Bare Ground at 20 cm Depth,HN32,C
+Lowest Minimum Soil Temperature in Bare Ground at 20 cm Depth,LN32,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 20 cm Depth,MO32,C
+Highest Soil Temperature at Observation Time in Bare Ground at 20 cm Depth,HO32,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 20 cm Depth,LO32,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 20 cm Depth,MX32,C
+Highest Maximum Soil Temperature in Bare Ground at 20 cm Depth,HX32,C
+Lowest Maximum Soil Temperature in Bare Ground at 20 cm Depth,LX32,C
+Soil Minimum Temperature in Bare Ground at 50 cm Depth,SN33,C
+Soil Maximum Temperature in Bare Ground at 50 cm Depth,SX33,C
+Soil Temperature at Observation in Bare Ground at 50 cm Depth,SO33,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 50 cm Depth,MN33,C
+Highest Minimum Soil Temperature in Bare Ground at 50 cm Depth,HN33,C
+Lowest Minimum Soil Temperature in Bare Ground at 50 cm Depth,LN33,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 50 cm Depth,MO33,C
+Highest Soil Temperature at Observation Time in Bare Ground at 50 cm Depth,HO33,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 50 cm Depth,LO33,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 50 cm Depth,MX33,C
+Highest Maximum Soil Temperature in Bare Ground at 50 cm Depth,HX33,C
+Lowest Maximum Soil Temperature in Bare Ground at 50 cm Depth,LX33,C
+Soil Minimum Temperature in Bare Ground at 100 cm Depth,SN34,C
+Soil Maximum Temperature in Bare Ground at 100 cm Depth,SX34,C
+Soil Temperature at Observation in Bare Ground at 100 cm Depth,SO34,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 100 cm Depth,MN34,C
+Highest Minimum Soil Temperature in Bare Ground at 100 cm Depth,HN34,C
+Lowest Minimum Soil Temperature in Bare Ground at 100 cm Depth,LN34,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 100 cm Depth,MO34,C
+Highest Soil Temperature at Observation Time in Bare Ground at 100 cm Depth,HO34,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 100 cm Depth,LO34,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 100 cm Depth,MX34,C
+Highest Maximum Soil Temperature in Bare Ground at 100 cm Depth,HX34,C
+Lowest Maximum Soil Temperature in Bare Ground at 100 cm Depth,LX34,C
+Soil Minimum Temperature in Bare Ground at 150 cm Depth,SN35,C
+Soil Maximum Temperature in Bare Ground at 150 cm Depth,SX35,C
+Soil Temperature at Observation in Bare Ground at 150 cm Depth,SO35,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 150 cm Depth,MN35,C
+Highest Minimum Soil Temperature in Bare Ground at 150 cm Depth,HN35,C
+Lowest Minimum Soil Temperature in Bare Ground at 150 cm Depth,LN35,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 150 cm Depth,MO35,C
+Highest Soil Temperature at Observation Time in Bare Ground at 150 cm Depth,HO35,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 150 cm Depth,LO35,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 150 cm Depth,MX35,C
+Highest Maximum Soil Temperature in Bare Ground at 150 cm Depth,HX35,C
+Lowest Maximum Soil Temperature in Bare Ground at 150 cm Depth,LX35,C
+Soil Minimum Temperature in Bare Ground at 180 cm Depth,SN36,C
+Soil Maximum Temperature in Bare Ground at 180 cm Depth,SX36,C
+Soil Temperature at Observation in Bare Ground at 180 cm Depth,SO36,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at 180 cm Depth,MN36,C
+Highest Minimum Soil Temperature in Bare Ground at 180 cm Depth,HN36,C
+Lowest Minimum Soil Temperature in Bare Ground at 180 cm Depth,LN36,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at 180 cm Depth,MO36,C
+Highest Soil Temperature at Observation Time in Bare Ground at 180 cm Depth,HO36,C
+Lowest Soil Temperature at Observation Time in Bare Ground at 180 cm Depth,LO36,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at 180 cm Depth,MX36,C
+Highest Maximum Soil Temperature in Bare Ground at 180 cm Depth,HX36,C
+Lowest Maximum Soil Temperature in Bare Ground at 180 cm Depth,LX36,C
+Soil Minimum Temperature in Bare Ground at Unknown Depth,SN37,C
+Soil Maximum Temperature in Bare Ground at Unknown Depth,SX37,C
+Soil Temperature at Observation in Bare Ground at Unknown Depth,SO37,C
+Monthly Mean Minimum Soil Temperature in Bare Ground at Unknown Depth,MN37,C
+Highest Minimum Soil Temperature in Bare Ground at Unknown Depth,HN37,C
+Lowest Minimum Soil Temperature in Bare Ground at Unknown Depth,LN37,C
+Monthly Mean Soil Temperature at Observation Time in Bare Ground at Unknown Depth,MO37,C
+Highest Soil Temperature at Observation Time in Bare Ground at Unknown Depth,HO37,C
+Lowest Soil Temperature at Observation Time in Bare Ground at Unknown Depth,LO37,C
+Monthly Mean Maximum Soil Temperature in Bare Ground at Unknown Depth,MX37,C
+Highest Maximum Soil Temperature in Bare Ground at Unknown Depth,HX37,C
+Lowest Maximum Soil Temperature in Bare Ground at Unknown Depth,LX37,C
+Soil Minimum Temperature in Brome Grasss at 5 cm Depth,SN40,C
+Soil Maximum Temperature in Brome Grasss at 5 cm Depth,SX40,C
+Soil Temperature at Observation in Brome Grasss at 5 cm Depth,SO40,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 5 cm Depth,MN40,C
+Highest Minimum Soil Temperature in Brome Grasss at 5 cm Depth,HN40,C
+Lowest Minimum Soil Temperature in Brome Grasss at 5 cm Depth,LN40,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 5 cm Depth,MO40,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 5 cm Depth,HO40,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 5 cm Depth,LO40,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 5 cm Depth,MX40,C
+Highest Maximum Soil Temperature in Brome Grasss at 5 cm Depth,HX40,C
+Lowest Maximum Soil Temperature in Brome Grasss at 5 cm Depth,LX40,C
+Soil Minimum Temperature in Brome Grasss at 10 cm Depth,SN41,C
+Soil Maximum Temperature in Brome Grasss at 10 cm Depth,SX41,C
+Soil Temperature at Observation in Brome Grasss at 10 cm Depth,SO41,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 10 cm Depth,MN41,C
+Highest Minimum Soil Temperature in Brome Grasss at 10 cm Depth,HN41,C
+Lowest Minimum Soil Temperature in Brome Grasss at 10 cm Depth,LN41,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 10 cm Depth,MO41,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 10 cm Depth,HO41,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 10 cm Depth,LO41,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 10 cm Depth,MX41,C
+Highest Maximum Soil Temperature in Brome Grasss at 10 cm Depth,HX41,C
+Lowest Maximum Soil Temperature in Brome Grasss at 10 cm Depth,LX41,C
+Soil Minimum Temperature in Brome Grasss at 20 cm Depth,SN42,C
+Soil Maximum Temperature in Brome Grasss at 20 cm Depth,SX42,C
+Soil Temperature at Observation in Brome Grasss at 20 cm Depth,SO42,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 20 cm Depth,MN42,C
+Highest Minimum Soil Temperature in Brome Grasss at 20 cm Depth,HN42,C
+Lowest Minimum Soil Temperature in Brome Grasss at 20 cm Depth,LN42,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 20 cm Depth,MO42,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 20 cm Depth,HO42,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 20 cm Depth,LO42,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 20 cm Depth,MX42,C
+Highest Maximum Soil Temperature in Brome Grasss at 20 cm Depth,HX42,C
+Lowest Maximum Soil Temperature in Brome Grasss at 20 cm Depth,LX42,C
+Soil Minimum Temperature in Brome Grasss at 50 cm Depth,SN43,C
+Soil Maximum Temperature in Brome Grasss at 50 cm Depth,SX43,C
+Soil Temperature at Observation in Brome Grasss at 50 cm Depth,SO43,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 50 cm Depth,MN43,C
+Highest Minimum Soil Temperature in Brome Grasss at 50 cm Depth,HN43,C
+Lowest Minimum Soil Temperature in Brome Grasss at 50 cm Depth,LN43,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 50 cm Depth,MO43,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 50 cm Depth,HO43,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 50 cm Depth,LO43,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 50 cm Depth,MX43,C
+Highest Maximum Soil Temperature in Brome Grasss at 50 cm Depth,HX43,C
+Lowest Maximum Soil Temperature in Brome Grasss at 50 cm Depth,LX43,C
+Soil Minimum Temperature in Brome Grasss at 100 cm Depth,SN44,C
+Soil Maximum Temperature in Brome Grasss at 100 cm Depth,SX44,C
+Soil Temperature at Observation in Brome Grasss at 100 cm Depth,SO44,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 100 cm Depth,MN44,C
+Highest Minimum Soil Temperature in Brome Grasss at 100 cm Depth,HN44,C
+Lowest Minimum Soil Temperature in Brome Grasss at 100 cm Depth,LN44,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 100 cm Depth,MO44,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 100 cm Depth,HO44,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 100 cm Depth,LO44,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 100 cm Depth,MX44,C
+Highest Maximum Soil Temperature in Brome Grasss at 100 cm Depth,HX44,C
+Lowest Maximum Soil Temperature in Brome Grasss at 100 cm Depth,LX44,C
+Soil Minimum Temperature in Brome Grasss at 150 cm Depth,SN45,C
+Soil Maximum Temperature in Brome Grasss at 150 cm Depth,SX45,C
+Soil Temperature at Observation in Brome Grasss at 150 cm Depth,SO45,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 150 cm Depth,MN45,C
+Highest Minimum Soil Temperature in Brome Grasss at 150 cm Depth,HN45,C
+Lowest Minimum Soil Temperature in Brome Grasss at 150 cm Depth,LN45,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 150 cm Depth,MO45,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 150 cm Depth,HO45,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 150 cm Depth,LO45,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 150 cm Depth,MX45,C
+Highest Maximum Soil Temperature in Brome Grasss at 150 cm Depth,HX45,C
+Lowest Maximum Soil Temperature in Brome Grasss at 150 cm Depth,LX45,C
+Soil Minimum Temperature in Brome Grasss at 180 cm Depth,SN46,C
+Soil Maximum Temperature in Brome Grasss at 180 cm Depth,SX46,C
+Soil Temperature at Observation in Brome Grasss at 180 cm Depth,SO46,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at 180 cm Depth,MN46,C
+Highest Minimum Soil Temperature in Brome Grasss at 180 cm Depth,HN46,C
+Lowest Minimum Soil Temperature in Brome Grasss at 180 cm Depth,LN46,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at 180 cm Depth,MO46,C
+Highest Soil Temperature at Observation Time in Brome Grasss at 180 cm Depth,HO46,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at 180 cm Depth,LO46,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at 180 cm Depth,MX46,C
+Highest Maximum Soil Temperature in Brome Grasss at 180 cm Depth,HX46,C
+Lowest Maximum Soil Temperature in Brome Grasss at 180 cm Depth,LX46,C
+Soil Minimum Temperature in Brome Grasss at Unknown Depth,SN47,C
+Soil Maximum Temperature in Brome Grasss at Unknown Depth,SX47,C
+Soil Temperature at Observation in Brome Grasss at Unknown Depth,SO47,C
+Monthly Mean Minimum Soil Temperature in Brome Grasss at Unknown Depth,MN47,C
+Highest Minimum Soil Temperature in Brome Grasss at Unknown Depth,HN47,C
+Lowest Minimum Soil Temperature in Brome Grasss at Unknown Depth,LN47,C
+Monthly Mean Soil Temperature at Observation Time in Brome Grasss at Unknown Depth,MO47,C
+Highest Soil Temperature at Observation Time in Brome Grasss at Unknown Depth,HO47,C
+Lowest Soil Temperature at Observation Time in Brome Grasss at Unknown Depth,LO47,C
+Monthly Mean Maximum Soil Temperature in Brome Grasss at Unknown Depth,MX47,C
+Highest Maximum Soil Temperature in Brome Grasss at Unknown Depth,HX47,C
+Lowest Maximum Soil Temperature in Brome Grasss at Unknown Depth,LX47,C
+Soil Minimum Temperature in Sod at 5 cm Depth,SN50,C
+Soil Maximum Temperature in Sod at 5 cm Depth,SX50,C
+Soil Temperature at Observation in Sod at 5 cm Depth,SO50,C
+Monthly Mean Minimum Soil Temperature in Sod at 5 cm Depth,MN50,C
+Highest Minimum Soil Temperature in Sod at 5 cm Depth,HN50,C
+Lowest Minimum Soil Temperature in Sod at 5 cm Depth,LN50,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 5 cm Depth,MO50,C
+Highest Soil Temperature at Observation Time in Sod at 5 cm Depth,HO50,C
+Lowest Soil Temperature at Observation Time in Sod at 5 cm Depth,LO50,C
+Monthly Mean Maximum Soil Temperature in Sod at 5 cm Depth,MX50,C
+Highest Maximum Soil Temperature in Sod at 5 cm Depth,HX50,C
+Lowest Maximum Soil Temperature in Sod at 5 cm Depth,LX50,C
+Soil Minimum Temperature in Sod at 10 cm Depth,SN51,C
+Soil Maximum Temperature in Sod at 10 cm Depth,SX51,C
+Soil Temperature at Observation in Sod at 10 cm Depth,SO51,C
+Monthly Mean Minimum Soil Temperature in Sod at 10 cm Depth,MN51,C
+Highest Minimum Soil Temperature in Sod at 10 cm Depth,HN51,C
+Lowest Minimum Soil Temperature in Sod at 10 cm Depth,LN51,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 10 cm Depth,MO51,C
+Highest Soil Temperature at Observation Time in Sod at 10 cm Depth,HO51,C
+Lowest Soil Temperature at Observation Time in Sod at 10 cm Depth,LO51,C
+Monthly Mean Maximum Soil Temperature in Sod at 10 cm Depth,MX51,C
+Highest Maximum Soil Temperature in Sod at 10 cm Depth,HX51,C
+Lowest Maximum Soil Temperature in Sod at 10 cm Depth,LX51,C
+Soil Minimum Temperature in Sod at 20 cm Depth,SN52,C
+Soil Maximum Temperature in Sod at 20 cm Depth,SX52,C
+Soil Temperature at Observation in Sod at 20 cm Depth,SO52,C
+Monthly Mean Minimum Soil Temperature in Sod at 20 cm Depth,MN52,C
+Highest Minimum Soil Temperature in Sod at 20 cm Depth,HN52,C
+Lowest Minimum Soil Temperature in Sod at 20 cm Depth,LN52,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 20 cm Depth,MO52,C
+Highest Soil Temperature at Observation Time in Sod at 20 cm Depth,HO52,C
+Lowest Soil Temperature at Observation Time in Sod at 20 cm Depth,LO52,C
+Monthly Mean Maximum Soil Temperature in Sod at 20 cm Depth,MX52,C
+Highest Maximum Soil Temperature in Sod at 20 cm Depth,HX52,C
+Lowest Maximum Soil Temperature in Sod at 20 cm Depth,LX52,C
+Soil Minimum Temperature in Sod at 50 cm Depth,SN53,C
+Soil Maximum Temperature in Sod at 50 cm Depth,SX53,C
+Soil Temperature at Observation in Sod at 50 cm Depth,SO53,C
+Monthly Mean Minimum Soil Temperature in Sod at 50 cm Depth,MN53,C
+Highest Minimum Soil Temperature in Sod at 50 cm Depth,HN53,C
+Lowest Minimum Soil Temperature in Sod at 50 cm Depth,LN53,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 50 cm Depth,MO53,C
+Highest Soil Temperature at Observation Time in Sod at 50 cm Depth,HO53,C
+Lowest Soil Temperature at Observation Time in Sod at 50 cm Depth,LO53,C
+Monthly Mean Maximum Soil Temperature in Sod at 50 cm Depth,MX53,C
+Highest Maximum Soil Temperature in Sod at 50 cm Depth,HX53,C
+Lowest Maximum Soil Temperature in Sod at 50 cm Depth,LX53,C
+Soil Minimum Temperature in Sod at 100 cm Depth,SN54,C
+Soil Maximum Temperature in Sod at 100 cm Depth,SX54,C
+Soil Temperature at Observation in Sod at 100 cm Depth,SO54,C
+Monthly Mean Minimum Soil Temperature in Sod at 100 cm Depth,MN54,C
+Highest Minimum Soil Temperature in Sod at 100 cm Depth,HN54,C
+Lowest Minimum Soil Temperature in Sod at 100 cm Depth,LN54,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 100 cm Depth,MO54,C
+Highest Soil Temperature at Observation Time in Sod at 100 cm Depth,HO54,C
+Lowest Soil Temperature at Observation Time in Sod at 100 cm Depth,LO54,C
+Monthly Mean Maximum Soil Temperature in Sod at 100 cm Depth,MX54,C
+Highest Maximum Soil Temperature in Sod at 100 cm Depth,HX54,C
+Lowest Maximum Soil Temperature in Sod at 100 cm Depth,LX54,C
+Soil Minimum Temperature in Sod at 150 cm Depth,SN55,C
+Soil Maximum Temperature in Sod at 150 cm Depth,SX55,C
+Soil Temperature at Observation in Sod at 150 cm Depth,SO55,C
+Monthly Mean Minimum Soil Temperature in Sod at 150 cm Depth,MN55,C
+Highest Minimum Soil Temperature in Sod at 150 cm Depth,HN55,C
+Lowest Minimum Soil Temperature in Sod at 150 cm Depth,LN55,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 150 cm Depth,MO55,C
+Highest Soil Temperature at Observation Time in Sod at 150 cm Depth,HO55,C
+Lowest Soil Temperature at Observation Time in Sod at 150 cm Depth,LO55,C
+Monthly Mean Maximum Soil Temperature in Sod at 150 cm Depth,MX55,C
+Highest Maximum Soil Temperature in Sod at 150 cm Depth,HX55,C
+Lowest Maximum Soil Temperature in Sod at 150 cm Depth,LX55,C
+Soil Minimum Temperature in Sod at 180 cm Depth,SN56,C
+Soil Maximum Temperature in Sod at 180 cm Depth,SX56,C
+Soil Temperature at Observation in Sod at 180 cm Depth,SO56,C
+Monthly Mean Minimum Soil Temperature in Sod at 180 cm Depth,MN56,C
+Highest Minimum Soil Temperature in Sod at 180 cm Depth,HN56,C
+Lowest Minimum Soil Temperature in Sod at 180 cm Depth,LN56,C
+Monthly Mean Soil Temperature at Observation Time in Sod at 180 cm Depth,MO56,C
+Highest Soil Temperature at Observation Time in Sod at 180 cm Depth,HO56,C
+Lowest Soil Temperature at Observation Time in Sod at 180 cm Depth,LO56,C
+Monthly Mean Maximum Soil Temperature in Sod at 180 cm Depth,MX56,C
+Highest Maximum Soil Temperature in Sod at 180 cm Depth,HX56,C
+Lowest Maximum Soil Temperature in Sod at 180 cm Depth,LX56,C
+Soil Minimum Temperature in Sod at Unknown Depth,SN57,C
+Soil Maximum Temperature in Sod at Unknown Depth,SX57,C
+Soil Temperature at Observation in Sod at Unknown Depth,SO57,C
+Monthly Mean Minimum Soil Temperature in Sod at Unknown Depth,MN57,C
+Highest Minimum Soil Temperature in Sod at Unknown Depth,HN57,C
+Lowest Minimum Soil Temperature in Sod at Unknown Depth,LN57,C
+Monthly Mean Soil Temperature at Observation Time in Sod at Unknown Depth,MO57,C
+Highest Soil Temperature at Observation Time in Sod at Unknown Depth,HO57,C
+Lowest Soil Temperature at Observation Time in Sod at Unknown Depth,LO57,C
+Monthly Mean Maximum Soil Temperature in Sod at Unknown Depth,MX57,C
+Highest Maximum Soil Temperature in Sod at Unknown Depth,HX57,C
+Lowest Maximum Soil Temperature in Sod at Unknown Depth,LX57,C
+Soil Minimum Temperature in Straw mulch at 5 cm Depth,SN60,C
+Soil Maximum Temperature in Straw mulch at 5 cm Depth,SX60,C
+Soil Temperature at Observation in Straw mulch at 5 cm Depth,SO60,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 5 cm Depth,MN60,C
+Highest Minimum Soil Temperature in Straw mulch at 5 cm Depth,HN60,C
+Lowest Minimum Soil Temperature in Straw mulch at 5 cm Depth,LN60,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 5 cm Depth,MO60,C
+Highest Soil Temperature at Observation Time in Straw mulch at 5 cm Depth,HO60,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 5 cm Depth,LO60,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 5 cm Depth,MX60,C
+Highest Maximum Soil Temperature in Straw mulch at 5 cm Depth,HX60,C
+Lowest Maximum Soil Temperature in Straw mulch at 5 cm Depth,LX60,C
+Soil Minimum Temperature in Straw mulch at 10 cm Depth,SN61,C
+Soil Maximum Temperature in Straw mulch at 10 cm Depth,SX61,C
+Soil Temperature at Observation in Straw mulch at 10 cm Depth,SO61,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 10 cm Depth,MN61,C
+Highest Minimum Soil Temperature in Straw mulch at 10 cm Depth,HN61,C
+Lowest Minimum Soil Temperature in Straw mulch at 10 cm Depth,LN61,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 10 cm Depth,MO61,C
+Highest Soil Temperature at Observation Time in Straw mulch at 10 cm Depth,HO61,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 10 cm Depth,LO61,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 10 cm Depth,MX61,C
+Highest Maximum Soil Temperature in Straw mulch at 10 cm Depth,HX61,C
+Lowest Maximum Soil Temperature in Straw mulch at 10 cm Depth,LX61,C
+Soil Minimum Temperature in Straw mulch at 20 cm Depth,SN62,C
+Soil Maximum Temperature in Straw mulch at 20 cm Depth,SX62,C
+Soil Temperature at Observation in Straw mulch at 20 cm Depth,SO62,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 20 cm Depth,MN62,C
+Highest Minimum Soil Temperature in Straw mulch at 20 cm Depth,HN62,C
+Lowest Minimum Soil Temperature in Straw mulch at 20 cm Depth,LN62,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 20 cm Depth,MO62,C
+Highest Soil Temperature at Observation Time in Straw mulch at 20 cm Depth,HO62,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 20 cm Depth,LO62,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 20 cm Depth,MX62,C
+Highest Maximum Soil Temperature in Straw mulch at 20 cm Depth,HX62,C
+Lowest Maximum Soil Temperature in Straw mulch at 20 cm Depth,LX62,C
+Soil Minimum Temperature in Straw mulch at 50 cm Depth,SN63,C
+Soil Maximum Temperature in Straw mulch at 50 cm Depth,SX63,C
+Soil Temperature at Observation in Straw mulch at 50 cm Depth,SO63,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 50 cm Depth,MN63,C
+Highest Minimum Soil Temperature in Straw mulch at 50 cm Depth,HN63,C
+Lowest Minimum Soil Temperature in Straw mulch at 50 cm Depth,LN63,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 50 cm Depth,MO63,C
+Highest Soil Temperature at Observation Time in Straw mulch at 50 cm Depth,HO63,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 50 cm Depth,LO63,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 50 cm Depth,MX63,C
+Highest Maximum Soil Temperature in Straw mulch at 50 cm Depth,HX63,C
+Lowest Maximum Soil Temperature in Straw mulch at 50 cm Depth,LX63,C
+Soil Minimum Temperature in Straw mulch at 100 cm Depth,SN64,C
+Soil Maximum Temperature in Straw mulch at 100 cm Depth,SX64,C
+Soil Temperature at Observation in Straw mulch at 100 cm Depth,SO64,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 100 cm Depth,MN64,C
+Highest Minimum Soil Temperature in Straw mulch at 100 cm Depth,HN64,C
+Lowest Minimum Soil Temperature in Straw mulch at 100 cm Depth,LN64,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 100 cm Depth,MO64,C
+Highest Soil Temperature at Observation Time in Straw mulch at 100 cm Depth,HO64,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 100 cm Depth,LO64,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 100 cm Depth,MX64,C
+Highest Maximum Soil Temperature in Straw mulch at 100 cm Depth,HX64,C
+Lowest Maximum Soil Temperature in Straw mulch at 100 cm Depth,LX64,C
+Soil Minimum Temperature in Straw mulch at 150 cm Depth,SN65,C
+Soil Maximum Temperature in Straw mulch at 150 cm Depth,SX65,C
+Soil Temperature at Observation in Straw mulch at 150 cm Depth,SO65,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 150 cm Depth,MN65,C
+Highest Minimum Soil Temperature in Straw mulch at 150 cm Depth,HN65,C
+Lowest Minimum Soil Temperature in Straw mulch at 150 cm Depth,LN65,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 150 cm Depth,MO65,C
+Highest Soil Temperature at Observation Time in Straw mulch at 150 cm Depth,HO65,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 150 cm Depth,LO65,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 150 cm Depth,MX65,C
+Highest Maximum Soil Temperature in Straw mulch at 150 cm Depth,HX65,C
+Lowest Maximum Soil Temperature in Straw mulch at 150 cm Depth,LX65,C
+Soil Minimum Temperature in Straw mulch at 180 cm Depth,SN66,C
+Soil Maximum Temperature in Straw mulch at 180 cm Depth,SX66,C
+Soil Temperature at Observation in Straw mulch at 180 cm Depth,SO66,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at 180 cm Depth,MN66,C
+Highest Minimum Soil Temperature in Straw mulch at 180 cm Depth,HN66,C
+Lowest Minimum Soil Temperature in Straw mulch at 180 cm Depth,LN66,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at 180 cm Depth,MO66,C
+Highest Soil Temperature at Observation Time in Straw mulch at 180 cm Depth,HO66,C
+Lowest Soil Temperature at Observation Time in Straw mulch at 180 cm Depth,LO66,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at 180 cm Depth,MX66,C
+Highest Maximum Soil Temperature in Straw mulch at 180 cm Depth,HX66,C
+Lowest Maximum Soil Temperature in Straw mulch at 180 cm Depth,LX66,C
+Soil Minimum Temperature in Straw mulch at Unknown Depth,SN67,C
+Soil Maximum Temperature in Straw mulch at Unknown Depth,SX67,C
+Soil Temperature at Observation in Straw mulch at Unknown Depth,SO67,C
+Monthly Mean Minimum Soil Temperature in Straw mulch at Unknown Depth,MN67,C
+Highest Minimum Soil Temperature in Straw mulch at Unknown Depth,HN67,C
+Lowest Minimum Soil Temperature in Straw mulch at Unknown Depth,LN67,C
+Monthly Mean Soil Temperature at Observation Time in Straw mulch at Unknown Depth,MO67,C
+Highest Soil Temperature at Observation Time in Straw mulch at Unknown Depth,HO67,C
+Lowest Soil Temperature at Observation Time in Straw mulch at Unknown Depth,LO67,C
+Monthly Mean Maximum Soil Temperature in Straw mulch at Unknown Depth,MX67,C
+Highest Maximum Soil Temperature in Straw mulch at Unknown Depth,HX67,C
+Lowest Maximum Soil Temperature in Straw mulch at Unknown Depth,LX67,C
+Soil Minimum Temperature in Grass muck at 5 cm Depth,SN70,C
+Soil Maximum Temperature in Grass muck at 5 cm Depth,SX70,C
+Soil Temperature at Observation in Grass muck at 5 cm Depth,SO70,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 5 cm Depth,MN70,C
+Highest Minimum Soil Temperature in Grass muck at 5 cm Depth,HN70,C
+Lowest Minimum Soil Temperature in Grass muck at 5 cm Depth,LN70,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 5 cm Depth,MO70,C
+Highest Soil Temperature at Observation Time in Grass muck at 5 cm Depth,HO70,C
+Lowest Soil Temperature at Observation Time in Grass muck at 5 cm Depth,LO70,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 5 cm Depth,MX70,C
+Highest Maximum Soil Temperature in Grass muck at 5 cm Depth,HX70,C
+Lowest Maximum Soil Temperature in Grass muck at 5 cm Depth,LX70,C
+Soil Minimum Temperature in Grass muck at 10 cm Depth,SN71,C
+Soil Maximum Temperature in Grass muck at 10 cm Depth,SX71,C
+Soil Temperature at Observation in Grass muck at 10 cm Depth,SO71,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 10 cm Depth,MN71,C
+Highest Minimum Soil Temperature in Grass muck at 10 cm Depth,HN71,C
+Lowest Minimum Soil Temperature in Grass muck at 10 cm Depth,LN71,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 10 cm Depth,MO71,C
+Highest Soil Temperature at Observation Time in Grass muck at 10 cm Depth,HO71,C
+Lowest Soil Temperature at Observation Time in Grass muck at 10 cm Depth,LO71,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 10 cm Depth,MX71,C
+Highest Maximum Soil Temperature in Grass muck at 10 cm Depth,HX71,C
+Lowest Maximum Soil Temperature in Grass muck at 10 cm Depth,LX71,C
+Soil Minimum Temperature in Grass muck at 20 cm Depth,SN72,C
+Soil Maximum Temperature in Grass muck at 20 cm Depth,SX72,C
+Soil Temperature at Observation in Grass muck at 20 cm Depth,SO72,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 20 cm Depth,MN72,C
+Highest Minimum Soil Temperature in Grass muck at 20 cm Depth,HN72,C
+Lowest Minimum Soil Temperature in Grass muck at 20 cm Depth,LN72,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 20 cm Depth,MO72,C
+Highest Soil Temperature at Observation Time in Grass muck at 20 cm Depth,HO72,C
+Lowest Soil Temperature at Observation Time in Grass muck at 20 cm Depth,LO72,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 20 cm Depth,MX72,C
+Highest Maximum Soil Temperature in Grass muck at 20 cm Depth,HX72,C
+Lowest Maximum Soil Temperature in Grass muck at 20 cm Depth,LX72,C
+Soil Minimum Temperature in Grass muck at 50 cm Depth,SN73,C
+Soil Maximum Temperature in Grass muck at 50 cm Depth,SX73,C
+Soil Temperature at Observation in Grass muck at 50 cm Depth,SO73,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 50 cm Depth,MN73,C
+Highest Minimum Soil Temperature in Grass muck at 50 cm Depth,HN73,C
+Lowest Minimum Soil Temperature in Grass muck at 50 cm Depth,LN73,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 50 cm Depth,MO73,C
+Highest Soil Temperature at Observation Time in Grass muck at 50 cm Depth,HO73,C
+Lowest Soil Temperature at Observation Time in Grass muck at 50 cm Depth,LO73,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 50 cm Depth,MX73,C
+Highest Maximum Soil Temperature in Grass muck at 50 cm Depth,HX73,C
+Lowest Maximum Soil Temperature in Grass muck at 50 cm Depth,LX73,C
+Soil Minimum Temperature in Grass muck at 100 cm Depth,SN74,C
+Soil Maximum Temperature in Grass muck at 100 cm Depth,SX74,C
+Soil Temperature at Observation in Grass muck at 100 cm Depth,SO74,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 100 cm Depth,MN74,C
+Highest Minimum Soil Temperature in Grass muck at 100 cm Depth,HN74,C
+Lowest Minimum Soil Temperature in Grass muck at 100 cm Depth,LN74,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 100 cm Depth,MO74,C
+Highest Soil Temperature at Observation Time in Grass muck at 100 cm Depth,HO74,C
+Lowest Soil Temperature at Observation Time in Grass muck at 100 cm Depth,LO74,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 100 cm Depth,MX74,C
+Highest Maximum Soil Temperature in Grass muck at 100 cm Depth,HX74,C
+Lowest Maximum Soil Temperature in Grass muck at 100 cm Depth,LX74,C
+Soil Minimum Temperature in Grass muck at 150 cm Depth,SN75,C
+Soil Maximum Temperature in Grass muck at 150 cm Depth,SX75,C
+Soil Temperature at Observation in Grass muck at 150 cm Depth,SO75,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 150 cm Depth,MN75,C
+Highest Minimum Soil Temperature in Grass muck at 150 cm Depth,HN75,C
+Lowest Minimum Soil Temperature in Grass muck at 150 cm Depth,LN75,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 150 cm Depth,MO75,C
+Highest Soil Temperature at Observation Time in Grass muck at 150 cm Depth,HO75,C
+Lowest Soil Temperature at Observation Time in Grass muck at 150 cm Depth,LO75,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 150 cm Depth,MX75,C
+Highest Maximum Soil Temperature in Grass muck at 150 cm Depth,HX75,C
+Lowest Maximum Soil Temperature in Grass muck at 150 cm Depth,LX75,C
+Soil Minimum Temperature in Grass muck at 180 cm Depth,SN76,C
+Soil Maximum Temperature in Grass muck at 180 cm Depth,SX76,C
+Soil Temperature at Observation in Grass muck at 180 cm Depth,SO76,C
+Monthly Mean Minimum Soil Temperature in Grass muck at 180 cm Depth,MN76,C
+Highest Minimum Soil Temperature in Grass muck at 180 cm Depth,HN76,C
+Lowest Minimum Soil Temperature in Grass muck at 180 cm Depth,LN76,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at 180 cm Depth,MO76,C
+Highest Soil Temperature at Observation Time in Grass muck at 180 cm Depth,HO76,C
+Lowest Soil Temperature at Observation Time in Grass muck at 180 cm Depth,LO76,C
+Monthly Mean Maximum Soil Temperature in Grass muck at 180 cm Depth,MX76,C
+Highest Maximum Soil Temperature in Grass muck at 180 cm Depth,HX76,C
+Lowest Maximum Soil Temperature in Grass muck at 180 cm Depth,LX76,C
+Soil Minimum Temperature in Grass muck at Unknown Depth,SN77,C
+Soil Maximum Temperature in Grass muck at Unknown Depth,SX77,C
+Soil Temperature at Observation in Grass muck at Unknown Depth,SO77,C
+Monthly Mean Minimum Soil Temperature in Grass muck at Unknown Depth,MN77,C
+Highest Minimum Soil Temperature in Grass muck at Unknown Depth,HN77,C
+Lowest Minimum Soil Temperature in Grass muck at Unknown Depth,LN77,C
+Monthly Mean Soil Temperature at Observation Time in Grass muck at Unknown Depth,MO77,C
+Highest Soil Temperature at Observation Time in Grass muck at Unknown Depth,HO77,C
+Lowest Soil Temperature at Observation Time in Grass muck at Unknown Depth,LO77,C
+Monthly Mean Maximum Soil Temperature in Grass muck at Unknown Depth,MX77,C
+Highest Maximum Soil Temperature in Grass muck at Unknown Depth,HX77,C
+Lowest Maximum Soil Temperature in Grass muck at Unknown Depth,LX77,C
+Soil Minimum Temperature in Bare muck at 5 cm Depth,SN80,C
+Soil Maximum Temperature in Bare muck at 5 cm Depth,SX80,C
+Soil Temperature at Observation in Bare muck at 5 cm Depth,SO80,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 5 cm Depth,MN80,C
+Highest Minimum Soil Temperature in Bare muck at 5 cm Depth,HN80,C
+Lowest Minimum Soil Temperature in Bare muck at 5 cm Depth,LN80,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 5 cm Depth,MO80,C
+Highest Soil Temperature at Observation Time in Bare muck at 5 cm Depth,HO80,C
+Lowest Soil Temperature at Observation Time in Bare muck at 5 cm Depth,LO80,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 5 cm Depth,MX80,C
+Highest Maximum Soil Temperature in Bare muck at 5 cm Depth,HX80,C
+Lowest Maximum Soil Temperature in Bare muck at 5 cm Depth,LX80,C
+Soil Minimum Temperature in Bare muck at 10 cm Depth,SN81,C
+Soil Maximum Temperature in Bare muck at 10 cm Depth,SX81,C
+Soil Temperature at Observation in Bare muck at 10 cm Depth,SO81,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 10 cm Depth,MN81,C
+Highest Minimum Soil Temperature in Bare muck at 10 cm Depth,HN81,C
+Lowest Minimum Soil Temperature in Bare muck at 10 cm Depth,LN81,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 10 cm Depth,MO81,C
+Highest Soil Temperature at Observation Time in Bare muck at 10 cm Depth,HO81,C
+Lowest Soil Temperature at Observation Time in Bare muck at 10 cm Depth,LO81,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 10 cm Depth,MX81,C
+Highest Maximum Soil Temperature in Bare muck at 10 cm Depth,HX81,C
+Lowest Maximum Soil Temperature in Bare muck at 10 cm Depth,LX81,C
+Soil Minimum Temperature in Bare muck at 20 cm Depth,SN82,C
+Soil Maximum Temperature in Bare muck at 20 cm Depth,SX82,C
+Soil Temperature at Observation in Bare muck at 20 cm Depth,SO82,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 20 cm Depth,MN82,C
+Highest Minimum Soil Temperature in Bare muck at 20 cm Depth,HN82,C
+Lowest Minimum Soil Temperature in Bare muck at 20 cm Depth,LN82,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 20 cm Depth,MO82,C
+Highest Soil Temperature at Observation Time in Bare muck at 20 cm Depth,HO82,C
+Lowest Soil Temperature at Observation Time in Bare muck at 20 cm Depth,LO82,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 20 cm Depth,MX82,C
+Highest Maximum Soil Temperature in Bare muck at 20 cm Depth,HX82,C
+Lowest Maximum Soil Temperature in Bare muck at 20 cm Depth,LX82,C
+Soil Minimum Temperature in Bare muck at 50 cm Depth,SN83,C
+Soil Maximum Temperature in Bare muck at 50 cm Depth,SX83,C
+Soil Temperature at Observation in Bare muck at 50 cm Depth,SO83,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 50 cm Depth,MN83,C
+Highest Minimum Soil Temperature in Bare muck at 50 cm Depth,HN83,C
+Lowest Minimum Soil Temperature in Bare muck at 50 cm Depth,LN83,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 50 cm Depth,MO83,C
+Highest Soil Temperature at Observation Time in Bare muck at 50 cm Depth,HO83,C
+Lowest Soil Temperature at Observation Time in Bare muck at 50 cm Depth,LO83,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 50 cm Depth,MX83,C
+Highest Maximum Soil Temperature in Bare muck at 50 cm Depth,HX83,C
+Lowest Maximum Soil Temperature in Bare muck at 50 cm Depth,LX83,C
+Soil Minimum Temperature in Bare muck at 100 cm Depth,SN84,C
+Soil Maximum Temperature in Bare muck at 100 cm Depth,SX84,C
+Soil Temperature at Observation in Bare muck at 100 cm Depth,SO84,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 100 cm Depth,MN84,C
+Highest Minimum Soil Temperature in Bare muck at 100 cm Depth,HN84,C
+Lowest Minimum Soil Temperature in Bare muck at 100 cm Depth,LN84,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 100 cm Depth,MO84,C
+Highest Soil Temperature at Observation Time in Bare muck at 100 cm Depth,HO84,C
+Lowest Soil Temperature at Observation Time in Bare muck at 100 cm Depth,LO84,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 100 cm Depth,MX84,C
+Highest Maximum Soil Temperature in Bare muck at 100 cm Depth,HX84,C
+Lowest Maximum Soil Temperature in Bare muck at 100 cm Depth,LX84,C
+Soil Minimum Temperature in Bare muck at 150 cm Depth,SN85,C
+Soil Maximum Temperature in Bare muck at 150 cm Depth,SX85,C
+Soil Temperature at Observation in Bare muck at 150 cm Depth,SO85,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 150 cm Depth,MN85,C
+Highest Minimum Soil Temperature in Bare muck at 150 cm Depth,HN85,C
+Lowest Minimum Soil Temperature in Bare muck at 150 cm Depth,LN85,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 150 cm Depth,MO85,C
+Highest Soil Temperature at Observation Time in Bare muck at 150 cm Depth,HO85,C
+Lowest Soil Temperature at Observation Time in Bare muck at 150 cm Depth,LO85,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 150 cm Depth,MX85,C
+Highest Maximum Soil Temperature in Bare muck at 150 cm Depth,HX85,C
+Lowest Maximum Soil Temperature in Bare muck at 150 cm Depth,LX85,C
+Soil Minimum Temperature in Bare muck at 180 cm Depth,SN86,C
+Soil Maximum Temperature in Bare muck at 180 cm Depth,SX86,C
+Soil Temperature at Observation in Bare muck at 180 cm Depth,SO86,C
+Monthly Mean Minimum Soil Temperature in Bare muck at 180 cm Depth,MN86,C
+Highest Minimum Soil Temperature in Bare muck at 180 cm Depth,HN86,C
+Lowest Minimum Soil Temperature in Bare muck at 180 cm Depth,LN86,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at 180 cm Depth,MO86,C
+Highest Soil Temperature at Observation Time in Bare muck at 180 cm Depth,HO86,C
+Lowest Soil Temperature at Observation Time in Bare muck at 180 cm Depth,LO86,C
+Monthly Mean Maximum Soil Temperature in Bare muck at 180 cm Depth,MX86,C
+Highest Maximum Soil Temperature in Bare muck at 180 cm Depth,HX86,C
+Lowest Maximum Soil Temperature in Bare muck at 180 cm Depth,LX86,C
+Soil Minimum Temperature in Bare muck at Unknown Depth,SN87,C
+Soil Maximum Temperature in Bare muck at Unknown Depth,SX87,C
+Soil Temperature at Observation in Bare muck at Unknown Depth,SO87,C
+Monthly Mean Minimum Soil Temperature in Bare muck at Unknown Depth,MN87,C
+Highest Minimum Soil Temperature in Bare muck at Unknown Depth,HN87,C
+Lowest Minimum Soil Temperature in Bare muck at Unknown Depth,LN87,C
+Monthly Mean Soil Temperature at Observation Time in Bare muck at Unknown Depth,MO87,C
+Highest Soil Temperature at Observation Time in Bare muck at Unknown Depth,HO87,C
+Lowest Soil Temperature at Observation Time in Bare muck at Unknown Depth,LO87,C
+Monthly Mean Maximum Soil Temperature in Bare muck at Unknown Depth,MX87,C
+Highest Maximum Soil Temperature in Bare muck at Unknown Depth,HX87,C
+Lowest Maximum Soil Temperature in Bare muck at Unknown Depth,LX87,C
+UNKNOWN Temperature OT00,OT00,C
+UNKNOWN Temperature OT01,OT01,C
+UNKNOWN Temperature OT02,OT02,C
+UNKNOWN Temperature OT03,OT03,C
+UNKNOWN Temperature OT04,OT04,C
+UNKNOWN Temperature OT05,OT05,C
+UNKNOWN Temperature OT06,OT06,C
+UNKNOWN Temperature OT07,OT07,C
+UNKNOWN Temperature OT08,OT08,C
+UNKNOWN Temperature OT09,OT09,C
+UNKNOWN Temperature OT10,OT10,C
+UNKNOWN Temperature OT11,OT11,C
+UNKNOWN Temperature OT12,OT12,C
+UNKNOWN Temperature OT13,OT13,C
+UNKNOWN Temperature OT14,OT14,C
+UNKNOWN Temperature OT15,OT15,C
+UNKNOWN Temperature OT16,OT16,C
+UNKNOWN Temperature OT17,OT17,C
+UNKNOWN Temperature OT18,OT18,C
+UNKNOWN Temperature OT19,OT19,C
+UNKNOWN Temperature OT20,OT20,C
+UNKNOWN Temperature OT21,OT21,C
+UNKNOWN Temperature OT22,OT22,C
+UNKNOWN Temperature OT23,OT23,C
+UNKNOWN Temperature OT24,OT24,C
