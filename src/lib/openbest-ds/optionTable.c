@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 #include "openbest-ds/printOut.h"
 #include "openbest-ds/optionTable.h"
 
@@ -181,4 +181,16 @@ void addUsage(optionTable* ot, char* usages)
 {
     strcat(ot->usages, "\t\t");
     strcat(ot->usages, usages);
+}
+
+void destroyOptionTable(optionTable* ot)
+{
+    option* o;
+    while ( ot->optionList != NULL )
+    {
+        o= ot->optionList->next;
+        free(ot->optionList);
+        ot->optionList= o;
+    }
+    free(ot);
 }

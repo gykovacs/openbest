@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 
 #include <stdio.h>
 #include <stdlib.h> 

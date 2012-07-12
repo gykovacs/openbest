@@ -3,7 +3,7 @@
 
 #include <float.h>
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 
 /**
  * structure to represent a moment

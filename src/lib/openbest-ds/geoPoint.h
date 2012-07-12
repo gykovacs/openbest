@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 #include "openbest-ds/temperatureGlobals.h"
 #include "openbest-ds/matrix3.h"
 

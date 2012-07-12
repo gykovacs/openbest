@@ -1,7 +1,9 @@
 #ifndef _STATION_MANIFEST_H_
 #define _STATION_MANIFEST_H_
 
+#include "openbest-ds/config-ds.h"
 #include "openbest-ds/timeRange.h"
+#include "openbest-ds/geoPoint.h"
 
 typedef struct
 {
@@ -17,16 +19,16 @@ typedef struct
   real location_precision;
   real alt_elevation;
   real alt_elevation_type;
-  int reloc;
+  char reloc[100];
   int station_type;
 } stationManifest;
 
 void setStartDateSM(stationManifest* sm, timeInstant* ti);
 
-void setDurationSM(stationManifest* sm, timeInstant* t1, timeInstant* t2);
+void setDurationSM2(stationManifest* sm, timeInstant* t1, timeInstant* t2);
 
-void setDurationSM(stationManifest* sm, timeRange* tr);
+void setDurationSM1(stationManifest* sm, timeRange* tr);
 
-
+void destroySM(stationManifest* sm);
 
 #endif

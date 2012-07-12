@@ -1,7 +1,7 @@
 #ifndef _VECTOR3_H_
 #define _VECTOR3_H_
 
-#include "config.h"
+#include "config-ds.h"
 
 /**
  * struct to represent 3D vectors

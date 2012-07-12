@@ -90,4 +90,6 @@ void setPostfix(optionTable* o, char* postfix);
 
 void addUsage(optionTable* o, char* usage);
 
+void destroyOptionTable(optionTable* ot);
+
 #endif

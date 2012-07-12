@@ -1,9 +1,31 @@
-#include "openbest-ds/stationSourceType.h"
+#include <string.h>
 
-void loadStationSourcePKT()
+#include "openbest-io/config-io.h"
+#include "openbest-io/loadStationSourceTypes.h"
+
+void loadStationSourceTypesPKT()
 {
-  stationSourcePKT= createPrimaryKeyTableP();
-  insertIntoPKT(stationSourcePKT, "US First Order Summary of the Day", 1);
+  char filename[100];
+  strcpy(filename, DATA_DIR );
+  strcat(filename, "sourceTypes.txt");
+  FILE* f= fopen(filename, "rt");
+  
+  char buffer[200];
+
+  int i= 0, j;
+  char* tmp;
+  while ( fgets(buffer, 200, f) != NULL )
+  {
+    ++i;
+    tmp= strtok(buffer, "\n,");
+    insertIntoPKT(stationSourceTypesPKT, tmp, i);
+    tmp= strtok(NULL, "\n,");
+    insertIntoPKT(stationSourceTypesPKT, tmp, i);
+  }
+  
+  fclose(f);
+  
+  /*insertIntoPKT(stationSourcePKT, "US First Order Summary of the Day", 1);
   insertIntoPKT(stationSourcePKT, "USS0D-F0", 1);
   
   insertIntoPKT(stationSourcePKT, "US Cooperative Summary of the Day", 2);
@@ -247,5 +269,5 @@ void loadStationSourcePKT()
   insertIntoPKT(stationSourcePKT, "NCDC_3202", 81);
   
   insertIntoPKT(stationSourcePKT, "NCDC: RCC-Preliminary Summary of the Day", 82);
-  insertIntoPKT(stationSourcePKT, "NCDC_RCC-", 82);
+  insertIntoPKT(stationSourcePKT, "NCDC_RCC-", 82);*/
 }

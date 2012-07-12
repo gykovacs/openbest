@@ -3,8 +3,12 @@
 valueToKeyTree* newVTKElement(char* key, int value)
 {
   valueToKeyTree* tmp= (valueToKeyTree*)malloc(sizeof(valueToKeyTree));
+  if ( tmp == NULL )
+      eprintf("malloc failed in newVTKElement\n");
   tmp->keys= (char**)malloc(sizeof(char*)*2);
-  tmp->keys[0]= cnalloc(strlen(key));
+  if ( tmp->keys == NULL )
+      eprintf("malloc failed in newVTKElement\n");
+  tmp->keys[0]= cnalloc(strlen(key) + 1);
   strcpy(tmp->keys[0], key);
   tmp->keys[1]= NULL;
   tmp->n= 2;
@@ -30,8 +34,8 @@ char* insertIntoVTK(valueToKeyTree** root, char* key, int value)
     else if ((*root)->value == value )
     {
       ((*root)->n)++;
-      (*root)->keys= realloc((*root)->keys, sizeof(char*)*((*root)->n));
-      ((*root)->keys)[(*root)->n-2]= cnalloc(strlen(key));
+      (*root)->keys= (char**)realloc((*root)->keys, sizeof(char*)*((*root)->n));
+      ((*root)->keys)[(*root)->n-2]= cnalloc(strlen(key) + 1);
       strcpy(((*root)->keys)[(*root)->n-2], key);
       ((*root)->keys)[(*root)->n-1]= NULL;
       
@@ -43,6 +47,8 @@ char* insertIntoVTK(valueToKeyTree** root, char* key, int value)
 keyToValueTree* newKTVElement(char* key, int value)
 {
   keyToValueTree* tmp= (keyToValueTree*)malloc(sizeof(keyToValueTree));
+  if ( tmp == NULL )
+      eprintf("malloc failed in newKTVElement");
   tmp->key= key;
   tmp->value= value;
   tmp->left= tmp->right= NULL;
@@ -123,22 +129,19 @@ void destroyVTK(valueToKeyTree** root)
 {
   if ( *root == NULL )
     return;
-  
+
   if ( (*root)->left != NULL )
     destroyVTK(&((*root)->left));
   
   if ( (*root)->right != NULL )
     destroyVTK(&((*root)->right));
   
-  if ( (*root)->left == NULL && (*root)->right == NULL )
-  {
-    int i;
-    for ( i= 0; i < (*root)->n - 1; ++i )
-      free((*root)->keys[i]);
-    free((*root)->keys);
-    free((*root));
-    *root= NULL;
-  }
+  int i;
+  for ( i= 0; i < (*root)->n - 1; ++i )
+    free((*root)->keys[i]);
+  free((*root)->keys);
+  free((*root));
+  *root= NULL;
 }
 
 void destroyKTV(keyToValueTree** root)
@@ -161,8 +164,9 @@ void destroyKTV(keyToValueTree** root)
 
 void destroyPKT(primaryKeyTable* pkt)
 {
-  destroyVTK(pkt->vtk);
-  destroyKTV(pkt->ktv);
+  destroyVTK(&(pkt->vtk));
+  destroyKTV(&(pkt->ktv));
+  free(pkt);
 }
 
 void displayPKTbyValue(primaryKeyTable* pkt)
@@ -177,10 +181,13 @@ void displayPKTbyKeys(primaryKeyTable* pkt)
 
 void displayVTK(valueToKeyTree* root)
 {
+  if ( root == NULL )
+    return;
   if ( root->left != NULL )
     displayVTK(root->left);
   printf("%d - ", root->value);
   int i;
+  printf("n: %d\n", root->n); fflush(stdout);
   for ( i= 0; i < root->n - 1; ++i )
     printf("%s, ", root->keys[i]);
   printf("\n");
@@ -190,6 +197,8 @@ void displayVTK(valueToKeyTree* root)
 
 void displayKTV(keyToValueTree* root)
 {
+  if ( root == NULL )
+    return;
   if ( root->left != NULL )
     displayKTV(root->left);
   printf("%s - %d\n", root->key, root->value);

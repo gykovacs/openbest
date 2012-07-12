@@ -1,7 +1,7 @@
 #ifndef _TILE_H_
 #define _TILE_H_
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 
 typedef struct
 {

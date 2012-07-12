@@ -1,7 +1,5 @@
 #include <unistd.h>
 
-#include "openbest-ds/config.h"
-
 #include "openbest-ds/hello-openbest.h"
 #include "openbest-ds/geoPoint.h"
 #include "openbest-ds/geoPoint2.h"
@@ -9,8 +7,10 @@
 #include "openbest-ds/matrix3.h"
 #include "openbest-ds/timeInstant.h"
 #include "openbest-ds/timeRange.h"
-#include "openbest-ds/primaryKeyTable.h"
-#include "openbest-ds/init.h"
+#include "openbest-ds/primaryKeyTables.h"
+#include "openbest-ds/init-ds.h"
+#include "openbest-io/loadCountryNames.h"
+#include "openbest-io/loadStationSourceTypes.h"
 
 #include "openbest-ds/optionTable.h"
 
@@ -139,15 +139,6 @@ int primaryKeyTableTest(int argc, char** argv)
   return 0;
 }
 
-int stationSourceTest(int argc, char** argv)
-{
-  initOpenBEST();
-  
-  displayPKTbyValue(stationSourcePKT);
-  
-  return 0;
-}
-
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -165,7 +156,6 @@ int main(int argc, char** argv)
     bool time= false;
     bool timer= false;
     bool pkt= false;
-    bool stationSource= false;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
     addOption(ot, "--gp", OPTION_BOOL, (char*)&gp, 0, "geoPoint test");
@@ -174,7 +164,6 @@ int main(int argc, char** argv)
     addOption(ot, "--time", OPTION_BOOL, (char*)&time, 0, "time instant test - args: y m d h min s");
     addOption(ot, "--timerange", OPTION_BOOL, (char*)&timer, 0, "time range test");
     addOption(ot, "--pkt", OPTION_BOOL, (char*)&pkt, 0, "primary key table test");
-    addOption(ot, "--stationSource", OPTION_BOOL, (char*)&stationSource, 0, "station source type");
     
     if ( processArgs(ot, &argc, argv) )
       return -1;
@@ -193,8 +182,6 @@ int main(int argc, char** argv)
       return timeRangeTest(argc, argv);
     else if ( pkt )
       return primaryKeyTableTest(argc, argv);
-    else if ( stationSource )
-      return stationSourceTest(argc, argv);
     
     return 0;
 }

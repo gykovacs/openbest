@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "openbest-ds/config.h"
+#include "openbest-ds/config-ds.h"
 
 int sgn(real v);
 

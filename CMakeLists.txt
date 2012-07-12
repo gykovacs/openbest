@@ -21,6 +21,9 @@ add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${PROJECT_DIR}/Doxyfile)
 endif(DOXYGEN_FOUND)
 
 INSTALL(DIRECTORY doc DESTINATION doc/openbest)
+INSTALL(DIRECTORY dat DESTINATION dat/)
+
+SET(DEVEL_BUILD on)
 
 SUBDIRS(src)
 
