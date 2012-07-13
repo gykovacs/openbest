@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SUBDIRS(openbest-ds openbest-io)
+SUBDIRS(openbest-ds openbest-io openbest-av)
 
 SET(CMAKE_VERBOSE_MAKEFILE on)

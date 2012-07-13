@@ -4,6 +4,7 @@
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/geoPoint.h"
 
+/** struct for stationSite class*/
 typedef struct
 {
     int id;

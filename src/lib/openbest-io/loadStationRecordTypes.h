@@ -4,6 +4,9 @@
 #include "openbest-ds/primaryKeyTables.h"
 #include "openbest-io/config-io.h"
 
+/**
+  * loads the station record types from stationRecordTypes.txt into stationRecordTypesPKT
+  */
 void loadStationRecordTypesPKT();
 
 #endif

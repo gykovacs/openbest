@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SUBDIRS(test-ds test-io)
+SUBDIRS(test-ds test-io test-av)
 
 SET(CMAKE_VERBOSE_MAKEFILE on)

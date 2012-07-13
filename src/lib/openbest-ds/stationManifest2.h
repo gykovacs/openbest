@@ -5,6 +5,9 @@
 #include "openbest-ds/timeRange.h"
 #include "openbest-ds/geoPoint.h"
 
+/**
+  * struct for stationManifest2 class
+  */
 typedef struct
 {
   int source;
@@ -25,15 +28,5 @@ typedef struct
   char archive_key[];
   int station_type;
 } stationManifest2;
-
-void setStartDateSM2(stationManifest2* sm, timeInstant* ti);
-
-void setDurationSM2(stationManifest2* sm, timeInstant* t1, timeInstant* t2);
-
-void setDurationSM2(stationManifest2* sm, timeRange* tr);
-
-void destroySM2(stationManifest2* sm);
-
-void displaySM2(stationManifest2* sm);
 
 #endif

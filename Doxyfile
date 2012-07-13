@@ -650,7 +650,10 @@ WARN_LOGFILE           =
 
 INPUT                  = src/lib/openbest-ds \
 			src/lib/openbest-io \
-			src/test/test-ds
+			src/lib/openbest-av \
+			src/test/test-ds \
+			src/test/test-io \
+			src/test/test-av
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is

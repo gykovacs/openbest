@@ -4,6 +4,9 @@
 #include "openbest-ds/primaryKeyTables.h"
 #include "openbest-io/config-io.h"
 
+/**
+  * loads the site flags from siteFlags.txt into siteFlagsPKT
+  */
 void loadSiteFlagsPKT();
 
 #endif

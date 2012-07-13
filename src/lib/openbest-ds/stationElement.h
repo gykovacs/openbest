@@ -3,6 +3,9 @@
 
 #include "openbest-ds/config-ds.h"
 
+/**
+  * struct for stationElement class
+  */
 typedef struct
 {
     int record_type;
