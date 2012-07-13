@@ -137,7 +137,7 @@ int matchFlagsTest(int argc, char** argv)
 int loadSSTest(int argc, char** argv)
 {
     initDS();
-    stationSite2p** ss;
+    stationSite2p* ss;
     int n_stationSite2;
     printf("start loading...\n"); fflush(stdout);
     loadPreliminaryData();
@@ -153,13 +153,17 @@ int loadSSTest(int argc, char** argv)
         displaySS2(ss[id]);
     }while ( 1 );
     finalizeDS();
+    destroySS2V(ss, n_stationSite2);
+
     return 0;
 }
 
 int loadSETest(int argc, char** argv)
 {
     initDS();
-    stationElement2p** se;
+    char** t= &unknown_value;
+    printf("%s\n", t[0]);
+    stationElement2p* se;
     int n_stationElement2;
     printf("start loading...\n"); fflush(stdout);
     loadPreliminaryData();
@@ -174,23 +178,39 @@ int loadSETest(int argc, char** argv)
             break;
         displaySE2(se[id]);
     }while ( 1 );
+
     finalizeDS();
+    destroySE2V(se, n_stationElement2);
+
     return 0;
 }
 
 int loadAllTest(int argc, char** argv)
 {
     initDS();
-    stationElement2p** se;
-    stationSite2p** ss;
+    stationElement2p* se;
+    stationSite2p* ss;
     int n_stationElement2;
     int n_stationSite2;
 
     tprintf("start loading...\n"); fflush(stdout);
-    loadData(ss, &n_stationSite2, se, &n_stationElement2);
+    loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
     tprintf("finish loading...\n"); fflush(stdout);
 
+    int id;
+    do
+    {
+        printf("give the number of record to display (-1 to exit):\n");
+        scanf("%d", &id);
+        if ( id == -1 )
+            break;
+        displaySE2(se[id]);
+    }while ( 1 );
+
     finalizeDS();
+    destroySS2V(ss, n_stationSite2);
+    destroySE2V(se, n_stationElement2);
+
     return 0;
 }
 

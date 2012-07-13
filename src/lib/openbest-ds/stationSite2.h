@@ -31,6 +31,8 @@ typedef struct
 
 typedef stationSite2* stationSite2p;
 
+stationSite2* createSS2N();
+
 void addFlag(stationSite2* ss, int flag);
 
 void displaySS2(stationSite2* ss);
@@ -40,5 +42,9 @@ void findByName(stationSite2* sites, int n, char* name, stationSite2** select, i
 void findByFlags(stationSite2* sites, int n, int* flags, int fn, stationSite2** select, int* sn);
 
 void displaySS2(stationSite2* ss);
+
+void destroySS2(stationSite2* ss);
+
+void destroySS2V(stationSite2p* ss, int n);
 
 #endif

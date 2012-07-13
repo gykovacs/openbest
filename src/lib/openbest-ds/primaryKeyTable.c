@@ -1,3 +1,4 @@
+#include "openbest-ds/config-ds.h"
 #include "openbest-ds/primaryKeyTable.h"
 
 valueToKeyTree* newVTKElement(char* key, int value)
@@ -76,7 +77,7 @@ void insertIntoKTV(keyToValueTree** root, char* key, int value)
 char** lookupKeysVTK(valueToKeyTree* root, int value)
 {
   if ( root == NULL )
-    return NULL;
+    return &unknown_value;
   if ( root->value == value )
     return root->keys;
   if ( root->value > value )

@@ -1,7 +1,13 @@
+#include <string.h>
+
+#include "openbest-ds/config-ds.h"
 #include "openbest-ds/init-ds.h"
 
 void initDS()
 {
+  unknown_value= (char*)malloc(sizeof(char)*14);
+  strcpy(unknown_value, "unknown_value");
+
   countryNamesPKT= createPrimaryKeyTableP();
   
   stationSourceTypesPKT= createPrimaryKeyTableP();
@@ -28,6 +34,8 @@ void initDS()
 
 void finalizeDS()
 {
+    free(unknown_value);
+
     destroyPKT(countryNamesPKT);
     destroyPKT(stationSourceTypesPKT);
     destroyPKT(countryCodesPKT);

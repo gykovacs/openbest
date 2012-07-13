@@ -31,6 +31,12 @@ typedef struct
 
 typedef stationElement2* stationElement2p;
 
+stationElement2* createSE2N();
+
 void displaySE2(stationElement2* se);
+
+void destroySE2(stationElement2* se);
+
+void destroySE2V(stationElement2p* se, int n);
 
 #endif

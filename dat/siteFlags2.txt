@@ -1,0 +1,154 @@
+1 ,USSOD: Accumulated Amount,USSOD_A
+2 ,USSOD: Accumulated Amount (includes estimated values),USSOD_B
+3 ,USSOD: Derived Value,USSOD_D
+4 ,USSOD: Estimated Value,USSOD_E
+5 ,USSOD: Value manually validated,USSOD_J
+6 ,USSOD: Data Element Missing,USSOD_M
+7 ,USSOD: Multiple Concurrent Peak Gust,USSOD_P
+8 ,USSOD: Included in Subsequent Value,USSOD_S
+9 ,USSOD: Trace Precipitation,USSOD_T
+10 ,USSOD: Expert system edited value, not validated,USSOD_(
+11 ,USSOD: Expert system approved edited value,USSOD_)
+12 ,USSOD: Valid data element,USSOD_C2_0
+13 ,USSOD: Valid data element (from unknown source),USSOD_C2_1
+14 ,USSOD: Invalid data element (subsequent value replacement),USSOD_C2_2
+15 ,USSOD: Invalid data element (no replacement),USSOD_C2_3
+16 ,USSOD: Validity unknown,USSOD_C2_4
+17 ,USSOD: Non-numeric data value replaced by its deciphered numeric value,USSOD_C2_5
+18 ,USSOD: Substituted TOBS for TMAX or TMIN,USSOD_C2_A
+19 ,USSOD: Time shifted value,USSOD_C2_B
+20 ,USSOD: Precipitation estimated from snowfall,USSOD_C2_C
+21 ,USSOD: Transposed digits,USSOD_C2_D
+22 ,USSOD: Changed units,USSOD_C2_E
+23 ,USSOD: Adjusted TMAX or TMIN by a multiple of + or -10 degrees,USSOD_C2_F
+24 ,USSOD: Changed algebraic sign,USSOD_C2_G
+25 ,USSOD: Moved decimal point,USSOD_C2_H
+26 ,USSOD: Rescaling other than F, G, or H,USSOD_C2_I
+27 ,USSOD: Subjectively derived value,USSOD_C2_J
+28 ,USSOD: Extracted from an accumulated value,USSOD_C2_K
+29 ,USSOD: Switched TMAX and/or TMIN,USSOD_C2_L
+30 ,USSOD: Switched TOBS with TMAX or TMIN,USSOD_C2_M
+31 ,USSOD: Substitution of 3 nearest station mean,USSOD_C2_N
+32 ,USSOD: Switched snow and precipitation data value,USSOD_C2_O
+33 ,USSOD: Added snowfall to snow depth,USSOD_C2_P
+34 ,USSOD: Switched snowfall and snow depth,USSOD_C2_Q
+35 ,USSOD: Precipitation not reported; estimated as "O",USSOD_C2_R
+36 ,USSOD: Manually edited value,USSOD_C2_S,USSOD_F2_S
+37 ,USSOD: Failed internal consistency check,USSOD_C2_T
+38 ,USSOD: Failed areal consistency check,USSOD_C2_U
+39 ,USSOD: Replacement value based on TempVal QC process,USSOD_C2_V
+40 ,USSOD: UNKNOWN FLAG C2-6 !!,USSOD_C2_6
+41 ,USSOD: UNKNOWN FLAG C2-8 !!,USSOD_C2_8
+42 ,USSOD: UNKNOWN FLAG C2-X !!,USSOD_C2_X
+43 ,USSOD: UNKNOWN FLAG C2-W !!,USSOD_C2_W
+44 ,USSOD: UNKNOWN FLAG C2-Y !!,USSOD_C2_Y
+45 ,USSOD: UNKNOWN FLAG C2-Z !!,USSOD_C2_Z
+46 ,USSOD: Passed consistency checks,USSOD_F2_0
+47 ,USSOD: Unknown validity,USSOD_F2_1
+48 ,USSOD: Consistency check failed (replacement value follows),USSOD_F2_2
+49 ,USSOD: Consistency check failed (no replacement),USSOD_F2_3
+50 ,USSOD: Data invalid (no replacement),USSOD_F2_4
+51 ,USSOD: Data from TD-9750 exceeds climate extremes,USSOD_F2_5
+52 ,USSOD: Failed an internal consistency check but valid under manual inspection,USSOD_F2_A
+53 ,USSOD: Wind direction code is invalid,USSOD_F2_D
+54 ,USSOD: Edited data passes system checks,USSOD_F2_E
+55 ,USSOD: UNKNOWN FLAG F2-V !!,USSOD_F2_V
+56 ,USSOD: UNKNOWN FLAG F2-N !!,USSOD_F2_N
+57 ,USSOD: UNKNOWN FLAG F2-B !!,USSOD_F2_B
+58 ,USSOD: UNKNOWN FLAG F2-M !!,USSOD_F2_M
+59 ,USSOD: UNKNOWN FLAG F2-U !!,USSOD_F2_U
+60 ,USSOD: UNKNOWN FLAG F2-F !!,USSOD_F2_F
+61 ,USSOD: UNKNOWN FLAG F2-J !!,USSOD_F2_J
+62 ,USSOD: UNKNOWN FLAG F2-L !!,USSOD_F2_L
+63 ,USSOD: UNKNOWN FLAG F2-T !!,USSOD_F2_T
+64 ,USSOD: UNKNOWN FLAG F2-I !!,USSOD_F2_I
+65 ,GSOD: Temperature extreme derived from hourly data,GSOD_*
+66 ,GSOD: 1 report of 6-hour precipitation amount,GSOD_A
+67 ,GSOD: Sum of 2 reports of 6-hour precipitation amount,GSOD_B
+68 ,GSOD: Sum of 3 reports of 6-hour precipitation amount,GSOD_C
+69 ,GSOD: Sum of 4 reports of 6-hour precipitation amount,GSOD_D
+70 ,GSOD: 1 report of 12-hour precipitation amount,GSOD_E
+71 ,GSOD: Sum of 2 reports of 12-hour precipitation amount,GSOD_F
+72 ,GSOD: 1 report of 24-hour precipitation amount,GSOD_G
+73 ,GSOD: Report conflict, zero daily total reported with non-zero hourly,GSOD_H
+74 ,GSOD: Station did not report any hourly or daily precipitation, but still possible some occurred,GSOD_I
+75 ,GHCN-D: Precipitation total formed from two 12-hour totals,GHCN_MB
+76 ,GHCN-D: Precipitation total formed from four six-hour totals,GHCN_MD
+77 ,GHCN-D: Temperature appears to be lagged from reported hour of observation,GHCN_ML
+78 ,GHCN-D: Trace of precipitation, snowfall, or snow depth,GHCN_MT
+79 ,GHCN-D: Failed accumulation total check,GHCN_QA
+80 ,GHCN-D: Failed duplicate check,GHCN_QD
+81 ,GHCN-D: Failed gap check,GHCN_QG
+82 ,GHCN-D: Failed internal consistency check,GHCN_QI
+83 ,GHCN-D: Failed streak/frequent-value check,GHCN_QK
+84 ,GHCN-D: Failed megaconsistency check,GHCN_QM
+85 ,GHCN-D: Failed naught check,GHCN_QN
+86 ,GHCN-D: Failed climatological outlier check,GHCN_QO
+87 ,GHCN-D: Failed lagged range check,GHCN_QR
+88 ,GHCN-D: Failed spatial consistency check,GHCN_QS
+89 ,GHCN-D: Failed temporal consistency check,GHCN_QT
+90 ,GHCN-D: Temperature too warm for snow,GHCN_QW
+91 ,GHCN-D: Failed bounds check,GHCN_QX
+92 ,Pre-existing bad flag,NEW_1
+93 ,Exceeds climate extreme,NEW_2
+94 ,Failed duplicate check,NEW_3
+95 ,Failed naught check,NEW_4
+96 ,Failed frequent value check,NEW_5
+97 ,Failed second derivative check,NEW_6
+98 ,Failed climatological outlier check,NEW_7
+99 ,Failed TMAX > TMIN,NEW_8
+100 ,Failed TMAX >= observed T >= TMIN,NEW_9
+101 ,Data Merge: Difference < 0.01 C,MERGE_1
+102 ,Data Merge: Difference >= 0.01 C and < 0.1 C,MERGE_2
+103 ,Data Merge: Difference >= 0.1 C and < 0.25 C,MERGE_3
+104 ,Merged data had conflicting time of observation,MERGE_CONFLICT_TOB
+105 ,Merged data had conflicting number of measurements,MERGE_CONFLICT_NUM
+106 ,USSOD: UNKNOWN FLAG & !!,USSOD_&
+107 ,USSOD: UNKNOWN FLAG - !!,USSOD_-
+108 ,USSOM: Accumulated Amount,USSOM_A,USSOM_2_A
+109 ,USSOM: Adjusted Total Based on Scaling over Missing Days,USSOM_B
+110 ,USSOM: Estimated Value,USSOM_E,USSOM_2_E
+111 ,USSOM: 1 to 9 Days Missing,USSOM_I
+112 ,USSOM: Data Element Missing,USSOM_M
+113 ,USSOM: Included in Subsequent Value,USSOM_S
+114 ,USSOM: Trace Precipitation,USSOM_T
+115 ,USSOM: Occurred Over Several Days,USSOM_+,USSOM_2_+
+116 ,USHCN-M: Estimated from surrounding values; no original,USHCN-M_E
+117 ,USHCN-M: 1 to 9 Days Missing,USHCN-M_I
+118 ,USHCN-M: Estimated from surrounding values; original failed quality check,USHCN-M_Q
+119 ,USHCN-M: Estimated from surrounding values; original missing too many days,USHCN-M_X
+120 ,Duplicate Reduction: Difference < 0.01 C,DUPLICATE_1
+121 ,Duplicate Reduction: Difference >= 0.01 C and < 0.1 C,DUPLICATE_2
+122 ,Duplicate Reduction: Difference >= 0.1 C and < 0.25 C,DUPLICATE_3
+123 ,Duplicate Reduction: Difference >= 0.25 C and < 1 C,DUPLICATE_4
+124 ,Duplicate Reduction: Difference > 1 C,DUPLICATE_5,Duplicate Reduction: Difference >= 1 C
+125 ,Duplicate reduction had conflicting time of observation,DUPLICATE_CONFLICT_TOB
+126 ,Duplicate reduction had conflicting number of measurements,DUPLICATE_CONFLICT_NUM
+127 ,Month had change in time of observation,MONTHLY_TOB_CHANGE
+128 ,Number of hourly observations hidden in monthly average,MONTHLY_NUM_DROPPED
+129 ,Month included multi-valued days,MONTHLY_INCLUDED_DUPLICATES,Month included merged daily records,MONTHLY_INCLUDED_MERGES
+130 ,Days missing from monthly average,MONTHLY_INCOMPLETE
+131 ,USSOD: UNKNOWN FLAG C2-& !!,USSOD_C2_&
+132 ,Year had change in time of observation,ANNUAL_TOB_CHANGE
+133 ,Number of daily observations hidden in yearly average,ANNUAL_NUM_DROPPED
+134 ,Year included multi-valued months,ANNUAL_INCLUDED_DUPLICATES
+135 ,Month included merged monthly records,ANNUAL_INCLUDED_MERGES
+136 ,Months missing from annual average,ANNUAL_INCOMPLETE
+137 ,Perceived Unit Reporting Error Corrected,NEW_10
+138 ,Local Envelope Exceeded,NEW_11
+139 ,Duplicate reduction dropped one or more values flagged as bad,DUPLICATE_BAD_FLAGGED_VALUE_DROPPED
+140 ,10 or More days missing from monthly average,MONTHLY_HIGHLY_INCOMPLETE
+141 ,Dropped one or more values flagged as bad,MONTHLY_BAD_FLAGGED_VALUE_DROPPED
+142 ,Averaged records had conflicting time of observation,AVERAGE_CONFLICT_TOB
+143 ,Averaged records had conflicting number of measurements,AVERAGE_CONFLICT_NUM
+144 ,One or more averaged records had missing time of observation,AVERAGE_ESTIMATED_TOB
+145 ,One or more averaged records had missing number of measurements,AVERAGE_ESTIMATED_NUM
+146 ,Averaging dropped one or more values flagged as bad,AVERAGE_BAD_FLAGGED_VALUE_DROPPED
+147 ,Value created by averaging 2 or more records,AVERAGE_VALUE
+148 ,Averaging had missing values,AVERAGE_MISSING_VALUES
+149 ,Preliminary derivative flag recinded,NEW_12
+150 ,Preliminary outlier flag recinded,NEW_13
+151 ,Value created by averaging max and min records,AVERAGE_MAX_MIN
+152 ,Value created by averaging triple observations,AVERAGE_TRIPLE
+153 ,New Monthly Average from Daily Values,NEW_MONTHLY_AVERAGE,NEW_ANNUAL_AVERAGE
+154 ,Indicates a low-resolution source when high-resolution is also available,FROM_LOWER_RESOLUTION

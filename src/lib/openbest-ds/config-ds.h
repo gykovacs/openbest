@@ -1,5 +1,5 @@
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef _CONFIG_DS_H_
+#define _CONFIG_DS_H_
 
 #include <omp.h>
 
@@ -11,6 +11,8 @@ typedef unsigned char bool;
 //typedef unsigned short key_t;
 typedef unsigned char flag_t;
 typedef float temp_t;
+
+char* unknown_value;
 
 //extern const char* const dataDir = "/mnt/gentoo/openbest/dat/";
 //#define DATA_DIR "/mnt/gentoo/gsoc/openbest/dat/"

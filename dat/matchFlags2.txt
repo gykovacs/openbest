@@ -1,0 +1,69 @@
+1 ,Manually Approved Match,MANUAL_GOOD
+2 ,Manually Rejected Match,MANUAL_BAD
+3 ,Exact match on station name,STATION_NAME_MATCH
+4 ,Partial match on station name,PARTIAL_NAME_MATCH
+5 ,Match on country,COUNTRY_MATCH
+6 ,Country conflict,COUNTRY_CONFLICT
+7 ,Match on county,COUNTY_MATCH
+8 ,County conflict,COUNTY_CONFLICT
+9 ,Match on state,STATE_MATCH
+10 ,State conflict,STATE_CONFLICT
+11 ,WMO ID Match,WMO_MATCH
+12 ,WMO ID Conflict,WMO_CONFLICT
+13 ,WBAN ID Match,WBAN_MATCH
+14 ,WBAN ID Conflict,WBAN_CONFLICT
+15 ,COOP ID Match,COOP_MATCH
+16 ,COOP ID Conflict,COOP_CONFLICT
+17 ,Same Source,SAME_SOURCE
+18 ,Different Sources,DIFFERENT_SOURCE
+19 ,GSOD Duplicate Match,GSOD_DUPLICATE
+20 ,Identical Location,IDENTICAL_LOCATION
+21 ,Consistent Locations,CONSISTENT_LOCATION
+22 ,Inconsistent Locations,INCONSISTENT_LOCATION
+23 ,Identical Altitude,IDENTICAL_ALTITUDE
+24 ,Consistent Altitude,CONSISTENT_ALTITUDE
+25 ,Similar Altitude (+/- 10 m),SIMILAR_ALTITUDE
+26 ,Different Altitude,DIFFERENT_ALTITUDE
+27 ,Distance less than 100 m,WITHIN_100_M
+28 ,Distance less than 1 km,WITHIN_1_KM
+29 ,Distance less than 10 km,WITHIN_10_KM
+30 ,Distance less than 50 km,WITHIN_50_KM
+31 ,Distance less than 100 km,WITHIN_100_KM
+32 ,Distance greater than 10 km,MORE_THAN_10_KM
+33 ,Distance greater than 50 km,MORE_THAN_50_KM
+34 ,Distance greater than 100 km,MORE_THAN_100_KM
+35 ,Nearest neighbors,NEAREST_NEIGHBOR
+36 ,Nearest neighbors for these sources,NEAREST_NEIGHBOR_SOURCE_RESTRICTED
+37 ,TMAX records overlap,TMAX_OVERLAP
+38 ,TMAX records don't overlap,TMAX_NO_OVERLAP
+39 ,TMAX records match,TMAX_MATCH
+40 ,TMAX records ambiguous,TMAX_AMBIGUOUS
+41 ,TMAX records don't match,TMAX_NO_MATCH
+42 ,TMIN records overlap,TMIN_OVERLAP
+43 ,TMIN records don't overlap,TMIN_NO_OVERLAP
+44 ,TMIN records match,TMIN_MATCH
+45 ,TMIN records ambiguous,TMIN_AMBIGUOUS
+46 ,TMIN records don't match,TMIN_NO_MATCH
+47 ,TAVG records overlap,TAVG_OVERLAP
+48 ,TAVG records don't overlap,TAVG_NO_OVERLAP
+49 ,TAVG records match,TAVG_MATCH
+50 ,TAVG records ambiguous,TAVG_AMBIGUOUS
+51 ,TAVG records don't match,TAVG_NO_MATCH
+52 ,TOBS records overlap,TOBS_OVERLAP
+53 ,TOBS records don't overlap,TOBS_NO_OVERLAP
+54 ,TOBS records match,TOBS_MATCH
+55 ,TOBS records ambiguous,TOBS_AMBIGUOUS
+56 ,TOBS records don't match,TOBS_NO_MATCH
+57 ,Algorithm Approved Metadata-Only Match,AUTOMATIC_METADATA_MATCH
+58 ,Algorithm Approved Data-Based Match,AUTOMATIC_MATCH
+59 ,Transitive Match,TRANSITIVE_MATCH
+60 ,ICAO ID Match,ICAO_MATCH
+61 ,ICAO ID Conflict,ICAO_CONFLICT
+62 ,ID Match,GENERIC_ID_MATCH
+63 ,Transitive Metadata Match,TRANSITIVE_METADATA_MATCH
+64 ,ID Crossover Match,CROSSOVER_ID_MATCH
+65 ,ID WMO Padded Crossover Match,CROSSOVER_PADDED_WMO_MATCH
+66 ,TMAX records short overlap,TMAX_SHORT_OVERLAP
+67 ,TMIN records short overlap,TMIN_SHORT_OVERLAP
+68 ,TAVG records short overlap,TAVG_SHORT_OVERLAP
+69 ,TOBS records short overlap,TOBS_SHORT_OVERLAP

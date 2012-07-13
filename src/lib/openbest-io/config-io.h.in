@@ -2,9 +2,9 @@
 #define _CONFIG_IO_H_
 
 #define DATA_DIR ${DATA_DIR}
-#define SITE_DATA "site_complete_detail.txt"
-#define SITE_FLAGS "site_flags.txt"
-#define TEMP_DATA "data.txt"
-#define TEMP_FLAGS "flags.txt"
+#define SITE_DATA "site_complete_detail${REDUCED_FLAG}.txt"
+#define SITE_FLAGS "site_flags${REDUCED_FLAG}.txt"
+#define TEMP_DATA "data${REDUCED_FLAG}.txt"
+#define TEMP_FLAGS "flags${REDUCED_FLAG}.txt"
 
 #endif

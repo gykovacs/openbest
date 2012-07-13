@@ -63,7 +63,7 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
           p= (stationSite2p*)realloc(p, sizeof(stationSite2p)*(n + 10000));
           capacity+= 10000;
       }
-      p[n]= (stationSite2p)malloc(sizeof(stationSite2));
+      p[n]= (stationSite2p)createSS2N();
 
       //printf("%s\n", buffer);
 
@@ -196,15 +196,17 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
 
         if ( flags[nf-1] == 0 )
             --nf;
-        pflags= (int*)malloc(sizeof(int)*nf);
-        if ( pflags == NULL )
-            eprintf("malloc failed in loadStationSite2");
-        for ( i= 0; i < nf; ++i )
-            pflags[i]= flags[i];
+
+
         while ( nth < n && p[nth]->id <= id )
         {
             if ( p[nth]->id == id )
             {
+                pflags= (int*)malloc(sizeof(int)*nf);
+                if ( pflags == NULL )
+                    eprintf("malloc failed in loadStationSite2");
+                for ( i= 0; i < nf; ++i )
+                    pflags[i]= flags[i];
                 p[nth]->flags= pflags;
                 p[nth]->n_flags= nf;
             }
@@ -212,6 +214,7 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
         }
     }
     printf("reading flags finished\n"); fflush(stdout);
+    fclose(f);
 }
 
 
@@ -232,7 +235,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
     char delims[]= "\t";
 
     stationElement2p* p= (stationElement2p*)malloc(sizeof(stationElement2p)*10000);
-    int capacity= 10000, n= 0;
+    int capacity= 10000, n= -1;
 
     int id;
     real* datesp;
@@ -290,7 +293,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
           }
 
           ++n;
-          p[n]= (stationSite2p)malloc(sizeof(stationSite2));
+          p[n]= (stationSite2p)createSE2N();
           datesp= (real*)malloc(sizeof(real)*MAX_LENGTH_OF_TIME_SERIES);
           if ( datesp == NULL ) eprintf("malloc failed in loadData");
           tempp= (temp_t*)malloc(sizeof(temp_t)*MAX_LENGTH_OF_TIME_SERIES);
@@ -384,7 +387,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
     last_id= -1;
     int flag;
     int i, j;
-    n= 0;
+    n= -1;
     while ( fgets(buffer, 1000, f) != NULL )
     {
       if ( buffer[0] == '%' )
