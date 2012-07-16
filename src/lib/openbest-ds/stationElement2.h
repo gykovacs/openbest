@@ -63,6 +63,8 @@ typedef stationElement2* stationElement2p;
   */
 stationElement2* createSE2N();
 
+stationElement2* createSE2NC(stationElement2* se);
+
 /**
   * prints the properties of the parameter stationElement2 struct to stdout
   * @param se stationElement2 object to print out
@@ -81,5 +83,22 @@ void destroySE2(stationElement2* se);
   * @param n length of the array
   */
 void destroySE2V(stationElement2p* se, int n);
+
+/**
+  * Takes a station element record that may be multi-valued and returns a single-valued alternative record. This operates on the assumption that all non-flagged values it is passed are equally acceptable, and expands the uncertainty to accommodate that if necessary.
+  * @param se stationElement2 object pointer,
+  * @param bf bad flags array
+  * @param n length of bad flags array
+  * @return new, single-valued stationElement2 object pointer
+  */
+stationElement2* makeSingleValued(stationElement2* se, int* bf, int n);
+
+bool isSingleValued(stationElement2* se);
+
+bool isMultiValued(stationElement2* se);
+
+stationElement2* structureMerge(stationElement2* se);
+
+stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* options);
 
 #endif

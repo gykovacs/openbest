@@ -1,5 +1,7 @@
 #include <math.h>
 #include <float.h>
+#include <limits.h>
+#include <stdlib.h>
 
 #include "openbest-ds/mathFunctions.h"
 #include "openbest-ds/printOut.h"
@@ -29,7 +31,7 @@ real* modA(real* x, real* y, int n)
   return res;
 }
 
-real min(real* x, int n)
+real minR(real* x, int n)
 {
   real t= FLT_MAX;
   int i;
@@ -39,7 +41,7 @@ real min(real* x, int n)
   return t;
 }
 
-real max(real* x, int n)
+real maxR(real* x, int n)
 {
   real t= -FLT_MAX;
   int i;
@@ -48,6 +50,27 @@ real max(real* x, int n)
       t= x[i];
   return t;
 }
+
+int minI(int* x, int n)
+{
+  int t= INT_MAX;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] < t )
+      t= x[i];
+  return t;
+}
+
+int maxI(int* x, int n)
+{
+  int t= -INT_MAX;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] > t )
+      t= x[i];
+  return t;
+}
+
 
 int isNaN(real* x, int n)
 {
@@ -160,4 +183,70 @@ void equalsr(real* input, int n, real a, char* flags)
       flags[i]= 1;
     else
       flags[i]= 0;
+}
+
+void diffR(real* input, int n, real* output)
+{
+    if ( n <= 1 )
+        return;
+
+    int i;
+    for ( i= 0; i < n-1; ++i )
+        output[i]= input[i+1] - input[i];
+}
+
+real* diffRN(real* input, int n)
+{
+    if ( n <= 1 )
+        return NULL;
+
+    real* output= rnalloc(n-1);
+
+    int i;
+    for ( i= 0; i < n-1; ++i )
+        output[i]= input[i+1] - input[i];
+
+    return output;
+}
+
+real* copyRA(real* input, int n)
+{
+    real* tmp= (real*)malloc(sizeof(real)*n);
+    memcpy(tmp, input, n*sizeof(real));
+    return tmp;
+}
+
+int* copyIA(int* input, int n)
+{
+    int* tmp= (int*)malloc(sizeof(int)*n);
+    memcpy(tmp, input, n*sizeof(int));
+    return tmp;
+}
+
+flag_t* copyFA(flag_t* input, int n)
+{
+    flag_t* tmp= (flag_t*)malloc(sizeof(flag_t)*n);
+    memcpy(tmp, input, n*sizeof(flag_t));
+    return tmp;
+}
+
+short* copySA(short* input, int n)
+{
+    short* tmp= (short*)malloc(sizeof(short)*n);
+    memcpy(tmp, input, n*sizeof(short));
+    return tmp;
+}
+
+char* copyCA(char* input, int n)
+{
+    char* tmp= (char*)malloc(sizeof(char)*n);
+    memcpy(tmp, input, n*sizeof(char));
+    return tmp;
+}
+
+temp_t* copyTA(temp_t* input, int n)
+{
+    temp_t* tmp= (temp_t*)malloc(sizeof(temp_t)*n);
+    memcpy(tmp, input, n*sizeof(temp_t));
+    return tmp;
 }

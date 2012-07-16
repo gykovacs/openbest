@@ -204,7 +204,7 @@ int loadAllTest(int argc, char** argv)
         scanf("%d", &id);
         if ( id == -1 )
             break;
-        displaySE2(se[id]);
+        displaySS2(ss[id]);
     }while ( 1 );
 
     finalizeDS();
@@ -220,6 +220,34 @@ int loadPrelimTest(int argc, char** argv)
     loadPreliminaryData();
     displayPKTbyValue(stationSourceTypesPKT);
     finalizeDS();
+
+    return 0;
+}
+
+int shrinkTest(int argc, char** argv)
+{
+    initDS();
+    stationSite2p* ss;
+    int n_stationSite2;
+    loadPreliminaryData();
+    loadStationSite2(&ss, &n_stationSite2);
+
+    printf("%d records loaded\n", n_stationSite2);
+
+    shrinkSS2V(&ss, &n_stationSite2);
+
+    int id;
+    do
+    {
+        printf("give the number of record to display (-1 to exit):\n");
+        scanf("%d", &id);
+        if ( id == -1 )
+            break;
+        displaySS2(ss[id]);
+    }while ( 1 );
+
+    finalizeDS();
+    destroySS2V(ss, n_stationSite2);
 
     return 0;
 }
@@ -246,6 +274,7 @@ int main(int argc, char** argv)
     bool loadss= false;
     bool loadse= false;
     bool loadall= false;
+    bool shrink= false;
     int err;
     
     addOption(ot, "--stationSourceTypes", OPTION_BOOL, (char*)&stationSource, 0, "station source types");
@@ -260,6 +289,7 @@ int main(int argc, char** argv)
     addOption(ot, "--loadSS", OPTION_BOOL, (char*)&loadss, 0, "load station sites");
     addOption(ot, "--loadSE", OPTION_BOOL, (char*)&loadse, 0, "load station elements");
     addOption(ot, "--loadAll", OPTION_BOOL, (char*)&loadall, 0, "load all data");
+    addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -291,6 +321,8 @@ int main(int argc, char** argv)
         err= loadSETest(argc, argv);
     else if ( loadall )
         err= loadAllTest(argc, argv);
+    else if ( shrink )
+        err= shrinkTest(argc, argv);
     
     destroyOptionTable(ot);
 

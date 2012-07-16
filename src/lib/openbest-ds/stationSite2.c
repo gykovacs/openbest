@@ -28,27 +28,6 @@ void displaySS2(stationSite2* ss)
     printf("\n");
 }
 
-int id;
-int country;
-char state[100];
-char county[100];
-geoPoint2* location;
-geoPoint2* all_locations;
-timeInstant* all_location_times;
-int timezone;
-char primary_name[50];
-char** alt_names;
-int relocated;
-int possible_relocated;
-int* instrument_changes;
-int* primary_manifests;
-int* secondary_manifests;
-int n_flags;
-int* flags;
-int n_sources;
-int* sources;
-int* archive_keys;
-
 stationSite2* createSS2N()
 {
     stationSite2* tmp= (stationSite2*)malloc(sizeof(stationSite2));
@@ -74,6 +53,8 @@ stationSite2* createSS2N()
 
 void destroySS2(stationSite2* ss)
 {
+    if ( ss == NULL )
+        return;
     if ( ss->location)
         free(ss->location);
     if ( ss->all_locations)
@@ -99,8 +80,93 @@ void destroySS2(stationSite2* ss)
 
 void destroySS2V(stationSite2p* ss, int n)
 {
-    int i;
-    for ( i= 0; i < n; ++i )
-        destroySS2(ss[i]);
+    if ( ss )
+    {
+        int i;
+        for ( i= 0; i < n; ++i )
+        {
+            printf("%d ", i);
+            destroySS2(ss[i]);
+        }
+        free(ss);
+    }
+}
+
+void shrinkSS2V(stationSite2p** ss1, int* n)
+{
+    stationSite2p* ss= *ss1;
+    int i, j;
+
+    /*for ( i= 0; i < *n; ++i )
+        displaySS2(ss[i]);
+
+    return;*/
+
+    bool* flags= (bool*)malloc(sizeof(bool)*(*n));
+    if ( !flags )
+        eprintf("malloc failed in shrinkSS2V");
+
+    tprintf("sort\n");
+    qsort(ss, *n, sizeof(stationSite2p), sortByIDSS2V);
+    tprintf("sort finished\n");
+
+    for ( i= 0; i < *n; ++i )
+        flags[i]= false;
+
+    int m= 0;
+    int nn= *n;
+    int base;
+
+    tprintf("start\n");
+    for ( i= 0; i < *n - 1; ++i )
+    {
+        if ( i != *n - 1 && ss[i]->id == ss[i+1]->id )
+            ++m;
+        else if ( i == *n - 1 || ss[i]->id != ss[i+1]->id )
+        {
+            if ( m > 0 )
+            {
+                base= i-m;
+                ss[base]->sources= (int*)realloc(ss[base]->sources, sizeof(int)*(m+1));
+                if ( !ss[base]->sources )
+                    eprintf("malloc failed in shrinkSS2V");
+                for ( j= base+1; j <= i; ++j )
+                {
+                    ss[base]->sources[j-base]= ss[j]->sources[0];
+                    flags[j]= true;
+                    --nn;
+                }
+                for ( j= 0; j < m; ++j )
+                    printf("%d ", ss[base]->sources[j]);
+                printf("\n");
+                ss[base]->n_sources+= m;
+                m= 0;
+            }
+        }
+    }
+
+    tprintf("finished %d\n", nn);
+
+    stationSite2p* tmp= (stationSite2p*)malloc(sizeof(stationSite2p)*(nn));
+    if ( !tmp )
+        eprintf("malloc failed in shrinkSS2V");
+    j= 0;
+    for ( i= 0; i < *n; ++i )
+        if ( flags[i] )
+        {
+            destroySS2(ss[i]);
+        }
+        else
+            tmp[j++]= ss[i];
+
     free(ss);
+    *ss1= tmp;
+    *n= nn;
+
+    free(flags);
+}
+
+void sortByIDSS2V(const void* a, const void* b)
+{
+    return ((stationSite2*)a)->id - ((stationSite2*)b)->id;
 }

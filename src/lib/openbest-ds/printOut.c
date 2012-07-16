@@ -69,3 +69,15 @@ void enewline()
 {
   fprintf(stderr, "\n");
 }
+
+void dea(){    printf("a"); fflush(stdout); }
+void deb(){    printf("b"); fflush(stdout); }
+void dec(){    printf("c"); fflush(stdout); }
+void ded(){    printf("d"); fflush(stdout); }
+void dee(){    printf("e"); fflush(stdout); }
+void def(){    printf("f"); fflush(stdout); }
+void deg(){    printf("g"); fflush(stdout); }
+void deh(){    printf("h"); fflush(stdout); }
+void dei(){    printf("i"); fflush(stdout); }
+void dej(){    printf("j"); fflush(stdout); }
+void dek(){    printf("k"); fflush(stdout); }

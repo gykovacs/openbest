@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include "openbest-ds/basicAlgorithms.h"
 #include "openbest-ds/hello-openbest.h"
 #include "openbest-ds/geoPoint.h"
 #include "openbest-ds/geoPoint2.h"
@@ -139,6 +140,57 @@ int primaryKeyTableTest(int argc, char** argv)
   return 0;
 }
 
+int uniqueTest(int argc, char** argv)
+{
+    int* t= (int*)malloc(sizeof(int)*10);
+    int n= 10;
+    int i;
+
+    t[0]= 2;
+    t[1]= 1;
+    t[2]= 1;
+    t[3]= 3;
+    t[4]= 2;
+    t[5]= 4;
+    t[6]= 8;
+    t[7]= 0;
+    t[8]= 1;
+    t[9]= 5;
+
+    uniqueIA(&t, &n);
+
+    for ( i= 0; i < n; ++i )
+        printf("%d ", t[i]);
+    printf("\n");
+    return 0;
+}
+
+int modeTest(int argc, char** argv)
+{
+    real* t= rnalloc(10);
+    int n= 10;
+
+    t[0]= 1.2;
+    t[1]= -1.4;
+    t[2]= 1.8;
+    t[3]= -1.4;
+    t[4]= 1.75;
+    t[5]= 1.8;
+    t[6]= 1.8;
+    t[7]= 1.8;
+    t[8]= 2.0;
+    t[9]= 10000;
+
+    real m= modeRMA(t, n);
+    printf("%e\n", (float)m);
+    printf("%f\n", (float)m);
+    printf("%lf\n", (float)m);
+    //printf("%d: %f\n", (int)modeRFA(t, n), (float)m);
+
+    free(t);
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -156,6 +208,9 @@ int main(int argc, char** argv)
     bool time= false;
     bool timer= false;
     bool pkt= false;
+    bool unique= false;
+    bool mode= false;
+    int err;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
     addOption(ot, "--gp", OPTION_BOOL, (char*)&gp, 0, "geoPoint test");
@@ -164,24 +219,35 @@ int main(int argc, char** argv)
     addOption(ot, "--time", OPTION_BOOL, (char*)&time, 0, "time instant test - args: y m d h min s");
     addOption(ot, "--timerange", OPTION_BOOL, (char*)&timer, 0, "time range test");
     addOption(ot, "--pkt", OPTION_BOOL, (char*)&pkt, 0, "primary key table test");
+    addOption(ot, "--unique", OPTION_BOOL, (char*)&unique, 0, "unique test");
+    addOption(ot, "--mode", OPTION_BOOL, (char*)&mode, 0, "mode function test");
     
     if ( processArgs(ot, &argc, argv) )
-      return -1;
+    {
+        destroyOptionTable(ot);
+        return -1;
+    }
     
     if ( hello )
-      return helloTest(argc, argv);
+      err= helloTest(argc, argv);
     else if ( gp )
-      return gpTest(argc, argv);
+      err= gpTest(argc, argv);
     else if ( mv )
-      return mvTest(argc, argv);
+      err= mvTest(argc, argv);
     else if ( breakOverlap )
-      return breakOverlapTest(argc, argv);
+      err= breakOverlapTest(argc, argv);
     else if ( time )
-      return timeInstantTest(argc, argv);
+      err= timeInstantTest(argc, argv);
     else if ( timer )
-      return timeRangeTest(argc, argv);
+      err= timeRangeTest(argc, argv);
     else if ( pkt )
-      return primaryKeyTableTest(argc, argv);
+      err= primaryKeyTableTest(argc, argv);
+    else if ( unique )
+      err= uniqueTest(argc, argv);
+    else if ( mode )
+      err= modeTest(argc, argv);
+
+    destroyOptionTable(ot);
     
-    return 0;
+    return err;
 }

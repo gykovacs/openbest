@@ -34,7 +34,7 @@ void isNaNV(real* x, int n, char* flags);
   * @param n length of the input array
   * @returns the minimum value in the array
   */
-real min(real* x, int n);
+real minR(real* x, int n);
 
 /**
   * returns the maximum value in the parameter array
@@ -42,7 +42,23 @@ real min(real* x, int n);
   * @param n length of the input array
   * @returns the maximum value in the array
   */
-real max(real* x, int n);
+real maxR(real* x, int n);
+
+/**
+  * returns the minimum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the minimum value in the array
+  */
+int minI(int* x, int n);
+
+/**
+  * returns the maximum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the maximum value in the array
+  */
+int maxI(int* x, int n);
 
 /**
   * modulo division
@@ -155,5 +171,33 @@ void lessthenr(real* input, int n, real a, char* flags);
   * @param flags output array
   */
 void equalsr(real* input, int n, real a, char* flags);
+
+/**
+  * computes the differences of consecutive elements of the input array into array output
+  * @param input input array
+  * @param n length of input array
+  * @param output output array
+  */
+void diffR(real* input, int n, real* output);
+
+/**
+  * computes the differences of consecutive elements of the input array into a newly allocated array of size n-1
+  * @param input input array
+  * @param n length of input array
+  * @returns output array
+  */
+real* diffRN(real* input, int n);
+
+real* copyRA(real* input, int n);
+
+int* copyIA(int* input, int n);
+
+flag_t* copyFA(flag_t* input, int n);
+
+short* copySA(short* input, int n);
+
+char* copyCA(char* input, int n);
+
+temp_t* copyTA(temp_t* input, int n);
 
 #endif

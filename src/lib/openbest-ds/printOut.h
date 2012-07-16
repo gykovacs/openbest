@@ -11,4 +11,26 @@ void newline();
 
 void enewline();
 
+void dea();
+
+void deb();
+
+void dec();
+
+void ded();
+
+void dee();
+
+void def();
+
+void deg();
+
+void deh();
+
+void dei();
+
+void dej();
+
+void dek();
+
 #endif

@@ -80,4 +80,14 @@ void destroySS2(stationSite2* ss);
   */
 void destroySS2V(stationSite2p* ss, int n);
 
+
+/**
+  * Shrinks the vector of station sites, by collapsing the records of the same stations from different sources
+  * @param se array os stationSite2 object pointers
+  * @param n size of the array
+  */
+void shrinkSS2V(stationSite2p** ss, int* n);
+
+void sortByIDSS2V(const void* a, const void* b);
+
 #endif
