@@ -5,13 +5,13 @@
 #define DATA_DIR "/mnt/gentoo/gsoc/openbest/dat/"
 
 /** site data text file*/
-#define SITE_DATA "site_complete_detail_reduced.txt"
+#define SITE_DATA "site_complete_detail.txt"
 /** site flags text file*/
-#define SITE_FLAGS "site_flags_reduced.txt"
+#define SITE_FLAGS "site_flags.txt"
 
 /** temperature data text file*/
-#define TEMP_DATA "data_reduced.txt"
+#define TEMP_DATA "data.txt"
 /** temperature flags text file*/
-#define TEMP_FLAGS "flags_reduced.txt"
+#define TEMP_FLAGS "flags.txt"
 
 #endif

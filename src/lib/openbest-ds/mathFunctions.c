@@ -71,6 +71,45 @@ int maxI(int* x, int n)
   return t;
 }
 
+flag_t minF(flag_t* x, int n)
+{
+  int t= 255;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] < t )
+      t= x[i];
+  return t;
+}
+
+flag_t maxF(flag_t* x, int n)
+{
+  int t= 0;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] > t )
+      t= x[i];
+  return t;
+}
+
+char minC(char* x, int n)
+{
+  int t= 255;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] < t )
+      t= x[i];
+  return t;
+}
+
+char maxC(char* x, int n)
+{
+  int t= 0;
+  int i;
+  for ( i= 0; i < n; ++i )
+    if ( x[i] > t )
+      t= x[i];
+  return t;
+}
 
 int isNaN(real* x, int n)
 {
@@ -89,30 +128,6 @@ void isNaNV(real* x, int n, char* flags)
       flags[i]= 1;
     else
       flags[i]= 0;
-}
-
-real* rnalloc(int n)
-{
-  return (real*)malloc(sizeof(real)*n);
-}
-
-char* cnalloc(int n)
-{
-  return (char*)malloc(sizeof(char)*n);
-}
-
-void set(real* p, int n, real v)
-{
-  int i;
-  for ( i= 0; i < n; ++i )
-    p[i]= v;
-}
-
-void setc(char* p, int n, char v)
-{
-  int i;
-  for ( i= 0; i < n; ++i )
-    p[i]= v;
 }
 
 void add(real* a, real* b, int n, real* res)
@@ -209,44 +224,28 @@ real* diffRN(real* input, int n)
     return output;
 }
 
-real* copyRA(real* input, int n)
+flag_t* ismemberFA(flag_t* a, int n, flag_t* b, int m)
 {
-    real* tmp= (real*)malloc(sizeof(real)*n);
-    memcpy(tmp, input, n*sizeof(real));
+    flag_t* tmp= fnalloc(n);
+    qsortFA(b, m);
+    int i, j;
+    for ( i= 0; i < n; ++i )
+        for ( j= 0; j < m && b[j] < a[i]; ++j )
+        {
+            if ( a[i] == b[j] )
+            {
+                tmp[i]= true;
+                break;
+            }
+        }
     return tmp;
 }
 
-int* copyIA(int* input, int n)
+int isemptyF(flag_t* a, int n)
 {
-    int* tmp= (int*)malloc(sizeof(int)*n);
-    memcpy(tmp, input, n*sizeof(int));
-    return tmp;
-}
-
-flag_t* copyFA(flag_t* input, int n)
-{
-    flag_t* tmp= (flag_t*)malloc(sizeof(flag_t)*n);
-    memcpy(tmp, input, n*sizeof(flag_t));
-    return tmp;
-}
-
-short* copySA(short* input, int n)
-{
-    short* tmp= (short*)malloc(sizeof(short)*n);
-    memcpy(tmp, input, n*sizeof(short));
-    return tmp;
-}
-
-char* copyCA(char* input, int n)
-{
-    char* tmp= (char*)malloc(sizeof(char)*n);
-    memcpy(tmp, input, n*sizeof(char));
-    return tmp;
-}
-
-temp_t* copyTA(temp_t* input, int n)
-{
-    temp_t* tmp= (temp_t*)malloc(sizeof(temp_t)*n);
-    memcpy(tmp, input, n*sizeof(temp_t));
-    return tmp;
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( a[i] )
+            return 0;
+    return 1;
 }

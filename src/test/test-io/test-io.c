@@ -196,6 +196,8 @@ int loadAllTest(int argc, char** argv)
     tprintf("start loading...\n"); fflush(stdout);
     loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
     tprintf("finish loading...\n"); fflush(stdout);
+    tprintf("%d stationSite2 records loaded\n", n_stationSite2);
+    tprintf("%d stationElement2 records loaded\n", n_stationElement2);
 
     int id;
     do
@@ -205,6 +207,8 @@ int loadAllTest(int argc, char** argv)
         if ( id == -1 )
             break;
         displaySS2(ss[id]);
+        displaySE2(se[id]);
+
     }while ( 1 );
 
     finalizeDS();

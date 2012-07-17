@@ -53,12 +53,14 @@ int singleValuedTest(int argc, char** argv)
     initDS();
     stationElement2p* se;
     int n_stationElement2;
-    loadPreliminaryData();
+
     loadStationElement2(&se, &n_stationElement2);
 
+    tprintf("start checkling multivaluedness...\n");
     int i;
     for ( i= 0; i < n_stationElement2; ++i )
-        printf("%d", isSingleValued(se[i]));
+        if ( isMultiValued(se[i]) )
+            tprintf("%d %d\n", i, se[i]->site);
 
     finalizeDS();
     destroySE2V(se, n_stationElement2);

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "openbest-ds/basicAlgorithms.h"
 
 void swap(real *x,real *y)
@@ -146,9 +148,6 @@ real modeRMA(real* input, int n)
     real* tmp= copyRA(input, n);
     qsortRA(tmp, n);
 
-    int k;
-    for ( k= 0; k < n; ++k )
-        printf("%f ", tmp[k]);
     int maxL, i, j;
     real maxV1;
     maxL= 0;
@@ -163,12 +162,10 @@ real modeRMA(real* input, int n)
             {
                 maxL= j;
                 maxV1= tmp[i-1];
-                printf("%f ", tmp[i-1]);
             }
             j= 1;
         }
     free(tmp);
-    printf("n: %f\n", maxV1);
     return maxV1;
 }
 
@@ -176,9 +173,7 @@ int modeRFA(real* input, int n)
 {
     real* tmp= copyRA(input, n);
     qsortRA(tmp, n);
-    int k;
-    for ( k= 0; k < n; ++k )
-        printf("%f ", tmp[k]);
+
     int maxL, i, j;
     real maxV;
     maxL= 0;
@@ -197,6 +192,5 @@ int modeRFA(real* input, int n)
             j= 1;
         }
     free(tmp);
-    printf("m: %d\n", maxL);
     return maxL;
 }

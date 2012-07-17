@@ -289,7 +289,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
               p[n]->flags= (flag_t**)malloc(sizeof(flag_t*)*tsn);
               if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
               p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= tsn;
-              printf(":%d ", tsn); fflush(stdout);
+              //printf(":%d ", tsn); fflush(stdout);
           }
 
           ++n;
@@ -306,7 +306,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
           if ( tobp == NULL ) eprintf("malloc failed in loadData");
           tsn= 0;
           p[n]->site= id;
-          printf("%d", n); fflush(stdout);
+          //printf("%d", n); fflush(stdout);
       }
 
       //series number
@@ -367,7 +367,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
         p[n]->flags= (flag_t**)malloc(sizeof(flag_t*)*tsn);
         if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
         p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= tsn;
-        printf(":%d ", tsn); fflush(stdout);
+       // printf(":%d ", tsn); fflush(stdout);
     }
 
     *se= p;
@@ -402,7 +402,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
       {
           if ( last_id != -1 )
           {
-              printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
+              //printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
               for ( i= 0; i < p[n]->n_n_flags; ++i )
               {
                   p[n]->flags[i]= realloc(p[n]->flags[i], sizeof(flag_t)*(p[n]->n_flags[i]));
@@ -449,7 +449,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
 
     // last station element flags
     {
-        printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
+        //printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
         for ( i= 0; i < p[n]->n_n_flags; ++i )
         {
             p[n]->flags[i]= realloc(p[n]->flags[i], sizeof(flag_t)*(p[n]->n_flags[i]));
@@ -466,4 +466,5 @@ void loadData(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, in
     loadPreliminaryData();
     loadStationElement2(se, n_stationElement2);
     loadStationSite2(ss, n_stationSite2);
+    shrinkSS2V(ss, n_stationSite2);
 }

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "openbest-ds/config-ds.h"
+#include "openbest-ds/memFunctions.h"
 
 /**
   * signum of the parameter
@@ -61,6 +61,38 @@ int minI(int* x, int n);
 int maxI(int* x, int n);
 
 /**
+  * returns the minimum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the minimum value in the array
+  */
+flag_t minF(flag_t* x, int n);
+
+/**
+  * returns the maximum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the maximum value in the array
+  */
+flag_t maxF(flag_t* x, int n);
+
+/**
+  * returns the minimum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the minimum value in the array
+  */
+char minC(char* x, int n);
+
+/**
+  * returns the maximum value in the parameter array
+  * @param x array of real numbers
+  * @param n length of the input array
+  * @returns the maximum value in the array
+  */
+char maxC(char* x, int n);
+
+/**
   * modulo division
   * @param x real number to divide
   * @param y real number to divide x with
@@ -77,35 +109,7 @@ real mod1(real x, real y);
   */
 real* modA(real* x, real* y, int n);
 
-/**
-  * allocates memory for n real numbers
-  * @param n number of real numbers to allocate space for
-  * @returns pointer to the allocated area
-  */
-real* rnalloc(int n);
 
-/**
-  * allocates memory for n char variables
-  * @param n number of char variables to allocate space for
-  * @returns pointer to the allocated area
-  */
-char* cnalloc(int n);
-
-/**
-  * sets the elements of the parameter array to a specific value
-  * @param p input array
-  * @param n length of the input array
-  * @param v value to set the elements of the array to
-  */
-void set(real* p, int n, real v);
-
-/**
-  * sets the elements of the parameter array to a specific value
-  * @param p input array
-  * @param n length of the input array
-  * @param v value to set the elements of the array to
-  */
-void setc(char* p, int n, char v);
 
 /**
   * adds the elements of two arrays element-wise and puts into the output parameter array
@@ -188,16 +192,8 @@ void diffR(real* input, int n, real* output);
   */
 real* diffRN(real* input, int n);
 
-real* copyRA(real* input, int n);
+flag_t* ismemberFA(flag_t* a, int n, flag_t* b, int m);
 
-int* copyIA(int* input, int n);
-
-flag_t* copyFA(flag_t* input, int n);
-
-short* copySA(short* input, int n);
-
-char* copyCA(char* input, int n);
-
-temp_t* copyTA(temp_t* input, int n);
+int isemptyF(flag_t* a, int n);
 
 #endif

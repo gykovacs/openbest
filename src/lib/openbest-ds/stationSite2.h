@@ -88,6 +88,6 @@ void destroySS2V(stationSite2p* ss, int n);
   */
 void shrinkSS2V(stationSite2p** ss, int* n);
 
-void sortByIDSS2V(const void* a, const void* b);
+int sortByIDSS2V(const void* a, const void* b);
 
 #endif

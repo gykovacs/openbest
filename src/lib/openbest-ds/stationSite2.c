@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "openbest-ds/stationSite2.h"
 #include "openbest-ds/primaryKeyTables.h"
 
@@ -97,18 +99,17 @@ void shrinkSS2V(stationSite2p** ss1, int* n)
     stationSite2p* ss= *ss1;
     int i, j;
 
-    /*for ( i= 0; i < *n; ++i )
-        displaySS2(ss[i]);
-
-    return;*/
-
     bool* flags= (bool*)malloc(sizeof(bool)*(*n));
     if ( !flags )
         eprintf("malloc failed in shrinkSS2V");
 
-    tprintf("sort\n");
-    qsort(ss, *n, sizeof(stationSite2p), sortByIDSS2V);
-    tprintf("sort finished\n");
+    /*for ( i= 0; i < *n; ++i )
+        printf("%d ", ss[i]->id);
+    printf("\n=================================\n");*/
+    qsort(ss, *n, sizeof(stationSite2p), (int(*)(const void*, const void*))&sortByIDSS2V);
+
+    /*for ( i= 0; i < *n; ++i )
+        printf("%d ", ss[i]->id);*/
 
     for ( i= 0; i < *n; ++i )
         flags[i]= false;
@@ -117,7 +118,7 @@ void shrinkSS2V(stationSite2p** ss1, int* n)
     int nn= *n;
     int base;
 
-    tprintf("start\n");
+    tprintf("start shrinking\n");
     for ( i= 0; i < *n - 1; ++i )
     {
         if ( i != *n - 1 && ss[i]->id == ss[i+1]->id )
@@ -136,16 +137,16 @@ void shrinkSS2V(stationSite2p** ss1, int* n)
                     flags[j]= true;
                     --nn;
                 }
-                for ( j= 0; j < m; ++j )
-                    printf("%d ", ss[base]->sources[j]);
-                printf("\n");
+                /*for ( j= 0; j < m; ++j )
+                    printf("%d ", ss[base]->sources[j]);*/
+                //printf("\n");
                 ss[base]->n_sources+= m;
                 m= 0;
             }
         }
     }
 
-    tprintf("finished %d\n", nn);
+    tprintf("shrinking finished %d\n", nn);
 
     stationSite2p* tmp= (stationSite2p*)malloc(sizeof(stationSite2p)*(nn));
     if ( !tmp )
@@ -166,7 +167,7 @@ void shrinkSS2V(stationSite2p** ss1, int* n)
     free(flags);
 }
 
-void sortByIDSS2V(const void* a, const void* b)
+int sortByIDSS2V(const void* a, const void* b)
 {
-    return ((stationSite2*)a)->id - ((stationSite2*)b)->id;
+    return (*(stationSite2p*)a)->id - (*(stationSite2p*)b)->id;
 }
