@@ -4,6 +4,9 @@
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/primaryKeyTables.h"
 
+/**
+  * struct to represent berkeleyAverageOptions struct
+  */
 typedef struct
 {
     /// Basic Mapping Options
@@ -53,7 +56,7 @@ typedef struct
     int scalpelEmpiricalMaxPairs;
     int scalpelEmpiricalBestPairs;
     real scalpelEmpiricalCut;
-    int scalpelMaxSegment;
+    int scalpelEmpiricalMaxSegment;
     bool removeInsignificantBreaks;
 
     /// Iterative Reweighting Options
@@ -81,8 +84,8 @@ typedef struct
 
     /// Baseline Mapping Options
     bool fullBaselineMapping;
+    int n_fullBaselineTargetLats;
     real* fullBaselineTargetLats;
-    int n_fullBaselineTragetLats;
     int fullBaselineAltitudeDegree;
 
     /// Uncertainty Computation Options
@@ -104,12 +107,35 @@ typedef struct
     bool clusterMode;
 } berkeleyAverageOptions;
 
+/**
+  * creates berkeleyAverageOptions object with default values
+  * @returns the new berkeleyAverageOptions instance
+  */
 berkeleyAverageOptions* createBAON();
 
+/**
+  * creates berkeleyAverageOptions object with some predefined configurations
+  * @param mode the possible mode parameters are: "quick", "weighted", "local", "complete"
+  * @returns the new berkeleyAverageOptions instance
+  */
 berkeleyAverageOptions* createBAON1(char* mode);
 
+/**
+  * creates berkeleyAverageOptions object with the predefined "quick" configuration
+  * @returns the new berkeleyAverageOptions instance
+  */
 berkeleyAverageOptions* createBerkeleyAverageOptionsQuick();
 
+/**
+  * checks the consistency of the berkeleyAverageOptions object
+  * @param p input berkeleyAverageOptions instance pointer
+  */
 void berkeleyAverageOptionsConsistency(berkeleyAverageOptions* p);
+
+/**
+  * displays the contents of the parameter berkeleyAverageOptions instance
+  * @param bao input berkeleyAverageOptions instance pointer
+  */
+void displayBAO(berkeleyAverageOptions* bao);
 
 #endif

@@ -1,3 +1,7 @@
+#include <float.h>
+#include <math.h>
+#include <stdlib.h>
+
 #include "openbest-av/berkeleyAverageOptions.h"
 
 
@@ -127,7 +131,6 @@ berkeleyAverageOptions* createBAON1(char* mode)
         ///Same as local but with localized statistical uncertainty.
         p->statisticalUncertaintyLocal= true;
     }
-    berkeleyAverageOptionsConsistency(p);
     return p;
 }
 
@@ -185,14 +188,233 @@ void berkeleyAverageOptionsConsistency(berkeleyAverageOptions* p)
                 eprintf("scalpelTOBPersistence < 1/6");
             if ( p->scalpelTOBChanges && (p->scalpelTOBDifference < 1 || p->scalpelTOBDifference > 12 ))
                 eprintf("scalpelTOBDifference not between 1 and 12");
-            if ( !p->scalpelGaps && !p->scalpelTOBChanges && !p->scalpelDeclaredMoves && !p->scalpelSuspectedMosve )
+            if ( !p->scalpelGaps && !p->scalpelTOBChanges && !p->scalpelDeclaredMoves && !p->scalpelSuspectedMoves )
                 eprintf("scalpelMetaData is true, but all metadata segments are false");
         }
-        if ( p->scalpelEMpirical )
+        if ( p->scalpelEmpirical )
         {
             if ( p->scalpelEmpiricalMaxDistance < 0 )
                 eprintf("scalpelEmpiricalMaxDistance < 0");
+            if ( p->scalpelEmpiricalMaxDistance < 200 )
+                wprintf("scalpelEmpiricalMaxDistance < 200 km is not recommended");
+            if ( p->scalpelEmpiricalMaxPairs < 1 )
+                eprintf("scalpelEmpiricalMaxPaires < 1");
+            if ( p->scalpelEmpiricalMaxPairs < p->scalpelEmpiricalBestPairs )
+                eprintf("scalpelEmpiricalMaxPairs < scalpelEmpiricalBestPairs");
+            if ( p->scalpelEmpiricalBestPairs < 1 )
+                eprintf("scalpelEmpiricalBestPairs < 1");
+            if ( p->scalpelEmpiricalBestPairs > 100 )
+                wprintf("scalpelEmpiricalBestPairs > 100 is not recommended");
+            if ( p->scalpelEmpiricalCut >= 1 || p->scalpelEmpiricalCut <= 0 )
+                eprintf("scalpelEmpiricalPrimaryCut not in range 0-1");
+            if ( p->scalpelEmpiricalMaxSegment < 6 )
+                eprintf("scalpelEmpiricalMaxSegment is less than 6");
+            if ( p->scalpelEmpiricalCut < 0.99 )
+                eprintf("scalpelEmpiricalCut < 0.99 is not recommended");
+            if ( p->scalpelEmpiricalMaxSegment < 5*12 )
+                wprintf("scalpelEmpiricalMaxSegment < 60 is not recommended");
 
         }
     }
+
+    if ( p->useIterativeReweighting )
+    {
+        if ( p->precisionTarget < 0 )
+            eprintf("precisionTarget < 0");
+        if ( p->precisionTarget < 0.0001 )
+            wprintf("precisionTarget < 0.0001 is not recommended");
+        if ( p->precisionTarget > 0.01 )
+            wprintf("precisionTarget > 0.01 is not recommended");
+        if ( p->maxIterations < 3 )
+            eprintf("maxIterations < 3");
+        if ( p->maxIterations > 100 )
+            wprintf("maxIterations > 100 is not recommended");
+        if ( p->precisionTargetMinStations < 1 )
+            eprintf("precisionTargetMinStations < 1");
+        if ( p->precisionTargetMinStations > 20 )
+            wprintf("precisionTargetMinStations < 20 is not recommended");
+    }
+
+    if ( p->localMode )
+    {
+        if ( p->spatialMapsEmptyCellCut < 0 || p->spatialMapsEmptyCellCut > 1 )
+            eprintf("spatialMapsEmptyCellCut not in range 0-1");
+        if ( p->spatialMapsEmptyCellCut > 0.05 )
+            wprintf("spatialMapsEmptyCellCut > 0.05 is not recommended");
+        if ( p->spatialMapsTrivialMaxCut < 0 || p->spatialMapsTrivialMaxCut > 1 )
+            eprintf("spatialMapsTrivialMaxCut not in range 0-1");
+        if ( p->spatialMapsTrivialMaxCut > 0.1 )
+            wprintf("spatialMapsTrivialMaxCut > 0.1 is not recommended");
+        if ( p->spatialMapsTrivialSumCut < 0 || p->spatialMapsTrivialSumCut > 1 )
+            eprintf("spatialMapsTrivialSumCut not in range 0-1");
+        if ( p->spatialMapsTrivialSumCut > 0.05 )
+            wprintf("spatialMapsTrivialSumCut > 0.05 is not recommended");
+    }
+
+    if ( p->limitEmpiricalFitRegion )
+        if ( p->empiricalFitRegionCutoff < 0 || p->empiricalFitRegionCutoff > 1 )
+            eprintf("empiricalFitRegionCutoff not in range 0-1");
+    if ( p->limitEmpiricalBaselineRegion )
+        if ( p->empiricalBaselineRegionCutoff < 0 || p->empiricalBaselineRegionCutoff > 1 )
+            eprintf("empiricalBaselineRegionCutoff not in range 0-1");
+    if ( p->limitEmpiricalBaselineRegion && p->limitEmpiricalFitRegion )
+        if ( p->empiricalBaselineRegionCutoff < p->empiricalFitRegionCutoff )
+            wprintf("empiricalBaselineRegionCutoff < empiricalFitRegionCutoff is not recommended");
+
+    if ( p->fullBaselineMapping )
+    {
+        if ( minR(p->fullBaselineTargetLats, p->n_fullBaselineTargetLats) < 0 )
+            eprintf("min(fullBaselineTargetLats) < 0 ");
+        if ( maxR(p->fullBaselineTargetLats, p->n_fullBaselineTargetLats) > 1 )
+            eprintf("max(fullBaselineTargetLats) > 1 ");
+        if ( p->n_fullBaselineTargetLats == 0 )
+            eprintf("fullBaselineTargetLats is empty");
+        if ( p->n_fullBaselineTargetLats < 10 )
+            wprintf("length(fullBaselineTargetLats) < 10 not recommended");
+        if ( p->fullBaselineAltitudeDegree < 1 )
+            eprintf("fullBaselineAltitudeDegree < 1");
+        if ( p->fullBaselineAltitudeDegree != floor(p->fullBaselineAltitudeDegree) )
+            eprintf("fullBaselineAltitudeDegree is not an integer");
+        if ( p->fullBaselineAltitudeDegree > 4 )
+            wprintf("fullBaselineAltitudeDegree > 4 is not recommended");
+    }
+
+    if ( p->computeUncertainty )
+    {
+        if ( p->computeStatisticalUncertainty )
+        {
+            if ( p->statisticalUncertaintyLocal && !p->localMode )
+                eprintf("statisticalUncertaintyLocal true but localMode is false");
+            if ( p->statisticalUncertaintyInnerLoops < 2 )
+                eprintf("statisticalUncertaintyInnerLoops < 2");
+            if ( p->statisticalUncertaintyInnerLoops > 10 )
+                wprintf("statisticalUncertaintyInnerLoops > 10 is not recommended");
+            if ( p->statisticalUncertaintyOuterLoops < 1 )
+                eprintf("statisticalUncertaintyOuterLoops < 1");
+            if ( p->statisticalUncertaintyOuterLoops > 5 )
+                wprintf("statisticalUncertaintyOuterLoops > 5 is not recommended");
+            if ( p->statisticalUncertaintyMinRepeats > p->statisticalUncertaintyInnerLoops )
+                eprintf("statisticalUncertaintyMinRepeats > statisticalUnceratintyInnerLoops ");
+            if ( p->statisticalUncertaintyMinRepeats < 2 )
+                eprintf("statisticalUncertaintyMinRepeats < 2");
+            if ( p->statisticalUncertaintyMinRepeats < 3 )
+                wprintf("statisticalUncertaintyMinRepeats < 3 is not recommended");
+            if ( p->statisticalUncertaintyBenchmarkMinDate >= p->statisticalUncertaintyBenchmarkMaxDate )
+                eprintf("statisticalUncertaintyBenchmarkMinDate >= statisticalUncertaintyBenchmarkMaxDate");
+            if ( p->statisticalUncertaintyBenchmarkMaxDate - p->statisticalUncertaintyBenchmarkMinDate < 20 )
+                wprintf("statisticalUncertaintyBenchmarkMaxDate - StatisticalUncertaintyBenchmarkMinDate is less than 20 years");
+        }
+        if ( (p->computeEmpiricalSpatialUncertainty || p->computeAnalyticSpatialUncertainty) && !p->localMode )
+            eprintf("can't generate spatial uncertainties without localization");
+        if ( p->computeEmpiricalSpatialUncertainty )
+        {
+            if ( p->spatialUncertaintyBenchmarkMinDate >= p->spatialUncertaintyBenchmarkMaxDate )
+                eprintf("spatialUncertaintyBenchmarkMinDate >= spatialUncertaintyBenchmarkMaxDate");
+            if ( p->spatialUncertaintyBenchmarkMaxDate - p->spatialUncertaintyBenchmarkMinDate < 20 )
+                wprintf("spatialUncertaintyBenchmarkMaxDate - spatialUncertaintyBenchmarkMInDate is less than 20 years");
+            if ( !p->supplementEmpiricalSpatialWithAnalytic )
+                wprintf("use of supplementEmpiricalSpatialWithAnalytic is highly recommended");
+            if ( p->supplementEmpiricalSpatialWithAnalytic && !p->computeAnalyticSpatialUncertainty )
+                eprintf("supplementEmpiricalSpatialWithAnalytic is true but computeAnalyticSpatialUncertainty is false");
+        }
+    }
+}
+
+
+void displayBAO(berkeleyAverageOptions* b)
+{
+    tprintf("BASIC MAPPING OPTIONS\n");
+    tprintf("localMode: %d\n", b->localMode);
+    tprintf("gridSize: %d\n", b->gridSize);
+    tprintf("girdApproximationDistance: %d\n", b->gridApproximationDistance);
+    tprintf("useLandMask: %d\n", b->useLandMask);
+    tprintf("MINIMUM DATA SIZE REQUIREMENTS\n");
+    tprintf("minMonths: %d\n", b->minMonths);
+    tprintf("minStations: %d\n", b->minStations);
+    tprintf("CORRELATION FUNCTION PARAMTERIZATION\n");
+    tprintf("correlationParameters: %f\n", b->correlationParameters);
+    tprintf("correlationLimitDistance: %f\n", b->correlationLimitDistance);
+    tprintf("BAD FLAGS:\n");
+    tprintf("badFlags: %d - ", b->n_badFlags);
+    int i;
+    for ( i= 0; i < b->n_badFlags; ++i )
+        printf("%d ", b->badFlags[i]);
+    printf("\n");
+    tprintf("SITE WEIGHTING PARAMETERS\n");
+    tprintf("useSiteWeighting: %d\n", b->useSiteWeighting);
+    tprintf("siteWeightingGlobalCutoffMultiplier: %f\n", b->siteWeightingGlobalCutoffMultiplier);
+    tprintf("siteWeightingCutoffMultiplier: %f\n", b->siteWeightingCutoffMultiplier);
+    tprintf("siteWeightingLocalized: %d\n", b->siteWeightingLocalized);
+    tprintf("siteWeightingRemoveSelf: %d\n", b->siteWeightingRemoveSelf);
+    tprintf("OUTLIER WEIGHTING PARAMETERS\n");
+    tprintf("useOutlierWeighting: %d\n", b->useOutlierWeighting);
+    tprintf("outlierWeightingGlobalCutoffMultiplier: %f\n", b->outlierWeightingGlobalCutoffMultiplier);
+    tprintf("outlierWeightingCutoffMultiplier: %f\n", b->outlierWeightingCutoffMultiplier);
+    tprintf("outlierWeightingLocalized: %d\n", b->outlierWeightingLocalized);
+    tprintf("outlierWeightingRemoveSelf: %d\n", b->outlierWeightingRemoveSelf);
+    tprintf("SCALPEL RELATED OPTIONS\n");
+    tprintf("useScalpel: %d\n", b->useScalpel);
+    tprintf("scalpelMetadata: %d\n", b->scalpelMetadata);
+    tprintf("scalpelGaps: %d\n", b->scalpelGaps);
+    tprintf("scalpelGapLength: %d\n", b->scalpelGapLength);
+    tprintf("scalpelDeclaredMoves: %d\n", b->scalpelDeclaredMoves);
+    tprintf("scalpelSuspectedMoves: %d\n", b->scalpelSuspectedMoves);
+    tprintf("scalpelTOBChanges: %d\n", b->scalpelTOBChanges);
+    tprintf("scalpelTOBPersistence: %f\n", b->scalpelTOBPersistence);
+    tprintf("scalpelTOBDifference: %f\n", b->scalpelTOBDifference);
+    tprintf("scalpelEmpirical: %d\n", b->scalpelEmpirical);
+    tprintf("scalpelEmpiricalMaxDistance: %f\n", b->scalpelEmpiricalMaxDistance);
+    tprintf("scalpelEmpiricalMaxPairs: %d\n", b->scalpelEmpiricalMaxPairs);
+    tprintf("scalpelEmpiricalBestPairs: %d\n", b->scalpelEmpiricalBestPairs);
+    tprintf("scalpelEmpiricalCut: %f\n", b->scalpelEmpiricalCut);
+    tprintf("scalpelEmpiricalMaxSegment: %d\n", b->scalpelEmpiricalMaxSegment);
+    tprintf("removeInsignificantBreaks: %d\n", b->removeInsignificantBreaks);
+    tprintf("ITERATIVE REWEIGHTING OPTIONS\n");
+    tprintf("useIterativeReweighting: %d\n", b->useIterativeReweighting);
+    tprintf("precisionTarget: %f\n", b->precisionTarget);
+    tprintf("precisionTargetMinStations: %f\n", b->precisionTargetMinStations);
+    tprintf("maxIterations: %d\n", b->maxIterations);
+    tprintf("useBroydenMethod: %d\n", b->useBroydenMethod);
+    tprintf("useSeed: %d\n", b->useSeed);
+    tprintf("seedMonthlyTimes: %d - ", b->seedMonthlyTimes);
+    for ( i= 0; i < b->n_seedMonthlyTimes; ++i )
+        printf("%f ", b->seedMonthlyTimes[i]);
+    printf("\n");
+    tprintf("seedMonthlyValues: %d - ", b->seedMonthlyValues);
+    for ( i= 0; i < b->n_seedMonthlyValues; ++i )
+        printf("%f ", b->seedMonthlyValues[i]);
+    printf("\n");
+    tprintf("SPATIAL MAP APPROXIMATION PARAMETERS\n");
+    tprintf("spatialMapsEmptyCellCut: %f\n", b->spatialMapsEmptyCellCut);
+    tprintf("spatialMapsTrivialMaxCut: %f\n", b->spatialMapsTrivialMaxCut);
+    tprintf("spatialMapsTrivialSumCut: %f\n", b->spatialMapsTrivialSumCut);
+    tprintf("EMPIRICAL REGION DETERMINATION PARAMETERS\n");
+    tprintf("limitEmpiricalFitRegion: %d\n", b->limitEmpiricalFitRegion);
+    tprintf("empiricalFitRegionCutoff: %f\n", b->empiricalFitRegionCutoff);
+    tprintf("limitEmpiricalBaselineRegion: %d\n", b->limitEmpiricalBaselineRegion);
+    tprintf("empiricalBaselineRegionCutoff: %f\n", b->empiricalBaselineRegionCutoff);
+    tprintf("BASELINE MAPPING OPTIONS\n");
+    tprintf("fullBaselineMapping: %d\n", b->fullBaselineMapping);
+    tprintf("fullBaselineTargetLats: %d - ", b->n_fullBaselineTargetLats);
+    for ( i= 0; i < b->n_fullBaselineTargetLats; ++i )
+        printf("%f ", b->fullBaselineTargetLats[i]);
+    printf("\n");
+    tprintf("fullBaselineAltitudeDegree: %d\n", b->fullBaselineAltitudeDegree);
+    tprintf("UNCERTAINTY COMPUTATION OPTIONS\n");
+    tprintf("computeUncertainty: %d\n", b->computeUncertainty);
+    tprintf("computeStatisticalUncertainty: %d\n", b->computeStatisticalUncertainty);
+    tprintf("statisticalUnceratintyLocal: %d\n", b->statisticalUncertaintyLocal);
+    tprintf("useJackKnife: %d\n", b->useJackKnife);
+    tprintf("statisticalUncertaintyInnerLoops: %d\n", b->statisticalUncertaintyInnerLoops);
+    tprintf("statisticalUncertaintyOuterLoops: %d\n", b->statisticalUncertaintyOuterLoops);
+    tprintf("statisticalUncertaintyMinRepeats: %d\n", b->statisticalUncertaintyMinRepeats);
+    tprintf("statisticalUncertaintyBenchmarkMinDate: %d\n", b->statisticalUncertaintyBenchmarkMinDate);
+    tprintf("statisticalUncertaintyBenchmarkMaxDate: %d\n", b->statisticalUncertaintyBenchmarkMaxDate);
+    tprintf("computeEmpiricalSpatialUncertainty: %d\n", b->computeEmpiricalSpatialUncertainty);
+    tprintf("supplementEmpiricalSpatialWithAnalytic: %d\n", b->supplementEmpiricalSpatialWithAnalytic);
+    tprintf("spatialUncertaintyBenchmarkMinDate: %d\n", b->spatialUncertaintyBenchmarkMinDate);
+    tprintf("spatialUncertaintyBenchmarkMaxDate: %d\n", b->spatialUncertaintyBenchmarkMaxDate);
+    tprintf("computeAnalyticSpatialUncertainty: %d\n", b->computeAnalyticSpatialUncertainty);
+    tprintf("OTHER OPTIONS\n");
+    tprintf("clutserMode: %d\n", b->clusterMode);
 }
