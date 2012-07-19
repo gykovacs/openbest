@@ -40,6 +40,7 @@ primaryKeyTable* matchFlagsPKT;
 
 int n_badFlags;
 char** badFlags;
+int* iBadFlags;
 
 int n_sourceFileCodes;
 char** sourceFileCodes;

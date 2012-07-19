@@ -93,11 +93,17 @@ void uniqueIA(int** t1, int* n1)
 
 void uniqueIAN(int* t, int n, int** output, int* m)
 {
+    int k;
+    printf("%d: ", n);
+    for ( k= 0; k < n; ++k )
+        printf("%d ", t[k]);
+    printf("\n");
     *output= (int*)malloc(sizeof(int)*n);
     qsortIA(t, n);
     int i, j, d;
     d= 1;
     j= 1;
+    (*output)[0]= t[0];
     for ( i= 1; i < n; ++i )
         if ( t[i-1] != t[i] )
         {
@@ -193,4 +199,13 @@ int modeRFA(real* input, int n)
         }
     free(tmp);
     return maxL;
+}
+
+void findEqualsIA(int* input, int n, int v, int* f, int* n_f)
+{
+    int i;
+    *n_f= 0;
+    for ( i= 0; i < n; ++i )
+        if ( input[i] == v )
+            f[(*n_f)++]= i;
 }

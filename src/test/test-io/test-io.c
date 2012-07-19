@@ -110,6 +110,9 @@ int otherFlagsTest(int argc, char** argv)
     for ( i= 0; i < n_badFlags; ++i )
         printf("%s\n", badFlags[i]);
     printf("\n");
+    for ( i= 0; i < n_badFlags; ++i )
+        printf("%d %s\n", iBadFlags[i], badFlags[i]);
+    printf("\n");
     for ( i= 0; i < n_sourceRecordTypes; ++i )
         printf("%s\n", sourceRecordTypes[i]);
     printf("\n");

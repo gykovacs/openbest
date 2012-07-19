@@ -22,6 +22,10 @@ void loadBadFlags()
         strcpy(badFlags[i], buffer);
     }
 
+    iBadFlags= inalloc(n);
+    for ( i= 0; i < n_badFlags; ++i )
+        iBadFlags[i]= lookupValuePKT(dataFlagsPKT, badFlags[i]);
+
     fclose(f);
 }
 

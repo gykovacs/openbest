@@ -113,4 +113,6 @@ real modeRMA(real* input, int n);
 
 int modeRFA(real* input, int n);
 
+void findEqualsIA(int* input, int n, int v, int* f, int* n_f);
+
 #endif

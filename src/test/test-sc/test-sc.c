@@ -17,6 +17,9 @@
 #include "openbest-io/loadStationRecordTypes.h"
 #include "openbest-io/loadOtherFlags.h"
 #include "openbest-io/loadData.h"
+#include "openbest-av/berkeleyAverage.h"
+#include "openbest-av/berkeleyAverageOptions.h"
+#include "openbest-av/scalpelMethods.h"
 
 #include "openbest-ds/optionTable.h"
 
@@ -86,6 +89,42 @@ int makeSingleValuedTest(int argc, char** argv)
     return 0;
 }
 
+int splitStationBreaksTest(int argc, char** argv)
+{
+    initDS();
+    stationElement2p* se;
+    int n_stationElement2;
+    stationSite2p* ss;
+    int n_stationSite2;
+
+    loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
+
+    printf("%d %d\n", n_stationSite2, n_stationElement2);
+    getchar();
+
+    berkeleyAverageOptions* bao= createBerkeleyAverageOptionsQuick();
+
+    int* a;
+    int* b;
+
+    splitStationBreaks(&se, &n_stationElement2, &ss, &n_stationSite2, bao->scalpelGapLength, iBadFlags, n_badFlags, &a, &b);
+
+    printf("aaa\n"); fflush(stdout);
+    int i;
+    /*for ( i= 0; i < n_stationElement2; ++i )
+    {
+        tprintf("=========%d\n", i);
+        displaySE2(se[i]);
+    }*/
+    printf("%d %d\n", n_stationElement2, n_stationSite2);
+    getchar();
+    printf("ccc\n"); fflush(stdout);
+    destroySE2V(se, n_stationElement2);
+    printf("bbb\n"); fflush(stdout);
+    destroySS2V(ss, n_stationSite2);
+    printf("ddd\n"); fflush(stdout);
+    finalizeDS();
+}
 
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
@@ -100,11 +139,13 @@ int main(int argc, char** argv)
     bool shrink= false;
     bool issingle= false;
     bool mksingle= false;
+    bool ssbtest= false;
     int err;
     
     addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
     addOption(ot, "--issingle", OPTION_BOOL, (char*)&issingle, 0, "isSingleValued test");
     addOption(ot, "--mksingle", OPTION_BOOL, (char*)&mksingle, 0, "makeSingleValued test");
+    addOption(ot, "--ssb", OPTION_BOOL, (char*)&ssbtest, 0, "split station breaks test");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -118,6 +159,8 @@ int main(int argc, char** argv)
         err= singleValuedTest(argc, argv);
     else if ( mksingle )
         err= makeSingleValuedTest(argc, argv);
+    else if ( ssbtest )
+        err= splitStationBreaksTest(argc, argv);
     
     destroyOptionTable(ot);
 

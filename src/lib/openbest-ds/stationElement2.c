@@ -466,3 +466,65 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action)
 
     return se;
 }
+
+void findFlags(stationElement2* se, flag_t* badFlags, int n_badFlags, int* f, int* n_f)
+{
+    int i, j, k, l= 0;
+    for ( i= 0; i < se->n_n_flags; ++i )
+        for ( j= 0; j < se->n_flags[i]; ++j )
+        {
+            for ( k= 0; k < n_badFlags; ++k )
+                if ( se->flags[i][j] == badFlags[k] )
+                {
+                    f[l++]= i;
+                    break;
+                }
+            if ( k != n_badFlags )
+                break;
+        }
+    *n_f= l;
+}
+
+stationElement2p createSE2Select(stationElement2p se, int* f, int n_f)
+{
+    stationElement2* tmp= createSE2N();
+
+    tmp->record_flags= copyIA(se->record_flags, se->n_record_flags);
+    tmp->n_record_flags= se->n_record_flags;
+
+    tmp->primary_record_ids= copyIA(se->primary_record_ids, se->n_primary_record_ids);
+    tmp->n_primary_record_ids= se->n_primary_record_ids;
+
+    tmp->dates= rnalloc(n_f);
+    tmp->time_of_observation= cnalloc(n_f);
+    tmp->data= tnalloc(n_f);
+    tmp->uncertainty= rnalloc(n_f);
+    tmp->num_measurements= snalloc(n_f);
+    tmp->n_flags= cnalloc(n_f);
+    tmp->flags= (flag_t**)malloc(sizeof(flag_t*)*n_f);
+
+    int a= 0, i;
+    for ( i= 0; i < n_f; ++i )
+    {
+        tmp->dates[a]= se->dates[f[i]];
+        tmp->time_of_observation[a]= se->time_of_observation[f[i]];
+        tmp->data[a]= se->data[f[i]];
+        tmp->uncertainty[a]= se->uncertainty[f[i]];
+        tmp->num_measurements[a]= se->num_measurements[f[i]];
+        tmp->n_flags[a]= se->n_flags[f[i]];
+        tmp->flags[a]= copyFA(se->flags[f[i]], se->n_flags[f[i]]);
+        ++a;
+    }
+
+    tmp->frequency= se->frequency;
+    tmp->site= se->site;
+    tmp->n_dates= n_f;
+    tmp->n_time_of_observation= n_f;
+    tmp->n_data= n_f;
+    tmp->n_uncertainty= n_f;
+    tmp->n_num_measurements= n_f;
+    tmp->n_n_flags= n_f;
+    tmp->source= se->source;
+
+    return tmp;
+}

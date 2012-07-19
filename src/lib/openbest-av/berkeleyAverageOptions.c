@@ -17,6 +17,8 @@ berkeleyAverageOptions* createBAON()
     //TODO correlation parameters
     //TODO correlation limit distance
     //TODO badFlags
+    p->badFlags= iBadFlags;
+    p->n_badFlags= n_badFlags;
     p->useSiteWeighting= true;
     p->siteWeightingGlobalCutoffMultiplier= FLT_MAX;
     p->siteWeightingCutoffMultiplier= 5;

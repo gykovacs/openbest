@@ -57,26 +57,37 @@ void destroySS2(stationSite2* ss)
 {
     if ( ss == NULL )
         return;
+    printf("a"); fflush(stdout);
     if ( ss->location)
         free(ss->location);
+    printf("b"); fflush(stdout);
     if ( ss->all_locations)
         free(ss->all_locations);
+    printf("c"); fflush(stdout);
     if ( ss->all_location_times )
         free(ss->all_location_times);
+    printf("d"); fflush(stdout);
     if ( ss->alt_names )
         free(ss->alt_names );
+    printf("e"); fflush(stdout);
     if ( ss->instrument_changes )
         free(ss->instrument_changes );
+    printf("f"); fflush(stdout);
     if ( ss->primary_manifests )
         free(ss->primary_manifests);
+    printf("g"); fflush(stdout);
     if ( ss->secondary_manifests )
         free(ss->secondary_manifests);
+    printf("h"); fflush(stdout);
     if ( ss->sources )
         free(ss->sources );
+    printf("i"); fflush(stdout);
     if ( ss->archive_keys )
         free(ss->archive_keys );
+    printf("j"); fflush(stdout);
     if ( ss->flags )
         free(ss->flags);
+    printf("k"); fflush(stdout);
     free(ss);
 }
 
@@ -84,10 +95,27 @@ void destroySS2V(stationSite2p* ss, int n)
 {
     if ( ss )
     {
-        int i;
+        int i, j;
+        for ( i= 0; i < n; ++i )
+            for ( j= i+1; j < n; ++j )
+                if ( ss[i] == ss[j] )
+                    ss[j]= NULL;
+
+        for ( i= 0; i < n; ++i )
+            if ( ss[i] )
+                printf("1");
+            else
+                printf("0");
+        for ( i= 0; i < n; ++i )
+            printf("%p\n", ss[i]);
         for ( i= 0; i < n; ++i )
         {
             printf("%d ", i);
+            if ( i == 3202 || i == 3345 )
+            {
+                printf("%p\n", ss[i]); fflush(stdout);
+                //displaySS2(ss[i]);
+            printf("-------"); fflush(stdout);}
             destroySS2(ss[i]);
         }
         free(ss);

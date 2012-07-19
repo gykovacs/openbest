@@ -52,6 +52,11 @@ typedef struct
     int n_primary_record_ids;
     /** primary record ids*/
     int* primary_record_ids;
+
+    bool compressed;
+
+    void* compressedRecord;
+    int compressedRecordLength;
 } stationElement2;
 
 /** stationElement2 pointer type*/
@@ -100,5 +105,9 @@ bool isMultiValued(stationElement2* se);
 stationElement2* structureMerge(stationElement2* se);
 
 stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* options);
+
+void findFlags(stationElement2* se, flag_t* badFlags, int n_badFlags, int* f, int* n_f);
+
+stationElement2* createSE2Select(stationElement2p se, int* f, int n_f);
 
 #endif
