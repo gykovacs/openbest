@@ -20,6 +20,10 @@
   */
 void loadPreliminaryData();
 
+void loadStationElement2(stationElement2p** se, int* n_stationElement2);
+
+void loadStationSite2(stationSite2p** ss, int* n_stationSite2);
+
 /**
   * loads the station and temperature data from text files
   * @param ss pointer to an empty array of size 0 of stationSite2 pointers; loadData allocates the proper amount of memory
@@ -28,5 +32,7 @@ void loadPreliminaryData();
   * @param n_stationElement2 pointer to an integer variable to hold the length of the stationElement2 array loaded
   */
 void loadData(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2);
+
+void matchStationElementsAndSites(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2);
 
 #endif

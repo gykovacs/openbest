@@ -5,8 +5,9 @@
 
 void initDS()
 {
-  unknown_value= (char*)malloc(sizeof(char)*14);
-  strcpy(unknown_value, "unknown_value");
+  unknown_value= (char*)malloc(sizeof(char)*(strlen(UNKNOWN_FLAG_STRING)+1));
+  strcpy(unknown_value, UNKNOWN_FLAG_STRING);
+  compression_area= (char*)malloc(sizeof(char)*COMPRESSION_AREA);
 
   countryNamesPKT= createPrimaryKeyTableP();
   
@@ -49,6 +50,7 @@ void finalizeDS()
     for ( i= 0; i < n_badFlags; ++i )
         free(badFlags[i]);
     free(badFlags);
+    free(iBadFlags);
 
     for ( i= 0; i < n_sourceFileCodes; ++i )
         free(sourceFileCodes[i]);

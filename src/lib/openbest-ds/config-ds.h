@@ -14,6 +14,15 @@ typedef float temp_t;
 
 char* unknown_value;
 
+#define UNKNOWN_FLAG_STRING "unknown_value"
+
+/** pointer to the string "unknown_value"*/
+char* unknown_value;
+
+#define COMPRESSION_AREA 500000
+
+char* compression_area;
+
 //extern const char* const dataDir = "/mnt/gentoo/openbest/dat/";
 //#define DATA_DIR "/mnt/gentoo/gsoc/openbest/dat/"
 

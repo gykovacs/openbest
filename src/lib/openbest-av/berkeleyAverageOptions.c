@@ -420,3 +420,8 @@ void displayBAO(berkeleyAverageOptions* b)
     tprintf("OTHER OPTIONS\n");
     tprintf("clutserMode: %d\n", b->clusterMode);
 }
+
+void destroyBAO(berkeleyAverageOptions* bao)
+{
+    free(bao);
+}

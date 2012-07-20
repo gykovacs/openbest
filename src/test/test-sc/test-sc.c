@@ -118,12 +118,18 @@ int splitStationBreaksTest(int argc, char** argv)
     }*/
     printf("%d %d\n", n_stationElement2, n_stationSite2);
     getchar();
+    /*displaySE2(se[3360]);
+    destroySE2(se[3360]);
+    getchar();*/
     printf("ccc\n"); fflush(stdout);
     destroySE2V(se, n_stationElement2);
     printf("bbb\n"); fflush(stdout);
     destroySS2V(ss, n_stationSite2);
     printf("ddd\n"); fflush(stdout);
+    free(a);
+    free(b);
     finalizeDS();
+    destroyBAO(bao);
 }
 
 /**

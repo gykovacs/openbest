@@ -54,9 +54,11 @@ typedef struct
     int* primary_record_ids;
 
     bool compressed;
+    bool packed;
 
-    void* compressedRecord;
-    int compressedRecordLength;
+    char* compressedRecord;
+    unsigned int compressedRecordLength;
+    unsigned int dataLength;
 } stationElement2;
 
 /** stationElement2 pointer type*/
@@ -67,6 +69,8 @@ typedef stationElement2* stationElement2p;
   * @returns pointer of the new instance
   */
 stationElement2* createSE2N();
+
+stationElement2* createSE2Test();
 
 stationElement2* createSE2NC(stationElement2* se);
 
@@ -109,5 +113,13 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* options);
 void findFlags(stationElement2* se, flag_t* badFlags, int n_badFlags, int* f, int* n_f);
 
 stationElement2* createSE2Select(stationElement2p se, int* f, int n_f);
+
+void compressSE2(stationElement2p se);
+
+void decompressSE2(stationElement2p se);
+
+unsigned int sizeSE2(stationElement2p se);
+
+unsigned int sizeOfCompressableSE2(stationElement2p se);
 
 #endif

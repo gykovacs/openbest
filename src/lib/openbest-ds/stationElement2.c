@@ -25,7 +25,7 @@ void displaySE2(stationElement2* se)
     printf("\n\t uncertainty: %d - ", se->n_uncertainty);
     for ( i= 0; i < se->n_uncertainty; ++i )
         printf("%f ", se->uncertainty[i]);
-    printf("\n\t n_num_measurements: - %d\n", se->n_num_measurements);
+    printf("\n\t n_num_measurements: - %d", se->n_num_measurements);
     for ( i= 0; i < se->n_num_measurements; ++i )
         printf("%d ", se->num_measurements[i]);
     printf("\n\t n_n_flags: %d - \n", se->n_n_flags);
@@ -66,6 +66,75 @@ stationElement2* createSE2N()
     tmp->n_record_flags= 0;
     tmp->n_primary_record_ids= 0;
 
+    tmp->compressed= false;
+    tmp->compressedRecordLength= 0;
+    tmp->dataLength= 0;
+    tmp->compressedRecord= NULL;
+
+    return tmp;
+}
+
+stationElement2* createSE2Test()
+{
+    stationElement2* tmp= createSE2N();
+    tmp->dates= rnalloc(3);
+    tmp->dates[0]= 1984;
+    tmp->dates[1]= 1984.4;
+    tmp->dates[2]= 1984.5;
+
+    tmp->record_type= 0;
+    tmp->frequency= 0;
+    tmp->site= 0;
+    tmp->n_dates= 3;
+    tmp->n_time_of_observation= 3;
+    tmp->n_data= 3;
+    tmp->n_uncertainty= 3;
+    tmp->n_num_measurements= 3;
+    tmp->n_n_flags= 3;
+    tmp->source= 0;
+    tmp->n_record_flags= 1;
+    tmp->n_primary_record_ids= 0;
+
+    tmp->time_of_observation= cnalloc(3);
+    tmp->time_of_observation[0]= 2;
+    tmp->time_of_observation[1]= 20;
+    tmp->time_of_observation[2]= 14;
+
+    tmp->data= tnalloc(3);
+    tmp->data[0]= 10.3;
+    tmp->data[1]= 14.8;
+    tmp->data[2]= 16.0;
+
+    tmp->uncertainty= rnalloc(3);
+    tmp->uncertainty[0]= 0.5;
+    tmp->uncertainty[1]= 0.2;
+    tmp->uncertainty[2]= 0.8;
+
+    tmp->num_measurements= snalloc(3);
+    tmp->num_measurements[0]= 3;
+    tmp->num_measurements[1]= 10;
+    tmp->num_measurements[2]= 8;
+
+    tmp->n_flags= cnalloc(3);
+    tmp->n_flags[0]= 2;
+    tmp->n_flags[1]= 1;
+    tmp->n_flags[2]= 0;
+
+    tmp->flags= (flag_t**)malloc((sizeof(flag_t*))*3);
+    tmp->flags[0]= (flag_t*)malloc(sizeof(flag_t)*2);
+    tmp->flags[1]= (flag_t*)malloc(sizeof(flag_t)*1);
+    tmp->flags[2]= NULL;
+
+    tmp->flags[0][0]= 165;
+    tmp->flags[0][1]= 170;
+
+    tmp->flags[1][0]= 172;
+
+    tmp->record_flags= inalloc(1);
+    tmp->record_flags[0]= 5;
+
+    tmp->primary_record_ids= NULL;
+
     return tmp;
 }
 
@@ -90,6 +159,179 @@ int n_record_flags;
 int* record_flags;
 int n_primary_record_ids;
 int* primary_record_ids;*/
+
+void compressSE2(stationElement2p se)
+{
+    if ( se->compressed == true )
+        return;
+
+    unsigned int index;
+    unsigned int size;
+    index= 0;
+
+    size= sizeof(real)*(se->n_dates);
+    memcpy((void*)(compression_area + index), (void*)(se->dates), size);
+    index+= size;
+
+    size= sizeof(char)*(se->n_time_of_observation);
+    memcpy((void*)(compression_area + index), (void*)(se->time_of_observation), size);
+    index+= size;
+
+    size= sizeof(temp_t)*(se->n_data);
+    memcpy((void*)(compression_area + index), (void*)(se->data), size);
+    index+= size;
+
+    size= sizeof(real)*(se->n_uncertainty);
+    memcpy((void*)(compression_area + index), (void*)(se->uncertainty), size);
+    index+= size;
+
+    size= sizeof(short)*(se->n_num_measurements);
+    memcpy((void*)(compression_area + index), (void*)(se->num_measurements), size);
+    index+= size;
+
+    size= sizeof(char)*(se->n_n_flags);
+    memcpy((void*)(compression_area + index), (void*)(se->n_flags), size);
+    index+= size;
+
+    int i;
+    for ( i= 0; i < se->n_n_flags; ++i )
+    {
+        size= sizeof(flag_t)*(se->n_flags[i]);
+        memcpy((void*)(compression_area + index), (void*)(se->flags[i]), size);
+        index+= size;
+    }
+
+    size= sizeof(int)*(se->n_record_flags);
+    memcpy((void*)(compression_area + index), (void*)(se->record_flags), size);
+    index+= size;
+
+    size= sizeof(int)*(se->n_primary_record_ids);
+    memcpy((void*)(compression_area + index), (void*)(se->primary_record_ids), size);
+    index+= size;
+
+    se->dataLength= index;
+    if ( se->compressedRecord= NULL )
+        se->compressedRecord= (char*)malloc(sizeof(char)*index);
+    else
+        se->compressedRecord= (char*)realloc(se->compressedRecord, sizeof(char)*index);
+
+    lzfx_compress((void*)compression_area, index, (void*)(se->compressedRecord), &(se->compressedRecordLength));
+    se->compressedRecord= realloc(se->compressedRecord, se->compressedRecordLength);
+    se->compressed= true;
+
+    free(se->dates);
+    free(se->time_of_observation);
+    free(se->data);
+    free(se->uncertainty);
+    free(se->num_measurements);
+    free(se->n_flags);
+    for ( i= 0; i < se->n_n_flags; ++i )
+        free(se->flags[i]);
+    free(se->flags);
+    free(se->record_flags);
+    free(se->primary_record_ids);
+
+    se->dates= NULL;
+    se->time_of_observation= NULL;
+    se->data= NULL;
+    se->uncertainty= NULL;
+    se->num_measurements= NULL;
+    se->n_flags= NULL;
+    se->flags= NULL;
+    se->record_flags= NULL;
+    se->primary_record_ids= NULL;
+}
+
+void decompressSE2(stationElement2p se)
+{
+    if ( se->compressed == false )
+        return;
+
+    unsigned int length= COMPRESSION_AREA;
+    lzfx_decompress((void*)(se->compressedRecord), se->compressedRecordLength, compression_area, &length);
+
+    unsigned int index= 0;
+    unsigned int size;
+
+    se->dates= (real*)rnalloc(se->n_dates);
+    size= sizeof(real)*(se->n_dates);
+    memcpy((void*)(se->dates), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->time_of_observation= (char*)cnalloc(se->n_time_of_observation);
+    size= sizeof(char)*(se->n_time_of_observation);
+    memcpy((void*)(se->time_of_observation), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->data= (temp_t*)tnalloc(se->n_data);
+    size= sizeof(temp_t)*(se->n_data);
+    memcpy((void*)(se->data), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->uncertainty= (real*)rnalloc(se->n_uncertainty);
+    size= sizeof(real)*(se->n_uncertainty);
+    memcpy((void*)(se->uncertainty), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->num_measurements= (short*)snalloc(se->n_num_measurements);
+    size= sizeof(short)*(se->n_num_measurements);
+    memcpy((void*)(se->num_measurements), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->n_flags= (char*)cnalloc(se->n_n_flags);
+    size= sizeof(char)*(se->n_n_flags);
+    memcpy((void*)(se->n_flags), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->flags= (flag_t**)malloc(sizeof(flag_t*)*(se->n_n_flags));
+    int i;
+    for ( i= 0; i < se->n_n_flags; ++i )
+    {
+        size= sizeof(flag_t)*(se->n_flags[i]);
+        se->flags[i]= (flag_t*)malloc(size);
+        memcpy((void*)(se->flags[i]), (void*)(compression_area + index), size);
+        index+= size;
+    }
+
+    se->record_flags= (int*)inalloc(se->n_record_flags);
+    size= sizeof(int)*(se->n_record_flags);
+    memcpy((void*)(se->record_flags), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->primary_record_ids= (int*)inalloc(se->n_primary_record_ids);
+    size= sizeof(int)*(se->n_primary_record_ids);
+    memcpy((void*)(se->primary_record_ids), (void*)(compression_area + index), size);
+    index+= size;
+
+    se->compressed= false;
+}
+
+unsigned int sizeSE2(stationElement2p se)
+{
+    int sum= sizeOfCompressableSE2(se);
+    sum+= sizeof(int)*11;
+    return sum;
+}
+
+unsigned int sizeOfCompressableSE2(stationElement2p se)
+{
+    int sum= 0;
+    sum+= sizeof(real)*(se->n_dates);
+    sum+= sizeof(char)*(se->n_time_of_observation);
+    sum+= sizeof(temp_t)*(se->n_data);
+    sum+= sizeof(real)*(se->n_uncertainty);
+    sum+= sizeof(short)*(se->n_num_measurements);
+    sum+= sizeof(int)*(se->n_record_flags);
+    sum+= sizeof(int)*(se->n_primary_record_ids);
+    sum+= sizeof(char*)*(se->n_n_flags);
+    int i;
+    int sum2= 0;
+    for ( i= 0; i < se->n_n_flags; ++i )
+        sum2+= se->n_flags[i];
+    sum+= sizeof(flag_t)*sum2;
+
+    return sum;
+}
 
 stationElement2* createSE2NC(stationElement2* se)
 {
@@ -135,49 +377,49 @@ stationElement2* createSE2NC(stationElement2* se)
 
 void destroySE2(stationElement2* se)
 {
-    //dea();
+    dea();
     if ( !se )
         return;
 
-    //deb();
+    deb();
     if ( se->dates )
         free(se->dates);
 
-    //dec();
+    dec();
     if ( se->time_of_observation )
         free(se->time_of_observation);
 
-    //ded();
+    ded();
     if ( se->data )
         free(se->data);
 
-    //dee();
+    dee();
     if ( se->uncertainty )
         free(se->uncertainty);
 
-    //def();
+    def();
     if ( se->num_measurements )
         free(se->num_measurements);
 
-    //deg();
+    deg();
     if ( se->n_flags )
         free(se->n_flags);
 
-    //deh();
+    deh();
     int i;
     for ( i= 0; i < se->n_n_flags; ++i )
         if ( se->flags[i] )
             free(se->flags[i]);
 
-    //dei();
+    dei();
     if ( se->flags )
         free(se->flags);
 
-    //dej();
+    dej();
     if ( se->record_flags )
         free(se->record_flags);
 
-    //dek();
+    dek();
     if ( se->primary_record_ids )
         free(se->primary_record_ids);
 
@@ -190,7 +432,10 @@ void destroySE2V(stationElement2p* se, int n)
         return;
     int i;
     for ( i= 0; i < n; ++i )
+    {
+        printf("%d ", i);
         destroySE2(se[i]);
+    }
     free(se);
 }
 

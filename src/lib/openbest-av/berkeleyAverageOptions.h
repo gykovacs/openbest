@@ -138,4 +138,6 @@ void berkeleyAverageOptionsConsistency(berkeleyAverageOptions* p);
   */
 void displayBAO(berkeleyAverageOptions* bao);
 
+void destroyBAO(berkeleyAverageOptions* bao);
+
 #endif

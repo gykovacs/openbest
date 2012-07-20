@@ -88,7 +88,7 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
 
       trimlr(tmp, tmpstr);
       //printf("%s\n", tmpstr);
-      p[n]->country= lookupValuePKT(&countryNamesPKT, tmpstr);
+      p[n]->country= lookupValuePKT(countryNamesPKT, tmpstr);
       //printf("%d\n", p[n]->country);
 
       //record start date
@@ -293,7 +293,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
           }
 
           ++n;
-          p[n]= (stationSite2p)createSE2N();
+          p[n]= (stationSite2*)createSE2N();
           datesp= (real*)malloc(sizeof(real)*MAX_LENGTH_OF_TIME_SERIES);
           if ( datesp == NULL ) eprintf("malloc failed in loadData");
           tempp= (temp_t*)malloc(sizeof(temp_t)*MAX_LENGTH_OF_TIME_SERIES);
@@ -412,7 +412,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
           //printf("c%d", p[id]->n_n_flags); fflush(stdout);
           //printf(" %d %d\n", sizeof(*p[id]->n_flags), sizeof(p[id+1]->n_flags));
           ++n;
-          if ( n == n_stationElement2 )
+          if ( n == *n_stationElement2 )
               break;
           for ( i= 0; i < p[n]->n_n_flags; ++i )
           {
@@ -467,4 +467,56 @@ void loadData(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, in
     loadStationElement2(se, n_stationElement2);
     loadStationSite2(ss, n_stationSite2);
     shrinkSS2V(ss, n_stationSite2);
+    matchStationElementsAndSites(ss, n_stationSite2, se, n_stationElement2);
+}
+
+void matchStationElementsAndSites(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2)
+{
+    tprintf("Matching %d station elements and %d station sites.\n", *n_stationElement2, *n_stationSite2);
+    stationElement2p* sen= (stationElement2p*)malloc(sizeof(stationElement2p)*(*n_stationElement2));
+    stationSite2p* ssn= (stationSite2p*)malloc(sizeof(stationSite2p)*(*n_stationSite2));
+    int* mse= (int*)inalloc(*n_stationElement2);
+    int* mss= (int*)inalloc(*n_stationSite2);
+    seti(mse, *n_stationElement2, 0);
+    seti(mss, *n_stationSite2, 0);
+
+    int n= 0;
+    int i, j;
+    for ( i= 0; i < *n_stationSite2; ++i )
+    {
+        for ( j= 0; j < *n_stationElement2; ++j )
+        {
+            if ( (*ss)[i]->id == (*se)[j]->site )
+            {
+                if ( (mse)[j] )
+                {
+                    printf("%d %d\n", i,j);
+                }
+                else
+                {
+                    sen[n]= (*se)[j];
+                    ssn[n]= (*ss)[i];
+                    mse[j]= 1;
+                    mss[i]= 1;
+                    ++n;
+                    break;
+                }
+            }
+        }
+    }
+    for ( i= 0; i < *n_stationElement2; ++i )
+        if ( !mse[i] )
+            destroySE2((*se)[i]);
+    for ( i= 0; i < *n_stationSite2; ++i )
+        if ( !mss[i] )
+            destroySS2((*ss)[i]);
+    free(*ss);
+    free(*se);
+    *se= realloc(sen, n*sizeof(stationElement2p));
+    *ss= realloc(ssn, n*sizeof(stationSite2p));
+    *n_stationSite2= n;
+    *n_stationElement2= n;
+    free(mse);
+    free(mss);
+    tprintf("Size after matching: %d.\n", n);
 }

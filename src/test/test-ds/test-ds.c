@@ -12,6 +12,8 @@
 #include "openbest-ds/init-ds.h"
 #include "openbest-io/loadCountryNames.h"
 #include "openbest-io/loadStationSourceTypes.h"
+#include "openbest-ds/lzfx/lzfx.h"
+#include "openbest-ds/stationElement2.h"
 
 #include "openbest-ds/optionTable.h"
 
@@ -214,6 +216,51 @@ int qsortRATest(int argc, char** argv)
     return 0;
 }
 
+int compressTest(int argc, char** argv)
+{
+    char* testBuffer= (char*)malloc(sizeof(char)*100);
+    strcpy(testBuffer,"this is a test string for compression/decompression");
+    char* workarea= (char*)malloc(sizeof(char)*strlen(testBuffer));
+    unsigned int olen= strlen(testBuffer);
+
+    lzfx_compress((void*)testBuffer, strlen(testBuffer)+1, (void*)workarea, &olen);
+    printf("length of compressed string: %d\n", olen);
+    printf("compressed data stream:\n");
+    int i;
+    for ( i= 0; i < olen; ++i )
+        printf("%c", workarea[i]);
+    printf("\n");
+
+    char* workarea2= (char*)malloc(sizeof(char)*strlen(testBuffer)*2);
+    unsigned int olen2= strlen(testBuffer)*2;
+
+    lzfx_decompress((void*)workarea, olen, (void*)workarea2, &olen2);
+    printf("%s\n", workarea2);
+
+    free(testBuffer);
+    free(workarea);
+    free(workarea2);
+
+    return 0;
+}
+
+int compressSE2Test(int argc, char** argv)
+{
+    initDS();
+
+    stationElement2* se= createSE2Test();
+
+    displaySE2(se);
+
+    compressSE2(se);
+
+    decompressSE2(se);
+
+    displaySE2(se);
+
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -234,6 +281,8 @@ int main(int argc, char** argv)
     bool unique= false;
     bool mode= false;
     bool qsortra= false;
+    bool compress= false;
+    bool compressSE2b= false;
     int err;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
@@ -246,6 +295,8 @@ int main(int argc, char** argv)
     addOption(ot, "--unique", OPTION_BOOL, (char*)&unique, 0, "unique test");
     addOption(ot, "--mode", OPTION_BOOL, (char*)&mode, 0, "mode function test");
     addOption(ot, "--qsortra", OPTION_BOOL, (char*)&qsortra, 0, "qsortra function test");
+    addOption(ot, "--compress", OPTION_BOOL, (char*)&compress, 0, "compression/decompression test");
+    addOption(ot, "--compressSE2", OPTION_BOOL, (char*)&compressSE2b, 0, "compress/decompress StationElement2");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -273,6 +324,10 @@ int main(int argc, char** argv)
       err= modeTest(argc, argv);
     else if ( qsortra )
       err= qsortRATest(argc, argv);
+    else if ( compress )
+      err= compressTest(argc, argv);
+    else if ( compressSE2b )
+      err= compressSE2Test(argc, argv);
 
     destroyOptionTable(ot);
     

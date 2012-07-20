@@ -115,7 +115,9 @@ void destroySS2V(stationSite2p* ss, int n)
             {
                 printf("%p\n", ss[i]); fflush(stdout);
                 //displaySS2(ss[i]);
-            printf("-------"); fflush(stdout);}
+            printf("-------"); fflush(stdout);
+            }
+
             destroySS2(ss[i]);
         }
         free(ss);
@@ -149,9 +151,9 @@ void shrinkSS2V(stationSite2p** ss1, int* n)
     tprintf("start shrinking\n");
     for ( i= 0; i < *n - 1; ++i )
     {
-        if ( i != *n - 1 && ss[i]->id == ss[i+1]->id )
+        if ( i != *n - 2 && ss[i]->id == ss[i+1]->id )
             ++m;
-        else if ( i == *n - 1 || ss[i]->id != ss[i+1]->id )
+        else if ( i == *n - 2 || ss[i]->id != ss[i+1]->id )
         {
             if ( m > 0 )
             {

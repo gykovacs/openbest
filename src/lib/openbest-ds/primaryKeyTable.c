@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/primaryKeyTable.h"
 
@@ -9,7 +11,7 @@ valueToKeyTree* newVTKElement(char* key, int value)
   tmp->keys= (char**)malloc(sizeof(char*)*2);
   if ( tmp->keys == NULL )
       eprintf("malloc failed in newVTKElement\n");
-  tmp->keys[0]= cnalloc(strlen(key) + 1);
+  tmp->keys[0]= (char*)cnalloc(strlen(key) + 1);
   strcpy(tmp->keys[0], key);
   tmp->keys[1]= NULL;
   tmp->n= 2;
@@ -93,7 +95,7 @@ char** lookupKeysPKT(primaryKeyTable* pkt, int value)
 int lookupValueKTV(keyToValueTree* root, char* key)
 {
   if ( root == NULL )
-    return NULL;
+    return 0;
   else if ( strcmp(root->key, key) > 0 )
     return lookupValueKTV(root->left, key);
   else if ( strcmp(root->key, key) < 0 )
