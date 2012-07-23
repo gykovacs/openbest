@@ -17,6 +17,7 @@
 #include "openbest-io/loadStationRecordTypes.h"
 #include "openbest-io/loadOtherFlags.h"
 #include "openbest-io/loadData.h"
+#include "openbest-io/config-io.h"
 
 #include "openbest-ds/optionTable.h"
 
@@ -259,6 +260,27 @@ int shrinkTest(int argc, char** argv)
     return 0;
 }
 
+int filenamesTest(int argc, char** argv)
+{
+    tprintf("data_dir: %s\n", DATA_DIR);
+    tprintf("dataset_dir: %s\n", DATASET_DIR);
+    tprintf("file_sep: %s\n", FILE_SEP);
+    tprintf("full_site_data_file: %s\n", FULL_SITE_DATA_FILE);
+    tprintf("full_site_flags_file: %s\n", FULL_SITE_FLAGS_FILE);
+    tprintf("full_temp_data_file: %s\n", FULL_TEMP_DATA_FILE);
+    tprintf("full_temp_flags_file: %s\n", FULL_TEMP_FLAGS_FILE);
+    tprintf("full_sources_file: %s\n", FULL_SOURCES_FILE);
+    tprintf("full_station_change_file: %s\n", FULL_STATION_CHANGE_FILE);
+    tprintf("site_data: %s\n", SITE_DATA);
+    tprintf("site_flags: %s\n", SITE_FLAGS);
+    tprintf("temp_data: %s\n", TEMP_DATA);
+    tprintf("temp_flags: %s\n", TEMP_FLAGS);
+    tprintf("sources_data: %s\n", SOURCES_DATA);
+    tprintf("station_change: %s\n", STATION_CHANGE);
+
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -282,6 +304,7 @@ int main(int argc, char** argv)
     bool loadse= false;
     bool loadall= false;
     bool shrink= false;
+    bool filenames= false;
     int err;
     
     addOption(ot, "--stationSourceTypes", OPTION_BOOL, (char*)&stationSource, 0, "station source types");
@@ -297,6 +320,7 @@ int main(int argc, char** argv)
     addOption(ot, "--loadSE", OPTION_BOOL, (char*)&loadse, 0, "load station elements");
     addOption(ot, "--loadAll", OPTION_BOOL, (char*)&loadall, 0, "load all data");
     addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
+    addOption(ot, "--filenames", OPTION_BOOL, (char*)&filenames, 0, "data filenames");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -330,6 +354,8 @@ int main(int argc, char** argv)
         err= loadAllTest(argc, argv);
     else if ( shrink )
         err= shrinkTest(argc, argv);
+    else if ( filenames )
+        err= filenamesTest(argc, argv);
     
     destroyOptionTable(ot);
 

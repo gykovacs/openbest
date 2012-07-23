@@ -1,18 +1,22 @@
-#ifndef _CONFIG_DS_H_
-#define _CONFIG_DS_H_
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
 
 #include <omp.h>
 
+/** definition of logical false*/
 #define false 0
+/** definition of logical true*/
 #define true 1
 
+/** definition of real type*/
 typedef double real;
+/** definition of boolean type*/
 typedef unsigned char bool;
 //typedef unsigned short key_t;
+/** definition of flag type*/
 typedef unsigned char flag_t;
+/** definition of temperature data type*/
 typedef float temp_t;
-
-char* unknown_value;
 
 #define UNKNOWN_FLAG_STRING "unknown_value"
 

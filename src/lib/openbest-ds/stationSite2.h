@@ -50,6 +50,10 @@ typedef struct
     int* sources;
     /** archivation keys*/
     int* archive_keys;
+
+    int n_relocations;
+    real* relocations;
+    flag_t* relocation_types;
 } stationSite2;
 
 /** stationSite2 pointer type definition*/

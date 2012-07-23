@@ -94,10 +94,10 @@ void uniqueIA(int** t1, int* n1)
 void uniqueIAN(int* t, int n, int** output, int* m)
 {
     int k;
-    printf("%d: ", n);
+    /*printf("%d: ", n);
     for ( k= 0; k < n; ++k )
         printf("%d ", t[k]);
-    printf("\n");
+    printf("\n");*/
     *output= (int*)malloc(sizeof(int)*n);
     qsortIA(t, n);
     int i, j, d;

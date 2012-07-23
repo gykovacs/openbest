@@ -1,17 +1,41 @@
 #ifndef _CONFIG_IO_H_
 #define _CONFIG_IO_H_
 
+
 /** data directory */
 #define DATA_DIR ${DATA_DIR}
 
+#define DATASET_DIR "multi-valued-tavg"
+
+#define FILE_SEP "/"
+
+#define FULL_SITE_DATA_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "site_complete_detail.txt"
+
+#define FULL_SITE_FLAGS_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "site_flags.txt"
+
+#define FULL_TEMP_DATA_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "data.txt"
+
+#define FULL_TEMP_FLAGS_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "flags.txt"
+
+#define FULL_SOURCES_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "sources.txt"
+
+#define FULL_STATION_CHANGE_FILE DATA_DIR FILE_SEP DATASET_DIR FILE_SEP "station_change.txt"
+
+
 /** site data text file*/
-#define SITE_DATA "site_complete_detail${REDUCED_FLAG}.txt"
+#define SITE_DATA DATA_DIR FILE_SEP "site_complete_detail.txt.${REDUCED_FLAG}.txt"
 /** site flags text file*/
-#define SITE_FLAGS "site_flags${REDUCED_FLAG}.txt"
+#define SITE_FLAGS DATA_DIR FILE_SEP "site_flags.txt.${REDUCED_FLAG}.txt"
 
 /** temperature data text file*/
-#define TEMP_DATA "data${REDUCED_FLAG}.txt"
+#define TEMP_DATA DATA_DIR FILE_SEP "data.txt.${REDUCED_FLAG}.txt"
 /** temperature flags text file*/
-#define TEMP_FLAGS "flags${REDUCED_FLAG}.txt"
+#define TEMP_FLAGS DATA_DIR FILE_SEP "flags.txt.${REDUCED_FLAG}.txt"
+
+#define SOURCES_DATA DATA_DIR FILE_SEP "sources.txt.${REDUCED_FLAG}.txt"
+
+#define STATION_CHANGE DATA_DIR FILE_SEP "station_change.txt.${REDUCED_FLAG}.txt"
+
+
 
 #endif

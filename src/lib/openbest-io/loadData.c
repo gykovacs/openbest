@@ -3,8 +3,12 @@
 #include "openbest-ds/config-ds.h"
 #include "openbest-io/loadData.h"
 
-#define MAX_LENGTH_OF_TIME_SERIES 4000
+#define MAX_LENGTH_OF_TIME_SERIES 40000
 #define MAX_DATA_FLAGS 30
+#define MAX_SOURCES 10
+
+#define MAX_SITE_FLAGS 11
+#define MAX_STATION_CHANGES 1000
 
 void loadPreliminaryData()
 {
@@ -36,8 +40,8 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
     /* READING STATION DATA */
 
     char filename[100];
-    strcpy(filename, DATA_DIR );
-    strcat(filename, SITE_DATA );
+    //strcpy(filename, DATA_DIR );
+    strcpy(filename, SITE_DATA );
     FILE* f= fopen(filename, "rt");
 
     char buffer[1000];
@@ -171,8 +175,8 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
 
     /* READING FLAGS */
 
-    strcpy(filename, DATA_DIR );
-    strcat(filename, SITE_FLAGS );
+    //strcpy(filename, DATA_DIR );
+    strcpy(filename, SITE_FLAGS );
 
     f= fopen(filename, "rt");
     int flags[11];
@@ -213,24 +217,107 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2)
             ++nth;
         }
     }
-    printf("reading flags finished\n"); fflush(stdout);
+    tprintf("reading flags finished\n");
     fclose(f);
+
+    /* READING SOURCES */
+
+    strcpy(filename, STATION_CHANGE );
+    tprintf("opening file: %s\n", filename);
+    f= fopen(filename, "rt");
+
+    nth= 0;
+    real changes[MAX_STATION_CHANGES];
+    flag_t types[MAX_STATION_CHANGES];
+    int last_id= -1;
+    int series, last_series= -1;
+    id= -1;
+    float rtmp;
+    int ftmp;
+    tprintf("reading site changes\n");
+    nf= 0;
+    int cnt= 0;
+    int nf2;
+    while ( fgets(buffer, 1000, f) != NULL )
+    {
+        last_id= id;
+
+        if ( buffer[0] == '%' )
+            continue;
+        tmp= strtok(buffer, delims);
+        sscanf(tmp, "%d", &id);
+
+        // change event number
+        last_series= series;
+        tmp= strtok(NULL, delims);
+        sscanf(tmp, "%d", &series);
+
+        if ( (id != last_id) && last_id != -1 )
+        {
+            nf2= 1;
+            for ( i= 1; i < nf; ++i )
+            {
+                if ( changes[nf2-1] < changes[i] )
+                {
+                    changes[nf2]= changes[i];
+                    types[nf2]= types[i];
+                    ++nf2;
+                }
+            }
+            nf= nf2;
+            while ( p[cnt]->id <= last_id )
+            {
+                if ( p[cnt]->id == last_id )
+                {
+                    p[cnt]->n_relocations= nf;
+                    p[cnt]->relocations= rnalloc(nf);
+                    p[cnt]->relocation_types= fnalloc(nf);
+                    memcpy(p[cnt]->relocations, changes, sizeof(real)*nf);
+                    memcpy(p[cnt]->relocation_types, types, sizeof(flag_t)*nf);
+                }
+                ++cnt;
+            }
+
+            nf= 0;
+        }
+
+        tmp= strtok(NULL, delims);
+        sscanf(tmp, "%f", &rtmp);
+        changes[nf]= rtmp;
+
+        tmp= strtok(NULL, delims);
+        sscanf(tmp, "%d", &ftmp);
+        types[nf]= ftmp;
+
+        nf++;
+    }
+
+    {
+        p[last_id]->n_relocations= nf;
+        p[last_id]->relocations= rnalloc(nf);
+        p[last_id]->relocation_types= fnalloc(nf);
+        memcpy(p[last_id]->relocations, changes, sizeof(real)*nf);
+        memcpy(p[last_id]->relocation_types, types, sizeof(flag_t)*nf);
+    }
+
+    fclose(f);
+    tprintf("reading of site changes finished\n");
+
 }
 
 
 void loadStationElement2(stationElement2p** se, int* n_stationElement2)
 {
-    printf("reading station elements\n"); fflush(stdout);
+    tprintf("reading station elements\n");
 
     char filename[100];
-    strcpy(filename, DATA_DIR );
-    strcat(filename, TEMP_DATA );
+    strcpy(filename, TEMP_DATA );
     FILE* f= fopen(filename, "rt");
 
     char buffer[1000];
-    char tmpstr[100];
 
     printf("%s\n", filename);
+
     char* tmp;
     char delims[]= "\t";
 
@@ -238,16 +325,14 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
     int capacity= 10000, n= -1;
 
     int id;
-    real* datesp;
-    temp_t* tempp;
-    real* uncp;
-    short* obsp;
-    char* tobp;
+    real datesp[MAX_LENGTH_OF_TIME_SERIES];
+    temp_t tempp[MAX_LENGTH_OF_TIME_SERIES];
+    real uncp[MAX_LENGTH_OF_TIME_SERIES];
+    short obsp[MAX_LENGTH_OF_TIME_SERIES];
+    char tobp[MAX_LENGTH_OF_TIME_SERIES];
     int tsn;
     int last_id= -1;
     float rtmp;
-    float t1, t2, t3;
-    int t0, t4, t5;
 
     while ( fgets(buffer, 1000, f) != NULL )
     {
@@ -264,49 +349,43 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
       //stationID
       tmp= strtok(buffer, delims);
       sscanf(tmp, "%d", &id);
-      //sscanf(buffer, "%d%d%f%f%f%d%d", &id, &t0, &t1, &t2, &t3, &t4, &t5);
+
+      //dea();
+
       if ( last_id != id )
       {
           if ( last_id != -1 )
           {
-              datesp= (real*)realloc(datesp, sizeof(real)*tsn);
-              if ( datesp == NULL ) eprintf("realloc failed in loadData");
-              tobp= (char*)realloc(tobp, sizeof(char)*tsn);
-              if ( tobp == NULL ) eprintf("realloc failed in loadData");
-              tempp= (temp_t*)realloc(tempp, sizeof(temp_t)*tsn);
-              if ( tempp == NULL ) eprintf("realloc failed in loadData");
-              uncp= (real*)realloc(uncp, sizeof(real)*tsn);
-              if ( uncp == NULL ) eprintf("realloc failed in loadData");
-              obsp= (short*)realloc(obsp, sizeof(short)*tsn);
-              if ( obsp == NULL ) eprintf("realloc failed in loadData");
-              p[n]->dates= datesp;
-              p[n]->time_of_observation= tobp;
-              p[n]->data= tempp;
-              p[n]->num_measurements= obsp;
-              p[n]->uncertainty= uncp;
+              p[n]->dates= rnalloc(tsn);
+              if ( p[n]->dates == NULL ) eprintf("realloc failed in loadData");
+              p[n]->time_of_observation= cnalloc(tsn);
+              if ( p[n]->time_of_observation == NULL ) eprintf("realloc failed in loadData");
+              p[n]->data= tnalloc(tsn);
+              if ( p[n]->data == NULL ) eprintf("realloc failed in loadData");
+              p[n]->uncertainty= rnalloc(tsn);
+              if ( p[n]->uncertainty == NULL ) eprintf("realloc failed in loadData");
+              p[n]->num_measurements= snalloc(tsn);
+              if ( p[n]->num_measurements == NULL ) eprintf("realloc failed in loadData");
+              memcpy(p[n]->dates, datesp, sizeof(real)*tsn);
+              memcpy(p[n]->time_of_observation, tobp, sizeof(char)*tsn);
+              memcpy(p[n]->data, tempp, sizeof(temp_t)*tsn);
+              memcpy(p[n]->uncertainty, uncp, sizeof(real)*tsn);
+              memcpy(p[n]->num_measurements, obsp, sizeof(short)*tsn);
               p[n]->n_flags= (char*)malloc(sizeof(char)*tsn);
               if ( p[n]->n_flags == NULL ) eprintf("malloc failed in loadData");
               p[n]->flags= (flag_t**)malloc(sizeof(flag_t*)*tsn);
               if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
-              p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= tsn;
-              //printf(":%d ", tsn); fflush(stdout);
+              p[n]->n_sources= (char*)malloc(sizeof(char)*tsn);
+              if ( p[n]->n_sources == NULL ) eprintf("malloc failed in loadData");
+              p[n]->sources= (char**)malloc(sizeof(char*)*tsn);
+              if ( p[n]->sources == NULL ) eprintf("malloc failed in loadData");
+              p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= p[n]->n_n_sources= tsn;
           }
 
           ++n;
           p[n]= (stationSite2*)createSE2N();
-          datesp= (real*)malloc(sizeof(real)*MAX_LENGTH_OF_TIME_SERIES);
-          if ( datesp == NULL ) eprintf("malloc failed in loadData");
-          tempp= (temp_t*)malloc(sizeof(temp_t)*MAX_LENGTH_OF_TIME_SERIES);
-          if ( tempp == NULL ) eprintf("malloc failed in loadData");
-          uncp= (real*)malloc(sizeof(real)*MAX_LENGTH_OF_TIME_SERIES);
-          if ( uncp == NULL ) eprintf("malloc failed in loadData");
-          obsp= (short*)malloc(sizeof(short*)*MAX_LENGTH_OF_TIME_SERIES);
-          if ( obsp == NULL ) eprintf("malloc failed in loadData");
-          tobp= (char*)malloc(sizeof(char*)*MAX_LENGTH_OF_TIME_SERIES);
-          if ( tobp == NULL ) eprintf("malloc failed in loadData");
           tsn= 0;
           p[n]->site= id;
-          //printf("%d", n); fflush(stdout);
       }
 
       //series number
@@ -316,58 +395,55 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
       tmp= strtok(NULL, delims);
       sscanf(tmp, "%f", &rtmp);
       datesp[tsn]= rtmp;
-      //datesp[tsn]= t1;
 
       //temperature
       tmp= strtok(NULL, delims);
       sscanf(tmp, "%f", &rtmp);
       tempp[tsn]= rtmp;
-      //tempp[tsn]= t2;
 
       //uncertainty
       tmp= strtok(NULL, delims);
       sscanf(tmp, "%f", &rtmp);
       uncp[tsn]= rtmp;
-      //uncp[tsn]= t3;
 
       //observations
       tmp= strtok(NULL, delims);
       sscanf(tmp, "%d", &(obsp[tsn]));
-      //obsp[tsn]= t4;
 
       //time of observation
       tmp= strtok(NULL, delims);
       sscanf(tmp, "%d", &(tobp[tsn]));
-      //tobp[tsn]= t5;
 
       ++tsn;
-      //printf("%d ", n); fflush(stdout);
       last_id= id;
     }
 
     // last station element
     {
-        datesp= (real*)realloc(datesp, sizeof(real)*tsn);
-        if ( datesp == NULL ) eprintf("realloc failed in loadData");
-        tobp= (char*)realloc(tobp, sizeof(char)*tsn);
-        if ( tobp == NULL ) eprintf("realloc failed in loadData");
-        tempp= (temp_t*)realloc(tempp, sizeof(temp_t)*tsn);
-        if ( tempp == NULL ) eprintf("realloc failed in loadData");
-        uncp= (real*)realloc(uncp, sizeof(real)*tsn);
-        if ( uncp == NULL ) eprintf("realloc failed in loadData");
-        obsp= (short*)realloc(obsp, sizeof(short)*tsn);
-        if ( obsp == NULL ) eprintf("realloc failed in loadData");
-        p[n]->dates= datesp;
-        p[n]->time_of_observation= tobp;
-        p[n]->data= tempp;
-        p[n]->num_measurements= obsp;
-        p[n]->uncertainty= uncp;
+        p[n]->dates= rnalloc(tsn);
+        if ( p[n]->dates == NULL ) eprintf("realloc failed in loadData");
+        p[n]->time_of_observation= cnalloc(tsn);
+        if ( p[n]->time_of_observation == NULL ) eprintf("realloc failed in loadData");
+        p[n]->data= tnalloc(tsn);
+        if ( p[n]->data == NULL ) eprintf("realloc failed in loadData");
+        p[n]->uncertainty= rnalloc(tsn);
+        if ( p[n]->uncertainty == NULL ) eprintf("realloc failed in loadData");
+        p[n]->num_measurements= snalloc(tsn);
+        if ( p[n]->num_measurements == NULL ) eprintf("realloc failed in loadData");
+        memcpy(p[n]->dates, datesp, sizeof(real)*tsn);
+        memcpy(p[n]->time_of_observation, tobp, sizeof(char)*tsn);
+        memcpy(p[n]->data, tempp, sizeof(temp_t)*tsn);
+        memcpy(p[n]->uncertainty, uncp, sizeof(real)*tsn);
+        memcpy(p[n]->num_measurements, obsp, sizeof(short)*tsn);
         p[n]->n_flags= (char*)malloc(sizeof(char)*tsn);
         if ( p[n]->n_flags == NULL ) eprintf("malloc failed in loadData");
         p[n]->flags= (flag_t**)malloc(sizeof(flag_t*)*tsn);
         if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
-        p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= tsn;
-       // printf(":%d ", tsn); fflush(stdout);
+        p[n]->n_sources= (char*)malloc(sizeof(char)*tsn);
+        if ( p[n]->n_sources == NULL ) eprintf("malloc failed in loadData");
+        p[n]->sources= (char**)malloc(sizeof(char*)*tsn);
+        if ( p[n]->sources == NULL ) eprintf("malloc failed in loadData");
+        p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= p[n]->n_n_sources= tsn;
     }
 
     *se= p;
@@ -375,12 +451,12 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
 
     fclose(f);
 
-    printf("read station element data finished\n"); fflush(stdout);
+    tprintf("read station element data finished\n");
 
     // READING FLAGS
+    tprintf("reading station flags\n");
 
-    strcpy(filename, DATA_DIR );
-    strcat(filename, TEMP_FLAGS );
+    strcpy(filename, TEMP_FLAGS );
     f= fopen(filename, "rt");
     printf("%s\n", filename);
 
@@ -397,41 +473,34 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
       tmp= strtok(buffer, delims);
       sscanf(tmp, "%d", &id);
 
-      //printf("%d ", id); fflush(stdout);
       if ( last_id != id )
       {
           if ( last_id != -1 )
           {
-              //printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
               for ( i= 0; i < p[n]->n_n_flags; ++i )
               {
                   p[n]->flags[i]= realloc(p[n]->flags[i], sizeof(flag_t)*(p[n]->n_flags[i]));
                   if ( p[n]->flags[i] == NULL ) eprintf("realloc failed in loadData");
               }
           }
-          //printf("c%d", p[id]->n_n_flags); fflush(stdout);
-          //printf(" %d %d\n", sizeof(*p[id]->n_flags), sizeof(p[id+1]->n_flags));
+
           ++n;
           if ( n == *n_stationElement2 )
               break;
           for ( i= 0; i < p[n]->n_n_flags; ++i )
           {
               p[n]->n_flags[i]= 0;
-              //printf("."); fflush(stdout);
               p[n]->flags[i]= (flag_t*)malloc(sizeof(flag_t)*MAX_DATA_FLAGS);
               if ( p[n]->flags[i] == NULL ) eprintf("malloc failed in loadData");
           }
           j= 0;
       }
-      //printf("b"); fflush(stdout);
 
       //series number
       tmp= strtok(NULL, delims);
 
       //date
       tmp= strtok(NULL, delims);
-
-      //printf("a"); fflush(stdout);
 
       while ( tmp= strtok(NULL, delims) )
       {
@@ -449,7 +518,6 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
 
     // last station element flags
     {
-        //printf("%d,%d ", n, p[n]->n_n_flags); fflush(stdout);
         for ( i= 0; i < p[n]->n_n_flags; ++i )
         {
             p[n]->flags[i]= realloc(p[n]->flags[i], sizeof(flag_t)*(p[n]->n_flags[i]));
@@ -457,7 +525,79 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
         }
     }
 
-    printf("finished\n"); fflush(stdout);
+    tprintf("reading of flags finished\n");
+    fclose(f);
+
+    //READ SOURCES
+
+    tprintf("reading of sources\n");
+    strcpy(filename, SOURCES_DATA );
+    f= fopen(filename, "rt");
+    printf("%s\n", filename);
+
+    last_id= -1;
+    n= -1;
+    while ( fgets(buffer, 1000, f) != NULL )
+    {
+      if ( buffer[0] == '%' )
+        continue;
+
+      tmp= strtok(buffer, delims);
+      sscanf(tmp, "%d", &id);
+
+      if ( last_id != id )
+      {
+          if ( last_id != -1 )
+          {
+              for ( i= 0; i < p[n]->n_n_sources; ++i )
+              {
+                  p[n]->sources[i]= realloc(p[n]->sources[i], sizeof(flag_t)*(p[n]->n_sources[i]));
+                  if ( p[n]->sources[i] == NULL ) eprintf("realloc failed in loadData");
+              }
+          }
+
+          ++n;
+          if ( n == *n_stationElement2 )
+              break;
+          for ( i= 0; i < p[n]->n_n_sources; ++i )
+          {
+              p[n]->n_sources[i]= 0;
+              p[n]->sources[i]= (flag_t*)malloc(sizeof(flag_t)*MAX_SOURCES);
+              if ( p[n]->sources[i] == NULL ) eprintf("malloc failed in loadData");
+          }
+          j= 0;
+      }
+
+      //series number
+      tmp= strtok(NULL, delims);
+
+      //date
+      tmp= strtok(NULL, delims);
+
+      while ( tmp= strtok(NULL, delims) )
+      {
+          sscanf(tmp, "%d", &flag);
+          if ( flag != 0 )
+          {
+              p[n]->sources[j][p[n]->n_sources[j]]= flag;
+              ++(p[n]->n_sources[j]);
+          }
+      }
+
+      ++j;
+      last_id= id;
+    }
+
+    // last station element flags
+    {
+        for ( i= 0; i < p[n]->n_n_flags; ++i )
+        {
+            p[n]->flags[i]= realloc(p[n]->flags[i], sizeof(flag_t)*(p[n]->n_flags[i]));
+            if ( p[n]->flags[i] == NULL ) eprintf("realloc failed in loadData");
+        }
+    }
+
+    tprintf("reading station element data finished\n");
     fclose(f);
 }
 

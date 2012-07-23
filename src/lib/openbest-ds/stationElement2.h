@@ -43,7 +43,9 @@ typedef struct
     /** data flags*/
     flag_t** flags;
     /** source flag*/
-    int source;
+    int n_n_sources;
+    char* n_sources;
+    flag_t** sources;
     /** number of record flags*/
     int n_record_flags;
     /** array of record flags*/

@@ -9,6 +9,6 @@ void splitStationBreaks(stationElement2p** seIO, int* n_stationElement2IO, stati
 
 void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, stationSite2p** ssIO, int* n_stationSite2IO, bool declared_moves, bool suspected_moves, flag_t* badFlags, int n_badFlags, int** back_mapIO, int** start_posIO);
 
-void splitStationTOBChange(stationElement2p** seIO, int* n_stationElement2IO, stationSite2p** ssIO, int* n_stationSite2IO, int persistence, flag_t* badFlags, int n_badFlags, real min_difference, int** back_mapIO, int** start_posIO);
+void splitStationTOBChange(stationElement2p** seIO, int* n_stationElement2IO, stationSite2p** ssIO, int* n_stationSite2IO, real persistence, flag_t* badFlags, int n_badFlags, real min_difference, int** back_mapIO, int** start_posIO);
 
 #endif

@@ -28,6 +28,10 @@ void displaySS2(stationSite2* ss)
         printf("%s, ", lookupKeysPKT(siteFlagsPKT, ss->flags[i])[0]); fflush(stdout);
     }
     printf("\n");
+    printf("\n\t relocations: %d - ", ss->n_relocations);
+    for ( i= 0; i < ss->n_relocations; ++i )
+        printf("%f,%d ", ss->relocations[i], ss->relocation_types[i]);
+    printf("\n"); fflush(stdout);
 }
 
 stationSite2* createSS2N()
@@ -43,6 +47,8 @@ stationSite2* createSS2N()
     tmp->flags= NULL;
     tmp->sources= NULL;
     tmp->archive_keys= NULL;
+    tmp->relocations= NULL;
+    tmp->relocation_types= NULL;
     tmp->id= -1;
     tmp->country= -1;
     tmp->timezone= -1;
@@ -50,6 +56,8 @@ stationSite2* createSS2N()
     tmp->possible_relocated= -1;
     tmp->n_flags= 0;
     tmp->n_sources= 0;
+    tmp->n_relocations= 0;
+
     return tmp;
 }
 
@@ -57,37 +65,41 @@ void destroySS2(stationSite2* ss)
 {
     if ( ss == NULL )
         return;
-    printf("a"); fflush(stdout);
+    //printf("a"); fflush(stdout);
     if ( ss->location)
         free(ss->location);
-    printf("b"); fflush(stdout);
+    //printf("b"); fflush(stdout);
     if ( ss->all_locations)
         free(ss->all_locations);
-    printf("c"); fflush(stdout);
+    //printf("c"); fflush(stdout);
     if ( ss->all_location_times )
         free(ss->all_location_times);
-    printf("d"); fflush(stdout);
+    //printf("d"); fflush(stdout);
     if ( ss->alt_names )
         free(ss->alt_names );
-    printf("e"); fflush(stdout);
+    //printf("e"); fflush(stdout);
     if ( ss->instrument_changes )
         free(ss->instrument_changes );
-    printf("f"); fflush(stdout);
+    //printf("f"); fflush(stdout);
     if ( ss->primary_manifests )
         free(ss->primary_manifests);
-    printf("g"); fflush(stdout);
+    //printf("g"); fflush(stdout);
     if ( ss->secondary_manifests )
         free(ss->secondary_manifests);
-    printf("h"); fflush(stdout);
+    //printf("h"); fflush(stdout);
     if ( ss->sources )
         free(ss->sources );
-    printf("i"); fflush(stdout);
+    //printf("i"); fflush(stdout);
     if ( ss->archive_keys )
         free(ss->archive_keys );
-    printf("j"); fflush(stdout);
+    //printf("j"); fflush(stdout);
     if ( ss->flags )
         free(ss->flags);
-    printf("k"); fflush(stdout);
+    //printf("k"); fflush(stdout);
+    if ( ss->relocations )
+        free(ss->relocations);
+    if ( ss->relocation_types )
+        free(ss->relocation_types);
     free(ss);
 }
 
@@ -101,22 +113,22 @@ void destroySS2V(stationSite2p* ss, int n)
                 if ( ss[i] == ss[j] )
                     ss[j]= NULL;
 
-        for ( i= 0; i < n; ++i )
+        /*for ( i= 0; i < n; ++i )
             if ( ss[i] )
                 printf("1");
             else
                 printf("0");
         for ( i= 0; i < n; ++i )
-            printf("%p\n", ss[i]);
+            printf("%p\n", ss[i]);*/
         for ( i= 0; i < n; ++i )
         {
-            printf("%d ", i);
-            if ( i == 3202 || i == 3345 )
+            //printf("%d ", i);
+            /*if ( i == 3202 || i == 3345 )
             {
                 printf("%p\n", ss[i]); fflush(stdout);
                 //displaySS2(ss[i]);
             printf("-------"); fflush(stdout);
-            }
+            }*/
 
             destroySS2(ss[i]);
         }

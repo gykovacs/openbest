@@ -29,9 +29,14 @@ ENDIF ( ${DEVEL_BUILD} )
 IF ( ${FULL_DATA} )
    SET(REDUCED_FLAG "")
 ELSE (${FULL_DATA} )
-#   SET(REDUCED_FLAG "_reduced")
-    SET(REDUCED_FLAG "_reduced2")
+    IF ( ${REDUCED_FLAG} )
+	MESSAGE("REDUCED_FLAG input: ${REDUCED_FLAG}")
+    ELSE ( ${REDUCED_FLAG} )
+	SET(REDUCED_FLAG "sample.1000")
+    ENDIF ( ${REDUCED_FLAG} )
 ENDIF (${FULL_DATA} )
+
+MESSAGE("using flag: ${REDUCED_FLAG}")
 
 CONFIGURE_FILE("config-io.h.in" "config-io.h")
 

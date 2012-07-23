@@ -258,6 +258,10 @@ int compressSE2Test(int argc, char** argv)
 
     displaySE2(se);
 
+    destroySE2(se);
+
+    finalizeDS();
+
     return 0;
 }
 

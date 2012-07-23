@@ -36,6 +36,7 @@ void initDS()
 void finalizeDS()
 {
     free(unknown_value);
+    free(compression_area);
 
     destroyPKT(countryNamesPKT);
     destroyPKT(stationSourceTypesPKT);
