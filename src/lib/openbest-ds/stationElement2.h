@@ -112,7 +112,7 @@ stationElement2* structureMerge(stationElement2* se);
 
 stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* options);
 
-void findFlags(stationElement2* se, flag_t* badFlags, int n_badFlags, int* f, int* n_f);
+void findFlags(stationElement2* se, int* badFlags, int n_badFlags, int* f, int* n_f);
 
 stationElement2* createSE2Select(stationElement2p se, int* f, int n_f);
 
@@ -123,5 +123,7 @@ void decompressSE2(stationElement2p se);
 unsigned int sizeSE2(stationElement2p se);
 
 unsigned int sizeOfCompressableSE2(stationElement2p se);
+
+int longestDataSeries(stationElement2p* se, int n);
 
 #endif

@@ -23,18 +23,18 @@
 
 
 /** site data text file*/
-#define SITE_DATA DATA_DIR FILE_SEP "site_complete_detail.txt.sample.1000.txt"
+#define SITE_DATA DATA_DIR FILE_SEP "site_complete_detail.txt.sample.500.txt"
 /** site flags text file*/
-#define SITE_FLAGS DATA_DIR FILE_SEP "site_flags.txt.sample.1000.txt"
+#define SITE_FLAGS DATA_DIR FILE_SEP "site_flags.txt.sample.500.txt"
 
 /** temperature data text file*/
-#define TEMP_DATA DATA_DIR FILE_SEP "data.txt.sample.1000.txt"
+#define TEMP_DATA DATA_DIR FILE_SEP "data.txt.sample.500.txt"
 /** temperature flags text file*/
-#define TEMP_FLAGS DATA_DIR FILE_SEP "flags.txt.sample.1000.txt"
+#define TEMP_FLAGS DATA_DIR FILE_SEP "flags.txt.sample.500.txt"
 
-#define SOURCES_DATA DATA_DIR FILE_SEP "sources.txt.sample.1000.txt"
+#define SOURCES_DATA DATA_DIR FILE_SEP "sources.txt.sample.500.txt"
 
-#define STATION_CHANGE DATA_DIR FILE_SEP "station_change.txt.sample.1000.txt"
+#define STATION_CHANGE DATA_DIR FILE_SEP "station_change.txt.sample.500.txt"
 
 
 

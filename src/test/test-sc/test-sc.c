@@ -9,6 +9,7 @@
 #include "openbest-ds/timeRange.h"
 #include "openbest-ds/primaryKeyTables.h"
 #include "openbest-ds/init-ds.h"
+#include "openbest-ds/printOut.h"
 #include "openbest-io/loadCountryNames.h"
 #include "openbest-io/loadStationSourceTypes.h"
 #include "openbest-io/loadCountryCodes.h"
@@ -100,7 +101,6 @@ int splitStationBreaksTest(int argc, char** argv)
     loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
 
     printf("%d %d\n", n_stationSite2, n_stationElement2);
-    getchar();
 
     berkeleyAverageOptions* bao= createBerkeleyAverageOptionsQuick();
 
@@ -117,7 +117,6 @@ int splitStationBreaksTest(int argc, char** argv)
         displaySE2(se[i]);
     }*/
     printf("%d %d\n", n_stationElement2, n_stationSite2);
-    getchar();
     /*displaySE2(se[3360]);
     destroySE2(se[3360]);
     getchar();*/
@@ -130,6 +129,8 @@ int splitStationBreaksTest(int argc, char** argv)
     free(b);
     finalizeDS();
     destroyBAO(bao);
+
+    return 0;
 }
 
 int splitStationMovesTest(int argc, char** argv)
@@ -150,7 +151,7 @@ int splitStationMovesTest(int argc, char** argv)
     int* a;
     int* b;
 
-    splitStationMoves(&se, &n_stationElement2, &ss, &n_stationSite2, true, true, iBadFlags, n_badFlags, &a, &b);
+    splitStationMoves(&se, &n_stationElement2, &ss, &n_stationSite2, true, true, &a, &b);
 
     printf("aaa\n"); fflush(stdout);
     int i;
@@ -173,6 +174,8 @@ int splitStationMovesTest(int argc, char** argv)
     free(b);
     finalizeDS();
     destroyBAO(bao);
+
+    return 0;
 }
 
 int splitStationTOBChangesTest(int argc, char** argv)
@@ -193,7 +196,54 @@ int splitStationTOBChangesTest(int argc, char** argv)
     int* a;
     int* b;
 
-    splitStationTOBChange(&se, &n_stationElement2, &ss, &n_stationSite2, 0.5, iBadFlags, n_badFlags, 4, &a, &b);
+    splitStationTOBChanges(&se, &n_stationElement2, &ss, &n_stationSite2, 0.5, iBadFlags, n_badFlags, 4, &a, &b);
+
+    printf("aaa\n"); fflush(stdout);
+    int i;
+    /*for ( i= 0; i < n_stationElement2; ++i )
+    {
+        tprintf("=========%d\n", i);
+        displaySE2(se[i]);
+    }*/
+    printf("%d %d\n", n_stationElement2, n_stationSite2);
+    getchar();
+    /*displaySE2(se[3360]);
+    destroySE2(se[3360]);
+    getchar();*/
+    printf("ccc\n"); fflush(stdout);
+    destroySE2V(se, n_stationElement2);
+    printf("bbb\n"); fflush(stdout);
+    destroySS2V(ss, n_stationSite2);
+    printf("ddd\n"); fflush(stdout);
+    free(a);
+    free(b);
+    finalizeDS();
+    destroyBAO(bao);
+
+    return 0;
+}
+
+int splitStationAllTest(int argc, char** argv)
+{
+    initDS();
+    stationElement2p* se;
+    int n_stationElement2;
+    stationSite2p* ss;
+    int n_stationSite2;
+
+    loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
+
+    printf("%d %d\n", n_stationSite2, n_stationElement2);
+    getchar();
+
+    berkeleyAverageOptions* bao= createBerkeleyAverageOptionsQuick();
+
+    int* a;
+    int* b;
+
+    splitStationBreaks(&se, &n_stationElement2, &ss, &n_stationSite2, bao->scalpelGapLength, iBadFlags, n_badFlags, &a, &b);
+    splitStationMoves(&se, &n_stationElement2, &ss, &n_stationSite2, true, true, &a, &b);
+    splitStationTOBChanges(&se, &n_stationElement2, &ss, &n_stationSite2, 0.5, iBadFlags, n_badFlags, 4, &a, &b);
 
     printf("aaa\n"); fflush(stdout);
     int i;
@@ -234,6 +284,7 @@ int main(int argc, char** argv)
     bool ssbtest= false;
     bool ssmtest= false;
     bool ssttest= false;
+    bool ssatest= false;
     int err;
     
     addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
@@ -242,6 +293,7 @@ int main(int argc, char** argv)
     addOption(ot, "--ssb", OPTION_BOOL, (char*)&ssbtest, 0, "split station breaks test");
     addOption(ot, "--ssm", OPTION_BOOL, (char*)&ssmtest, 0, "split station moves test");
     addOption(ot, "--sst", OPTION_BOOL, (char*)&ssttest, 0, "split station tob test");
+    addOption(ot, "--ssa", OPTION_BOOL, (char*)&ssatest, 0, "split station all test");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -261,6 +313,8 @@ int main(int argc, char** argv)
         err= splitStationMovesTest(argc, argv);
     else if ( ssttest )
         err= splitStationTOBChangesTest(argc, argv);
+    else if ( ssatest )
+        err= splitStationAllTest(argc, argv);
     
     destroyOptionTable(ot);
 

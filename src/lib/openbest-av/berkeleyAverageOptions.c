@@ -14,9 +14,8 @@ berkeleyAverageOptions* createBAON()
     p->useLandMask= true;
     p->minMonths= 6;
     p->minStations= 5;
-    //TODO correlation parameters
-    //TODO correlation limit distance
-    //TODO badFlags
+    p->correlationParameters= 0;
+    p->correlationLimitDistance= 0;
     p->badFlags= iBadFlags;
     p->n_badFlags= n_badFlags;
     p->useSiteWeighting= true;
@@ -69,7 +68,8 @@ berkeleyAverageOptions* createBAON()
     p->empiricalBaselineRegionCutoff= 0.8;
 
     p->fullBaselineMapping= true;
-    //TODO fullBaselineTargetLats
+    p->fullBaselineTargetLats= NULL;
+    p->n_fullBaselineTargetLats= 0;
     p->fullBaselineAltitudeDegree= 2;
 
     p->computeUncertainty= true;
@@ -107,6 +107,10 @@ berkeleyAverageOptions* createBAON1(char* mode)
         p->computeAnalyticSpatialUncertainty= false;
 
         p->clusterMode= false;
+
+        //TODO: clear
+        /*p->scalpelEmpirical= true;
+        p->scalpelEmpiricalMaxPairs= 20;*/
     }
     else if ( strcmp(mode, "weighted") == 0 )
     {

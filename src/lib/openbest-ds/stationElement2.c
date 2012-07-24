@@ -845,7 +845,7 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action)
     return se;
 }
 
-void findFlags(stationElement2* se, flag_t* badFlags, int n_badFlags, int* f, int* n_f)
+void findFlags(stationElement2* se, int* badFlags, int n_badFlags, int* f, int* n_f)
 {
     int i, j, k, l= 0;
     for ( i= 0; i < se->n_n_flags; ++i )
@@ -923,4 +923,14 @@ stationElement2p createSE2Select(stationElement2p se, int* f, int n_f)
     //tmp->n_relocations= se->n_relocations;
 
     return tmp;
+}
+
+int longestDataSeries(stationElement2p* se, int n)
+{
+    int res= 0;
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( res < se[i]->n_dates )
+            res= se[i]->n_dates;
+    return res;
 }

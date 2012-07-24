@@ -48,9 +48,19 @@ int compareIA(const void *x, const void *y)
     return *(int*)x - *(int*)y;
 }
 
+int compareORIA(const void* x, const void* y)
+{
+    return outer_array[*(int*)x] > outer_array[*(int*)y];
+}
+
 void qsortIA(int* t, int n)
 {
     qsort(t, n, sizeof(int), compareIA);
+}
+
+void qsortORIA(int* t, int n)
+{
+    qsort(t, n, sizeof(int), compareORIA);
 }
 
 int compareFA(const void *x, const void *y)
@@ -65,12 +75,28 @@ void qsortFA(flag_t* t, int n)
 
 int compareRA(const void *x, const void *y)
 {
-    return *(real*)x - *(real*)y;
+    return *(real*)x > *(real*)y;
 }
 
 void qsortRA(real* t, int n)
 {
     qsort(t, n, sizeof(real), compareRA);
+}
+
+void uniqueIA1(int* t, int* n1)
+{
+    int n= *n1;
+    qsortIA(t, n);
+    int i, j, d;
+    d= 1;
+    j= 1;
+    for ( i= 1; i < n; ++i )
+        if ( t[i-1] != t[i] )
+        {
+            ++d;
+            t[j++]= t[i];
+        }
+    *n1= d;
 }
 
 void uniqueIA(int** t1, int* n1)
@@ -90,6 +116,7 @@ void uniqueIA(int** t1, int* n1)
     *t1= (int*)realloc(*t1, sizeof(int)*d);
     *n1= d;
 }
+
 
 void uniqueIAN(int* t, int n, int** output, int* m)
 {
@@ -112,6 +139,22 @@ void uniqueIAN(int* t, int n, int** output, int* m)
         }
     *output= (int*)realloc(*output, sizeof(int)*d);
     *m= d;
+}
+
+void uniqueRA1(real* t, int* n1)
+{
+    int n= *n1;
+    qsortRA(t, n);
+    int i, j, d;
+    d= 1;
+    j= 1;
+    for ( i= 1; i < n; ++i )
+        if ( t[i-1] != t[i] )
+        {
+            ++d;
+            t[j++]= t[i];
+        }
+    *n1= d;
 }
 
 void uniqueRA(real** t1, int* n1)
@@ -208,4 +251,9 @@ void findEqualsIA(int* input, int n, int v, int* f, int* n_f)
     for ( i= 0; i < n; ++i )
         if ( input[i] == v )
             f[(*n_f)++]= i;
+}
+
+void findNSmallerRA(real* input, int n, int N, real* output)
+{
+    qsortRA(input, n);
 }

@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h> 
 
+real* outer_array;
+
 /**
   * swaps two real variables
   * @param x pointer to one variable to swap
@@ -40,12 +42,16 @@ void quicksort(real* list,int m,int n);
   */
 int compareIA(const void *x, const void *y);
 
+int compareORIA(const void* x, const void* y);
+
 /**
   * quick sorts an array of integer elemenets
   * @param t array to sort
   * @param n length of array
   */
 void qsortIA(int* t, int n);
+
+void qsortORIA(int* t, int n);
 
 /**
   * compares two flag_t variables
@@ -114,5 +120,7 @@ real modeRMA(real* input, int n);
 int modeRFA(real* input, int n);
 
 void findEqualsIA(int* input, int n, int v, int* f, int* n_f);
+
+void findNSmallerRA(real* input, int n, int N, real* output);
 
 #endif

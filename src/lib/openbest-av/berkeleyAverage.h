@@ -13,6 +13,6 @@
   * @param n_stationSite2 size of the array of stationSite2 objects
   * @param options pointer to berkeleyAverageOptions instance
   */
-void berkeleyAverage(stationElement2p* se, int n_stationElement2, stationSite2p* ss, int n_stationSite2, berkeleyAverageOptions* options);
+void berkeleyAverage(stationElement2p** se, int* n_stationElement2, stationSite2p** ss, int* n_stationSite2, berkeleyAverageOptions* options);
 
 #endif
