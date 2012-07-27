@@ -10,6 +10,7 @@
 #include <stdlib.h> 
 
 real* outer_array;
+temp_t* outer_arrayT;
 
 /**
   * swaps two real variables
@@ -44,6 +45,8 @@ int compareIA(const void *x, const void *y);
 
 int compareORIA(const void* x, const void* y);
 
+int compareOTIA(const void* x, const void* y);
+
 /**
   * quick sorts an array of integer elemenets
   * @param t array to sort
@@ -52,6 +55,8 @@ int compareORIA(const void* x, const void* y);
 void qsortIA(int* t, int n);
 
 void qsortORIA(int* t, int n);
+
+void qsortOTIA(int* t, int n);
 
 /**
   * compares two flag_t variables

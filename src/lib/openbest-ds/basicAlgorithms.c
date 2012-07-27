@@ -53,6 +53,12 @@ int compareORIA(const void* x, const void* y)
     return outer_array[*(int*)x] > outer_array[*(int*)y];
 }
 
+int compareOTIA(const void* x, const void* y)
+{
+    return outer_arrayT[*(int*)x] > outer_array[*(int*)y];
+}
+
+
 void qsortIA(int* t, int n)
 {
     qsort(t, n, sizeof(int), compareIA);
@@ -61,6 +67,11 @@ void qsortIA(int* t, int n)
 void qsortORIA(int* t, int n)
 {
     qsort(t, n, sizeof(int), compareORIA);
+}
+
+void qsortOTIA(int* t, int n)
+{
+    qsort(t, n, sizeof(int), compareOTIA);
 }
 
 int compareFA(const void *x, const void *y)
@@ -171,6 +182,11 @@ void uniqueRA(real** t1, int* n1)
             ++d;
             t[j++]= t[i];
         }
+    if ( t[i-1] == t[i-2] )
+    {
+        ++d;
+        t[j++]= t[i-1];
+    }
     *t1= (real*)realloc(*t1, sizeof(real)*d);
     *n1= d;
 }
@@ -178,7 +194,8 @@ void uniqueRA(real** t1, int* n1)
 void uniqueRAN(real* t, int n, real** output, int* m)
 {
     *output= (real*)malloc(sizeof(real)*n);
-    qsortRA(t, n);
+    memcpy(*output, t, sizeof(real)*n);
+    qsortRA(*output, n);
     int i, j, d;
     d= 1;
     j= 1;
@@ -188,6 +205,11 @@ void uniqueRAN(real* t, int n, real** output, int* m)
             ++d;
             (*output)[j++]= t[i];
         }
+    if ( t[i-1] == t[i-2] )
+    {
+        ++d;
+        (*output)[j++]= t[i-1];
+    }
     *output= (real*)realloc(*output, sizeof(real)*d);
     *m= d;
 }
@@ -241,6 +263,9 @@ int modeRFA(real* input, int n)
             j= 1;
         }
     free(tmp);
+    for ( i= 0; i < n; ++i )
+        printf("%f ", input[i]);
+    printf("\n");
     return maxL;
 }
 

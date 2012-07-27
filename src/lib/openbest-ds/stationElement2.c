@@ -5,6 +5,7 @@
 #include "openbest-ds/primaryKeyTables.h"
 #include "openbest-ds/memFunctions.h"
 #include "openbest-ds/mathFunctions.h"
+#include "openbest-ds/basicAlgorithms.h"
 
 void displaySE2(stationElement2* se)
 {
@@ -480,7 +481,7 @@ stationElement2* createSE2NC(stationElement2* se)
     //dej();
     tmp->primary_record_ids= (int*)copyIA(se->primary_record_ids, se->n_primary_record_ids);
 
-    tmp->sources= (int*)copyIA(se->sources, se->n_sources);
+    //tmp->n_sources= (int*)copyIA(se->sources, se->n_sources);
 
     /*tmp->relocations= (real*)copyRA(se->relocations, se->n_relocations);
 
@@ -579,7 +580,18 @@ bool isSingleValued(stationElement2* se)
     if ( se->n_dates <= 1 )
         return true;
 
+    int i;
+    printf("%d\n", se->n_dates);
+    for ( i= 0; i < se->n_dates; ++i )
+        printf("%f ", se->dates[i]);
+    printf("\n");
     real* d= diffRN(se->dates, se->n_dates);
+    for ( i= 0; i < se->n_dates-1; ++i )
+        printf("%f ", d[i]);
+    printf("\n");
+
+
+    printf("%f\n", minR(d, se->n_dates - 1));
 
     if ( minR(d, se->n_dates-1) > 0 )
     {
@@ -685,4 +697,61 @@ int longestDataSeries(stationElement2p* se, int n)
         if ( res < se[i]->n_dates )
             res= se[i]->n_dates;
     return res;
+}
+
+void sortSE2DataByDate(stationElement2p se)
+{
+    int* tmp= inalloc(se->n_data);
+    outer_array= se->dates;
+    int i;
+    for ( i= 0; i < se->n_data; ++i )
+        tmp[i]= i;
+
+    qsortOTIA(tmp, se->n_data);
+
+    stationElement2p seTmp= createSE2NC(se);
+    for ( i= 0; i < se->n_data; ++i )
+    {
+        free(se->flags[i]);
+        free(se->sources[i]);
+    }
+    for ( i= 0; i < se->n_data; ++i )
+    {
+        se->data[i]= seTmp->data[tmp[i]];
+        se->dates[i]= seTmp->dates[tmp[i]];
+        se->time_of_observation[i]= seTmp->time_of_observation[tmp[i]];
+        se->uncertainty[i]= seTmp->uncertainty[tmp[i]];
+        se->num_measurements[i]= seTmp->num_measurements[tmp[i]];
+        se->n_flags[i]= seTmp->n_flags[tmp[i]];
+        se->n_sources[i]= seTmp->n_sources[tmp[i]];
+        se->flags[i]= seTmp->flags[tmp[i]];
+        seTmp->flags[tmp[i]]= NULL;
+        se->sources[i]= seTmp->sources[tmp[i]];
+        seTmp->sources[tmp[i]]= NULL;
+    }
+
+    free(tmp);
+    if ( seTmp->data )
+        free(seTmp->data);
+    if ( seTmp->dates )
+        free(seTmp->dates);
+    if ( seTmp->time_of_observation )
+        free(seTmp->time_of_observation);
+    if ( seTmp->uncertainty)
+        free(seTmp->uncertainty);
+    if ( seTmp->num_measurements)
+        free(seTmp->num_measurements);
+    if ( seTmp->n_flags )
+        free(seTmp->n_flags);
+    if ( seTmp->n_sources )
+        free(seTmp->n_sources);
+    if ( seTmp->flags)
+        free(seTmp->flags);
+    if ( seTmp->sources )
+        free(seTmp->sources);
+    if ( seTmp->record_flags )
+        free(seTmp->record_flags);
+    if ( seTmp->primary_record_ids )
+        free(seTmp->primary_record_ids);
+    free(se);
 }

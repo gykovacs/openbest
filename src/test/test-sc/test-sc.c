@@ -80,9 +80,11 @@ int makeSingleValuedTest(int argc, char** argv)
     loadPreliminaryData();
     loadStationElement2(&se, &n_stationElement2);
 
-    int i;
-    for ( i= 0; i < n_stationElement2; ++i )
-        se[i]= makeSingleValued(se[i], NULL, 0);
+    //int i;
+    //for ( i= 0; i < n_stationElement2; ++i )
+    int n= 6;
+    printf("%d\n", isMultiValued(se[n]));
+        se[n]= makeSingleValued(se[n], NULL, 0);
 
     finalizeDS();
     destroySE2V(se, n_stationElement2);
