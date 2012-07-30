@@ -599,6 +599,10 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
 
     tprintf("reading station element data finished\n");
     fclose(f);
+    tprintf("sorting data series\n");
+    for ( i= 0; i < *n_stationElement2; ++i )
+        sortSE2DataByDate((*se)[i]);
+    tprintf("sorting of data series finished\n");
 }
 
 void loadData(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2)

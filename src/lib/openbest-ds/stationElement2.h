@@ -117,4 +117,6 @@ int longestDataSeries(stationElement2p* se, int n);
 
 void sortSE2DataByDate(stationElement2p se);
 
+int monthNum(stationElement2p se);
+
 #endif

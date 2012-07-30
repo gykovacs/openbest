@@ -263,6 +263,7 @@ int modeRFA(real* input, int n)
             j= 1;
         }
     free(tmp);
+    printf("modeRFA %d - \n", n);
     for ( i= 0; i < n; ++i )
         printf("%f ", input[i]);
     printf("\n");

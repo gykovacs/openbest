@@ -196,4 +196,12 @@ flag_t* ismemberFA(flag_t* a, int n, flag_t* b, int m);
 
 int isemptyF(flag_t* a, int n);
 
+int isemptyI(int* a, int n);
+
+int anyI(int* a, int n);
+
+int anyF(flag_t* f, int n);
+
+int anyB(bool* b, int n);
+
 #endif

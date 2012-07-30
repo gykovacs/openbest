@@ -21,10 +21,10 @@ flag_t* anyismember(flag_t** flags, char* n_flags, int n_n_flags, int* bf, int n
 
 stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, stationElement2p* result, int* result_count);
 
-void maskOverFlags(flag_t* flags, int n_flags, int* mask, int n_mask, int width);
+void maskOverFlags(flag_t** flags, int* mask, int size1, int c, int l);
 
-void rangeResolver(temp_t* data, real* unc, bool** consistent, bool* f, int size1, int size2, int c, real* max_table, real* min_table);
+void rangeResolver(real* data, real* unc, int** consistent, int* f, int n_f, real* max_table, real* min_table, int c);
 
-void getIndexValue(real* M, int n_M, int* mask, int n_mask);
+void getIndexValue(real* M, int* mask, int size1, int c, short* v, bool* est);
 
 #endif

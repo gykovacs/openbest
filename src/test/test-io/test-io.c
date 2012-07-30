@@ -281,6 +281,30 @@ int filenamesTest(int argc, char** argv)
     return 0;
 }
 
+int sortdataTest(int argc, char** argv)
+{
+    initDS();
+
+    stationElement2p* se;
+    int n_stationElement2;
+
+    loadPreliminaryData();
+    loadStationElement2(&se, &n_stationElement2);
+
+    int n= 6;
+
+    displaySE2(se[n]);
+
+    sortSE2DataByDate(se[n]);
+
+    displaySE2(se[n]);
+
+    finalizeDS();
+    destroySE2V(se, n_stationElement2);
+
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -305,6 +329,7 @@ int main(int argc, char** argv)
     bool loadall= false;
     bool shrink= false;
     bool filenames= false;
+    bool sortdata= false;
     int err;
     
     addOption(ot, "--stationSourceTypes", OPTION_BOOL, (char*)&stationSource, 0, "station source types");
@@ -321,6 +346,7 @@ int main(int argc, char** argv)
     addOption(ot, "--loadAll", OPTION_BOOL, (char*)&loadall, 0, "load all data");
     addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
     addOption(ot, "--filenames", OPTION_BOOL, (char*)&filenames, 0, "data filenames");
+    addOption(ot, "--sortdata", OPTION_BOOL, (char*)&sortdata, 0, "sort time series");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -356,6 +382,8 @@ int main(int argc, char** argv)
         err= shrinkTest(argc, argv);
     else if ( filenames )
         err= filenamesTest(argc, argv);
+    else if ( sortdata )
+        err= sortdataTest(argc, argv);
     
     destroyOptionTable(ot);
 

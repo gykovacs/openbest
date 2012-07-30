@@ -84,7 +84,7 @@ int makeSingleValuedTest(int argc, char** argv)
     //for ( i= 0; i < n_stationElement2; ++i )
     int n= 6;
     printf("%d\n", isMultiValued(se[n]));
-        se[n]= makeSingleValued(se[n], NULL, 0);
+    se[n]= makeSingleValued(se[n], NULL, 0);
 
     finalizeDS();
     destroySE2V(se, n_stationElement2);

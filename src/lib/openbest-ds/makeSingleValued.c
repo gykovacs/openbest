@@ -1,4 +1,5 @@
 #include "openbest-ds/makeSingleValued.h"
+#include <string.h>
 
 stationElement2* makeSingleValued(stationElement2* se, int* bf, int n)
 {
@@ -18,6 +19,219 @@ stationElement2* structureMerge(stationElement2* se)
     return se;
 }
 
+void getIndexValueS(short* M, int* mask, int size1, int c, short* v, bool* est)
+{
+    short* v1= snalloc(size1);
+    short* v2= snalloc(size1);
+
+    int i, j, k;
+    short minTmp, maxTmp;
+    for ( i= 0; i < size1; ++i )
+    {
+        minTmp= maxTmp= M[i*c];
+        for ( j= 0; j < c; ++j )
+        {
+            if ( minTmp > M[i*c + j] )
+                minTmp= M[i*c + j];
+            if ( maxTmp < M[i*c + j] )
+                maxTmp= M[i*c + j];
+        }
+        v1[i]= maxTmp;
+        v2[i]= minTmp;
+    }
+
+    short* va= snalloc(size1);
+    for ( i= 0; i < size1; ++i )
+        va[i]= v1[i];
+
+    int* f= inalloc(size1);
+    int n_f= 0;
+
+    for ( i= 0; i < size1; ++i )
+        if ( (v1[i] != v2[i]) && !(v1[i] < 0 && v2[i] < 0) )
+            f[n_f++]= i;
+    for ( i= 0; i < n_f; ++i )
+        va[f[i]]= -9999;
+
+    for ( i= 0; i < size1; ++i )
+        for ( j= 0; j < c; ++j )
+            if ( mask[i*c + j] )
+                M[i*c + j]= -99999;
+
+    for ( i= 0; i < size1; ++i )
+    {
+        minTmp= maxTmp= M[i*c];
+        for ( j= 0; j < c; ++j )
+        {
+            if ( minTmp > M[i*c + j] && M[i*c + j] > -99999 )
+                minTmp= M[i*c + j];
+            if ( maxTmp < M[i*c + j] && M[i*c + j] > -99999 )
+                maxTmp= M[i*c + j];
+        }
+        v1[i]= maxTmp;
+        v2[i]= minTmp;
+    }
+
+    short* vb= snalloc(size1);
+    for ( i= 0; i < size1; ++i )
+        vb[i]= v1[i];
+
+    for ( i= 0; i < size1; ++i )
+        if ( (v1[i] != v2[i]) && !(v1[i] < 0 && v2[i] < 0) )
+            f[n_f++]= i;
+    for ( i= 0; i < n_f; ++i )
+        vb[f[i]]= -9999;
+
+    for ( i= 0; i < size1; ++i )
+        v[i]= vb[i];
+
+    for ( i= 0; i < size1; ++i )
+        est[i]= false;
+
+    for ( i= 0; i < size1; ++i )
+    {
+        if ( vb[i] < -9999 )
+            est[i]= true;
+    }
+
+    for ( i= 0; i < size1; ++i )
+    {
+        if ( va[i] < -9999 && v[i] < -9999)
+            est[i]= true;
+    }
+
+    for ( i= 0; i < size1; ++i )
+        if ( v[i] < -9999 )
+        {
+            v[i]= va[i];
+            est[i]= false;
+        }
+
+    free(va);
+    free(vb);
+    free(v1);
+    free(v2);
+    free(f);
+}
+
+void getIndexValueC(char* M, int* mask, int size1, int c, char* v, bool* est)
+{
+    char* v1= snalloc(size1);
+    char* v2= snalloc(size1);
+
+    int i, j, k;
+    char minTmp, maxTmp;
+    for ( i= 0; i < size1; ++i )
+    {
+        minTmp= maxTmp= M[i*c];
+        for ( j= 0; j < c; ++j )
+        {
+            if ( minTmp > M[i*c + j] )
+                minTmp= M[i*c + j];
+            if ( maxTmp < M[i*c + j] )
+                maxTmp= M[i*c + j];
+        }
+        v1[i]= maxTmp;
+        v2[i]= minTmp;
+    }
+
+    char* va= snalloc(size1);
+    for ( i= 0; i < size1; ++i )
+        va[i]= v1[i];
+
+    int* f= inalloc(size1);
+    int n_f= 0;
+
+    for ( i= 0; i < size1; ++i )
+        if ( (v1[i] != v2[i]) && !(v1[i] < 0 && v2[i] < 0) )
+            f[n_f++]= i;
+    for ( i= 0; i < n_f; ++i )
+        va[f[i]]= -99;
+
+    for ( i= 0; i < size1; ++i )
+        for ( j= 0; j < c; ++j )
+            if ( mask[i*c + j] )
+                M[i*c + j]= -100;
+
+    for ( i= 0; i < size1; ++i )
+    {
+        minTmp= maxTmp= M[i*c];
+        for ( j= 0; j < c; ++j )
+        {
+            if ( minTmp > M[i*c + j] && M[i*c + j] > -100 )
+                minTmp= M[i*c + j];
+            if ( maxTmp < M[i*c + j] && M[i*c + j] > -100 )
+                maxTmp= M[i*c + j];
+        }
+        v1[i]= maxTmp;
+        v2[i]= minTmp;
+    }
+
+    char* vb= snalloc(size1);
+    for ( i= 0; i < size1; ++i )
+        vb[i]= v1[i];
+
+    for ( i= 0; i < size1; ++i )
+        if ( (v1[i] != v2[i]) && !(v1[i] < 0 && v2[i] < 0) )
+            f[n_f++]= i;
+    for ( i= 0; i < n_f; ++i )
+        vb[f[i]]= -99;
+
+    for ( i= 0; i < size1; ++i )
+        v[i]= vb[i];
+
+    for ( i= 0; i < size1; ++i )
+        est[i]= false;
+
+    for ( i= 0; i < size1; ++i )
+    {
+        if ( vb[i] < -99 )
+            est[i]= true;
+    }
+
+    for ( i= 0; i < size1; ++i )
+    {
+        if ( va[i] < -99 && v[i] < -99)
+            est[i]= true;
+    }
+
+    for ( i= 0; i < size1; ++i )
+        if ( v[i] < -99 )
+        {
+            v[i]= va[i];
+            est[i]= false;
+        }
+    free(va);
+    free(vb);
+    free(v1);
+    free(v2);
+    free(f);
+}
+
+void maskOverFlagsF(flag_t* flags, int* mask, int size1, int c, int l)
+{
+    int i, j, k;
+    for ( i= 0; i < size1; ++i )
+        for ( k= 0; k < c; ++k )
+        {
+            for ( j= k; j < c*l; j+= l)
+                if ( mask[i*c + k] )
+                    flags[i*c + j]= 0;
+        }
+}
+
+void maskOverFlagsI(int* flags, int* mask, int size1, int c, int l)
+{
+    int i, j, k;
+    for ( i= 0; i < size1; ++i )
+        for ( k= 0; k < c; ++k )
+        {
+            for ( j= k; j < c*l; j+= l)
+                if ( mask[i*c + k] )
+                    flags[i*c + j]= 0;
+        }
+}
+
 flag_t* anyismember(flag_t** flags, char* n_flags, int n_n_flags, int* bf, int n)
 {
     qsortIA(bf, n);
@@ -35,9 +249,22 @@ flag_t* anyismember(flag_t** flags, char* n_flags, int n_n_flags, int* bf, int n
     return res;
 }
 
+void cleanFlags(stationElement2p se)
+{
+
+}
+
 stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, stationElement2p* result, int* n_result)
 {
+    int z;
+    for ( z= 0; z < n; ++z )
+        printf("%d - %s\n", bf[z], badFlags[z]);
+
     int repeats= 1;
+    int* num_conflict;
+    int* tob_conflict;
+    bool* num_est;
+    bool* tob_est;
 
     int command;
 
@@ -61,23 +288,28 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     char* freq_type= lookupKeysPKT(frequencyTypesPKT, se->frequency)[0];
 
     real* target_dates;
+    int n_dates;
+
     int n_target_dates;
     uniqueRAN(se->dates, se->n_dates, &target_dates, &n_target_dates);
 
     stationElement2* result_st= createSE2NC(se);
 
     free(result_st->dates);
+
+    real* dates= copyRA(se->dates, se->n_dates);
+    n_dates= se->n_dates;
     result_st->dates= target_dates;
     result_st->n_dates= n_target_dates;
 
-    result_st->dates= (real*)realloc(result_st->dates, sizeof(real)*(result_st->n_dates + 1));
-    result_st->dates[result_st->n_dates]= -FLT_MAX;
-    result_st->n_dates++;
+    dates= (real*)realloc(dates, sizeof(real)*(n_dates + 1));
+    dates[n_dates]= -FLT_MAX;
+    n_dates++;
 
     // length of data series
-    int ld= result_st->n_dates - 1;
+    int ld= n_dates - 1;
 
-    int c= modeRFA(result_st->dates, result_st->n_dates);
+    int c= modeRFA(dates, n_dates);
 
     tprintf("c: %d\n", c);
     if ( c == 1 )
@@ -90,15 +322,15 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     //************************
     // allocate data holders
     //************************
-    real* data= rnalloc(ld*c);  // dimensions: ld x c, stride: c
-    set(data, ld*c, 0);         // dimensions: ld x c, stride: c
-    real* unc= copyRA(data, ld*c);  //dimensions: ld x c, stride: c
-    real* num= rnalloc(ld*c);   // dimensions: ld x c, stride: c
-    set(num, ld*c, FLT_MAX);    // dimensions: ld x c, stride: c
-    real* tob= rnalloc(ld*c);   // dimensions: ld x c, stride: c
-    set(tob, ld*c, FLT_MAX);    // dimensions: ld x c, stride: c
-    flag_t* flagged= fnalloc(ld*c); // dimensions: ld x c, stride: c
-    setf(flagged, ld*c, false); // dimensions: ld x c, stride: c
+    real* data= rnalloc(ld*c);  // dimensions: ld x c, stride: c, type: real
+    set(data, ld*c, 0);
+    real* unc= copyRA(data, ld*c);  //dimensions: ld x c, stride: c, type: real
+    short* num= snalloc(ld*c);   // dimensions: ld x c, stride: c, type: short
+    sets(num, ld*c, FLT_MAX);
+    char* tob= cnalloc(ld*c);   // dimensions: ld x c, stride: c, type: char
+    setc(tob, ld*c, FLT_MAX);
+    flag_t* flagged= fnalloc(ld*c); // dimensions: ld x c, stride: c, type: flag_t
+    setf(flagged, ld*c, false);
     flag_t* orig_flagged= anyismember(se->flags, se->n_flags, se->n_n_flags, bf, n); // dimensions: ld x 1, stride: 1
 
 
@@ -110,7 +342,7 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
 
     int* source= inalloc(ld*c*ls);      // dimensions: ld x c*ls, stride: c*ls
 
-    tprintf("%d %d\n", lf, ls);
+    tprintf("lf, ls: %d %d\n", lf, ls);
 
     //*************************
     // initialize  data holders
@@ -142,23 +374,27 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
 
     ///TODO: implement special processing to accelerate certain cases for command={5,2}
 
-    tprintf("%d %d\n", ld, c);
-    int* counts= (int*)inalloc(ld*c);     // dimensions: ld x c, stride: c
+    tprintf("ld, c: %d %d\n", ld, c);
+    int* counts= inalloc(ld*c);     // dimensions: ld x c, stride: c
     deg(); deg();
     seti(counts, ld*c, 0);
-    printf("%d\n", result_st->n_dates); fflush(stdout);
-    int* f= (int*)inalloc(result_st->n_dates);
+    printf("%d\n", n_dates); fflush(stdout);
+    int* f= inalloc(n_dates);
     int n_f= 0;
     if ( command == 5 )
         ; ///TODO
     else
     {
-        for ( i= 0; i < result_st->n_dates - 1; ++i )
+        for ( i= 0; i < n_dates - 1; ++i )
         {
-            if ( result_st->dates[i] != result_st->dates[i+1] )
+            if ( dates[i] != dates[i+1] )
                 f[n_f++]= i;
         }
     }
+
+    for ( i= 0; i < n_f; ++i )
+        printf("%d ", f[i]);
+    printf("\n");
 
     flag_t* used= fnalloc(ld + 1);  // dimensions: (ld + 1) x 1, stride: 1
     setf(used, ld+1, false);
@@ -176,44 +412,50 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
         else
         {
             n_f= 0;
-            for ( i= 0; i < result_st->n_dates - k; ++i )
-                if ( result_st->dates[i] != result_st->dates[i+k] && !used[ld + 1 - k])
+            for ( i= 0; i < n_dates - k; ++i )
+                if ( (dates[i] != dates[i+k]) && !used[i])
                     f[n_f++]= i;
         }
 
-        if ( isemptyF(f, n_f) )
+        printf("k - %d: ", k);
+        for ( i= 0; i < n_f; ++i )
+            printf("%d ", f[i]);
+        printf("\n");
+
+        if ( isemptyI(f, n_f) )
             continue;
 
         for ( i= 0; i < n_f; ++i )
         {
-            data[(f[i] + k - 1)*s_data + k]= data[f[i]];
-            num[(f[i] + k - 1)*s_data + k]= num[f[i]];
-            tob[(f[i] + k - 1)*s_data + k]= tob[f[i]];
-            unc[(f[i] + k - 1)*s_data + k]= unc[f[i]];
-            flagged[(f[i] + k - 1)*s_data + k]= flagged[f[i]];
+            data[(f[i] + k - 1)*s_data + k - 1]= data[f[i]];
+            num[(f[i] + k - 1)*s_data + k - 1]= num[f[i]];
+            tob[(f[i] + k - 1)*s_data + k - 1]= tob[f[i]];
+            unc[(f[i] + k - 1)*s_data + k - 1]= unc[f[i]];
+            flagged[(f[i] + k - 1)*s_data + k - 1]= flagged[f[i]];
 
             for ( j= 0; j < lf; ++j )
-                flags[(f[i] + k - 1)*s_flags + j + lf*(k-1)]= flags[f[i]+ j];
+                flags[(f[i] + k - 1)*s_flags + j + lf*(k-1)]= flags[f[i]*s_flags+ j];
             for ( j= 0; j < ls; ++j )
-                source[(f[i] + k - 1)*s_flags + j + ls*(k-1)]= source[f[i]+ j];
+                source[(f[i] + k - 1)*s_source + j + ls*(k-1)]= source[f[i]*s_source+ j];
 
             used[f[i]]= true;
-            counts[(f[i] + k - 1)*s_data + k]= 1;
+            counts[(f[i] + k - 1 )*s_data + k - 1]= 1;
         }
     }
 
-    tprintf("%d %d\n", n_f, c);
-    for ( i= 0; i < n_f; ++i )
+    tprintf("n_f, c: %d %d\n", n_f, c);
+    for ( i= 0; i < ld; ++i )
     {
+        printf("%d %f %d: ", i, dates[i], used[i]);
         for ( j= 0; j < c; ++j )
             printf("%d ", counts[i*s_data + j]);
         printf("\n");
     }
-    return se;
 
     // Remove the lines that have now been stacked -- original comment
-    /*setf(f, ld, 0);
+
     int sum;
+    n_f= 0;
     for ( i= 0; i < ld; ++i )
     {
         sum= 0;
@@ -221,57 +463,74 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
             sum+= counts[i*c + j];
         if ( sum > 0 )
         {
-            f[i]= true;
+            f[n_f++]= i;
         }
     }
-    real* dates= result_st->dates;
 
-    n_f= 0;
-    for ( i= 0; i < ld; ++i )
+    for ( i= 0; i < n_f; ++i )
     {
-        if ( f[i] )
+        dates[n_f]= dates[i];
+        for ( j= 0; j < c; ++j )
         {
-            dates[n_f]= dates[i];
-            for ( j= 0; j < c; ++j )
-            {
-                data[n_f*stride + j]= data[i*stride + j];
-                num[n_f*stride + j]= num[i*stride + j];
-                unc[n_f*stride + j]= unc[i*stride + j];
-                tob[n_f*stride + j]= tob[i*stride + j];
-                flagged[n_f*stride + j]= flagged[i*stride + j];
-                counts[n_f*stride + j]= counts[i*stride + j];
-            }
-            for ( k= 0; k < c*lf; ++k )
-            {
-                flags[n_f*lf + k]= flags[i*lf + k];
-                source[n_f*stride + k]= source[i*stride + k];
-            }
-            ++n_f;
+            data[i*stride + j]= data[f[i]*stride + j];
+            num[i*stride + j]= num[f[i]*stride + j];
+            unc[i*stride + j]= unc[f[i]*stride + j];
+            tob[i*stride + j]= tob[f[i]*stride + j];
+            flagged[i*stride + j]= flagged[f[i]*stride + j];
+            counts[i*stride + j]= counts[f[i]*stride + j];
+        }
+        for ( k= 0; k < c*lf; ++k )
+        {
+            flags[i*c*lf + k]= flags[f[i]*c*lf + k];
+        }
+        for ( k= 0; k < c*ls; ++k )
+        {
+            source[i*c*ls + k]= source[f[i]*c*ls + k];
         }
     }
 
-    data= realloc(data, n_f*sizeof(real));
-    num= realloc(num, n_f*sizeof(short));
-    unc= realloc(unc, n_f*sizeof(real));
-    tob= realloc(tob, n_f*sizeof(char));
-    flags= realloc(flags, n_f*lf*sizeof(flag_t));
-    source= realloc(source, n_f*ls*sizeof(int));
-    flagged= realloc(flagged, n_f*sizeof(flag_t));
-    counts= realloc(counts, n_f*sizeof(int));
+    printf("counts: \n");
+    for ( i= 0; i < n_f; ++i )
+    {
+        printf("%f %d : ", dates[i], i);
+        for ( j= 0; j < c; ++j )
+            printf("%d ", counts[i*stride + j]);
+        printf("\n");
+    }
 
+    printf("data: \n");
+    for ( i= 0; i < n_f; ++i )
+    {
+        printf("%f %d : ", dates[i], i);
+        for ( j= 0; j < c; ++j )
+            printf("%f ", data[i*stride + j]);
+        printf("\n");
+    }
+
+    data= realloc(data, n_f*c*sizeof(real));
+    num= realloc(num, n_f*c*sizeof(short));
+    unc= realloc(unc, n_f*c*sizeof(real));
+    tob= realloc(tob, n_f*c*sizeof(char));
+    flags= realloc(flags, n_f*lf*c*sizeof(flag_t));
+    source= realloc(source, n_f*ls*c*sizeof(int));
+    flagged= realloc(flagged, n_f*c*sizeof(flag_t));
+    counts= realloc(counts, n_f*c*sizeof(int));
+
+    printf("C: %d\n", c);
     int size1= n_f;
-    setf(f, n, 0);
     n_f= 0;
     for ( i= 0; i < size1; ++i )
     {
         sum= 0;
+        printf("%d,%d - ", i, c);
         for ( j= 0; j < c; ++j )
-            sum+= counts[i*c + j];
-        if ( sum > 1 )
         {
-            f[i]= true;
-            ++n_f;
+            printf("%d ", counts[i*c + j]);
+            sum+= counts[i*c + j];
         }
+        if ( sum > 1 )
+            f[n_f++]= i;
+        printf("\n");
     }
 
     int size2= n_f;
@@ -284,28 +543,49 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     int* source2= inalloc(size2*ls*c);      // dimensions: size2 x (c*ls), stride: c*ls
     flag_t* flagged2= fnalloc(size2*c);     // dimensions: size2 x c, stride: c
 
+    for ( i= 0; i < n_f; ++i )
+        printf("%d ", f[i]);
+    printf("\n");
+
     n_f= 0;
-    for ( i= 0; i < size1; ++i )
+    for ( i= 0; i < size2; ++i )
     {
-        if ( f[i] )
+        for ( j= 0; j < c; ++j )
         {
-            for ( j= 0; j < c; ++j )
-            {
-                data2[n_f*stride + j]= data[i*stride + j];
-                num2[n_f*stride + j]= num[i*stride + j];
-                counts2[n_f*stride + j]= num[i*stride + j];
-                unc2[n_f*stride + j]= unc[i*stride + j];
-                to2[n_f*stride + j]= tob[i*stride + j];
-                flagged2[n_f*stride + j]= flagged[i*stride + j];
-            }
-            for ( k= 0; k < c*lf; ++k )
-            {
-                flags[n_f*lf + k]= flags[i*lf + k];
-                source[n_f*stride + k]= source[i*stride + k];
-            }
-            ++n_f;
+            data2[i*stride + j]=    data[f[i]*stride + j];
+            num2[i*stride + j]=     num[f[i]*stride + j];
+            counts2[i*stride + j]=  counts[f[i]*stride + j];
+            unc2[i*stride + j]= unc[f[i]*stride + j];
+            tob2[i*stride + j]= tob[f[i]*stride + j];
+            flagged2[i*stride + j]= flagged[f[i]*stride + j];
+        }
+        for ( k= 0; k < c*lf; ++k )
+        {
+            flags2[i*s_flags + k]= flags[f[i]*s_flags + k];
+        }
+        for ( k= 0; k < c*ls; ++k )
+        {
+            source2[i*s_source + k]= source[f[i]*s_source + k];
         }
     }
+
+    for ( i= 0; i < size2; ++i )
+    {
+        for ( j= 0; j < c; ++j )
+            printf("%f ", data2[i*stride + j]);
+        printf("\n");
+    }
+
+    printf("flagged2: \n");
+    for ( i= 0; i < size2; ++i )
+    {
+        for ( j= 0; j < c; ++j )
+            printf("%d ", flagged2[i*stride + j]);
+        printf("\n");
+    }
+
+    for ( i= 0; i < size2; ++i )
+        printf("%f %d %d\n", data2[i*stride + 0], num2[i*stride + 0], counts2[i*stride + 0]);
 
     bool* no_flags= (bool*)malloc(sizeof(bool)*size2);
     bool* all_flags= (bool*)malloc(sizeof(bool)*size2);
@@ -339,20 +619,29 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     }
 
     bool* mask= (bool*)malloc(sizeof(bool)*size2*c);
-    if ( !isempty(flagged2, size2) )
+    for ( i= 0; i < size2*c; ++i )
+        mask[i]= 0;
+    //if ( !isemptyI(flagged2, size2) )
     {
         for ( i= 0; i < size2; ++i )
             if ( some_flags[i] )
-                if ( flagged2[i] == 1 )
-                    for ( j= 0; j < c; ++j )
-                        mask[i*c + j]= flagged2[i*c + j];
+                for ( j= 0; j < c; ++j )
+                    mask[i*c + j]= (flagged2[i*c + j] == 1);
 
+        for ( i= 0; i < size2; ++i )
+            //if ( some_flags[i] )
+            {
+                for ( j= 0; j < c; ++j )
+                    printf("%d ", mask[i*c + j]);
+                printf("\n");
+            }
     }
 
-    temp_t* data_high= tnalloc(size2*c);
-    temp_t* data_low= tnalloc(size2*c);
+    real* data_high= rnalloc(size2*c);
+    real* data_low= rnalloc(size2*c);
 
-    bool* consistent;
+    int* consistent;
+    printf("command: \n"); fflush(stdout);
     switch (command)
     {
         case 1: ;
@@ -370,20 +659,269 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
                 for ( j= 0; j < c; ++j )
                 {
                     data_high[i*c + j]= data2[i*c + j] + unc2[i*c + j];
-                    if ( ! counts[i*c + j] )
+                    if ( ! counts2[i*c + j] )
                         data_high[i*c + j]= FLT_MAX;
                     data_low[i*c + j]= data2[i*c + j] - unc2[i*c + j];
-                    if ( ! counts[i*c + j] )
+                    if ( ! counts2[i*c + j] )
                         data_low[i*c + j]= -FLT_MAX;
                 }
 
-            rangeResolver(data, unc, &consistent, f, size1, size2, c, data_high, data_low);
+            for ( i= 0; i < size2; ++i )
+            {
+                for ( j= 0; j < c; ++j )
+                {
+                    printf("%f,%f,%f ", data2[i*c + j], data_high[i*c + j], data_low[i*c + j]);
+                }
+                printf("\n");
+            }
 
+            rangeResolver(data, unc, &consistent, f, size2, data_high, data_low, c);
+
+            for ( i= 0; i < size1; ++i )
+            {
+                for ( j= 0; j < c; ++j )
+                {
+                    printf("%f,%f ", data[i*c + j], unc[i*c + j]);
+                }
+                printf("\n");
+            }
+
+            real* unc3= rnalloc(size2*c);
+            for ( i= 0; i < size2; ++i )
+                for ( j= 0; j < c; ++j )
+                    unc3[i*c + j]= unc2[i*c + j];
+            for ( i= 0; i < size2; ++i )
+                for ( j= 0; j < c; ++j )
+                    if ( !counts[i*c + j] )
+                        unc3[i*c + j]= FLT_MAX;
+
+            real* min_unc= rnalloc(size2);
+            real minTmp;
+            for ( i= 0; i < size2; ++i )
+            {
+                minTmp= unc3[i*c];
+                for ( j= 0; j < c; ++j )
+                    if ( minTmp > unc3[i*c + j] )
+                        minTmp= unc3[i*c + j];
+                min_unc[i]= minTmp;
+            }
+
+            for ( i= 0; i < size1; ++i )
+                if ( unc[i*c] < min_unc[i] )
+                    unc[i*c]= min_unc[i];
+
+            if ( command == 5 )
+                for ( i= 0; i < size1; ++i )
+                    result_st->dates[i]= dates[i];
+
+            for ( i= 0; i < size1; ++i )
+            {
+                result_st->data[i]= data[i*c];
+                result_st->uncertainty[i]= unc[i*c];
+            }
+
+            printf("%d %d %d\n", result_st->n_dates, result_st->n_data, result_st->n_uncertainty);
+            for ( i= 0; i < result_st->n_dates; ++i )
+                printf("%f %f %f\n", result_st->dates[i], result_st->data[i], result_st->uncertainty[i]);
 
         case 2: ; // TODO on demand
         case 3: ; // TODO on demand
         case 4: ; // TODO on demand;
-    }*/
+    }
+
+    switch (command)
+    {
+        case 1: ;
+        case 2: ;
+        case 3: ;
+        case 4: ;
+        case 5: ;
+        short* num_all= snalloc(size1);
+        num_est= bnalloc(size1);
+        char* tob_all= cnalloc(size1);
+        tob_est= bnalloc(size1);
+
+        getIndexValueS(num2, mask, size1, c, num_all, num_est);
+        getIndexValueC(tob2, mask, size1, c, tob_all, tob_est);
+
+        num_conflict= inalloc(size1);
+        tob_conflict= inalloc(size1);
+
+        for ( i= 0; i < size1; ++i )
+        {
+            if ( num_all[i] == -9999 )
+            {
+                num_conflict[i]= 1;
+            }
+            else
+                num_conflict[i]= 0;
+
+            if ( tob_all[i]= -99 )
+                tob_conflict[i]= 1;
+            else
+                tob_conflict[i]= 0;
+        }
+
+        for ( i= 0; i < size1; ++i )
+        {
+            num[i*c]= num_all[i];
+            tob[i*c]= tob_all[i];
+        }
+
+        maskOverFlagsF(flags2, mask, size1, c, lf);
+        maskOverFlagsI(source2, mask, size1, c, ls);
+
+        for ( i= 0; i < size1; ++i )
+        {
+            result_st->num_measurements[i]= num[i*c];
+            result_st->time_of_observation[i]= tob[i*c];
+            result_st->n_sources[i]= 0;
+            result_st->n_flags[i]= 0;
+            for ( j= 0; j < ls; ++j )
+            {
+                if ( source2[i*c*ls + j] )
+                {
+                    result_st->sources[result_st->n_sources[i]++]= source2[i*c*ls + j];
+                }
+            }
+            for ( j= 0; j < lf; ++j )
+            {
+                if ( flags2[i*c*lf + j] )
+                {
+                    result_st->flags[result_st->n_flags[i]++]= flags2[i*c*lf + j];
+                }
+            }
+        }
+    }
+
+    // Flags to be added
+
+    // Avearge includes missing values (allowed for some kinds of averages)
+
+    int n_f2= 0;
+    int* f2= inalloc(size1);
+    for ( i= 0; i < size1; ++i )
+    {
+        sum= 0;
+        for ( j= 0; j < c; ++j )
+            sum+= counts[i*c + j];
+        if ( sum > 1 )
+            f2[n_f2++]= i;
+    }
+
+    char name[100];
+    for ( i= 0; i < n_f2; ++i )
+    {
+        strcpy(name, freq_type);
+        switch (command)
+        {
+        case 1:
+            strcat(name, "MULTIPLE_VALUES_MERGED");
+            break;
+        case 2:
+            strcat(name, "CONSISTENT_VALUES_MERGED");
+            break;
+        case 3:
+            strcat(name, "AVERAGED_SIMILAR_VALUES");
+            break;
+        case 4:
+            strcat(name, "AVERAGED_DISSIMILAR_VALUES");
+            break;
+        case 5:
+            strcat(name, "DUPLICATES_REMOVED");
+            break;
+        }
+        result_st->flags[i]= (flag_t*)realloc(result_st->flags[i], (result_st->n_flags[i]+1)*sizeof(flag_t));
+        result_st->flags[i][result_st->n_flags[i]++]= lookupValuePKT(dataFlagsPKT, name);
+    }
+
+    n_f2= 0;
+    for ( i= 0; i < size1; ++i )
+    {
+        sum= 0;
+        for ( j= 0; j < c; ++j )
+            sum+= counts[i*c + j];
+        if ( sum < repeats )
+            f2[n_f2++]= i;
+    }
+
+    for ( i= 0; i < n_f2; ++i )
+    {
+        strcpy(name, freq_type);
+        strcat(name, "_AVERAGE_MISSING_VALUES");
+        result_st->flags[i]= (flag_t*)realloc(result_st->flags[i], (result_st->n_flags[i]+1)*sizeof(flag_t));
+        result_st->flags[i][result_st->n_flags[i]++]= lookupValuePKT(dataFlagsPKT, name);
+    }
+
+    for ( i= 0; i < size2; ++i )
+    {
+        if ( some_flags[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGER_BAD_FLAGGED_VALUE_DROPPED");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( num_conflict[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGER_CONFLICT_NUM");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( tob_conflict[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGER_CONFLICT_TOB");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( num_est[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGER_CONFLICT_NUM");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( tob_est[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGER_CONFLICT_NUM");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( consistent[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGED_CONSISTENT");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        if ( command == 1 && !consistent[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGED_INCONSISTENT");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlagsPKT, name);
+        }
+        /*if ( avg_inconsistent[i] )
+        {
+            strcpy(name, freq_type);
+            strcat(name, "_MERGED_CONSISTENT");
+            result_st->flags[f[i]]= (flag_t*)realloc(result_st->flags[f[i]], (result_st->n_flags[f[i]]+1)*sizeof(flag_t));
+            result_st->flags[f[i]][result_st->n_flags[f[i]]++]= lookupValuePKT(dataFlags, name);
+        }*/
+    }
+
+    for ( i= 0; i < size1; ++i )
+    {
+        sum= 0;
+        for ( j= 0; j < c; ++j )
+            sum+= counts[i*c + j];
+        n_result[i]= sum;
+    }
+
+    cleanFlags(result_st);
 
     free(data);
     free(unc);
@@ -395,21 +933,22 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     return se;
 }
 
-void rangeResolver(temp_t* data, real* unc, bool** consistent, bool* f, int size1, int size2, int c, real* max_table, real* min_table)
+
+void rangeResolver(real* data, real* unc, int** consistent, int* f, int n_f, real* max_table, real* min_table, int c)
 {
-    /*int i, j, k;
+    int i, j, k;
 
-    temp_t* val= tnalloc(size2);
-    unc* err= rnalloc(size2);
+    printf("%d\n", n_f);
+    for ( i= 0; i < n_f; ++i )
+        for ( j= 0; j < c; ++j )
+            printf("%f,%f,%f,%f\n", data[f[i]], unc[f[i]], max_table[i*c + j], min_table[i*c + j]);
+    getchar();
 
-    for ( i= 0; i < size2; ++i )
-        val[i]= err[i]= 0;
+    real* d_high= rnalloc(n_f);
+    real* d_low= rnalloc(n_f);
 
-    temp_t* d_high= tnalloc(size2);
-    temp_t* d_low= tnalloc(size2);
-
-    temp_t extr_min, extr_max;
-    for ( i= 0; i < size2; ++i )
+    real extr_min, extr_max;
+    for ( i= 0; i < n_f; ++i )
     {
         extr_min= extr_max= max_table[i*c + 0];
         for ( j= 0; j < c; ++j )
@@ -417,57 +956,106 @@ void rangeResolver(temp_t* data, real* unc, bool** consistent, bool* f, int size
             if ( max_table[i*c + j] < extr_min )
                 extr_min= max_table[i*c + j];
             if ( min_table[i*c + j] > extr_max )
-                extr_max= max_table[i*c + j];
+                extr_max= min_table[i*c + j];
         }
         d_high[i]= extr_min;
         d_low[i]= extr_max;
     }
 
-    bool* good= bnalloc(size2);
-    for ( i= 0; i < size2; ++i )
+    int* good= inalloc(n_f);
+    for ( i= 0; i < n_f; ++i )
         if ( d_high[i] >= d_low[i] )
+        {
             good[i]= true;
+        }
         else
             good[i]= false;
 
     *consistent= good;
 
-    for ( i= 0; i < size2; ++i )
+    for ( i= 0; i < n_f; ++i )
         if ( good[i] )
         {
-            val[i]= (d_high[i] + d_low[i])/2;
-            err[i]= (d_high[i] - d_low[i])/2;
+            data[f[i]*c]= (d_high[i] + d_low[i])/2;
+            unc[f[i]*c]= (d_high[i] - d_low[i])/2;
         }
 
     int all_good= 0;
-    for ( i= 0; i < size2; ++i )
+    for ( i= 0; i < n_f; ++i )
         all_good+= good[i];
-    if ( all_good == size2 )
-        return;
-
-    temp_t* max_table2= tnalloc(all_good*c);
-    temp_t* min_table2= tnalloc(all_good*c);
-
-    temp_t* val2= tnalloc(all_good*c);
-    temp_t* err2= tnalloc(all_good*c);
-
-    int n_2= 0;
-    for ( i= 0; i < size2; ++i )
+    if ( all_good == n_f )
     {
-        if ( !good[i] )
-        {
-            for ( j= 0; j < c; ++j )
-                val2[n_2*c + j]= err2[n_2*c + j]= 0;
-            for ( j= 0; j < c; ++j )
-            {
-                max_table2[n_2*c + j]= max_table[i*c + j];
-                min_table2[n_2*c + j]= min_table[i*c + j];
-            }
-        }
+        tprintf("all good\n");
+        return;
     }
 
+    int bad= n_f - all_good;
+
+    real* max_table2= rnalloc(bad*(c-1));
+    real* min_table2= rnalloc(bad*(c-1));
+
+    real* val2= rnalloc(bad*(c-1));
+    real* err2= rnalloc(bad*(c-1));
+    set(val2, bad*(c-1), 0);
+    set(err2, bad*(c-1), 0);
+
+    int a= 0;
+    int* select= inalloc(c-1);
+    int* consistent2;
     for ( k= 0; k < c; ++k )
     {
+            for ( j= 0; j < k; ++j )
+                select[j]= j;
+            for ( j= k+1; j < c; ++j )
+                select[j-1]= j;
 
-    }*/
+            a= 0;
+            for ( j= 0; j < n_f; ++j )
+                if ( !good[j] )
+                {
+                    for ( i= 0; i < c-1; ++i )
+                    {
+                        max_table2[a*(c-1) + i]= max_table[j*c + select[i]];
+                        min_table2[a*(c-1) + i]= min_table[j*c + select[i]];
+                    }
+                    ++a;
+                }
+
+            int* f2= inalloc(bad);
+            a= 0;
+            for ( j= 0; j < n_f; ++j )
+                if ( !good[j] )
+                    f2[a++]= j;
+            tprintf("recursive call...\n");
+            rangeResolver(val2, err2, &consistent2, f2, bad, max_table2, min_table2, c-1);
+            tprintf("recursion finished...\n");
+
+            for ( i= 0; i < bad; ++i )
+                for ( j= 0; j < c-1; ++j )
+                {
+                    max_table2[i*(c-1) + j]= val2[i*(c-1)+j] + err2[i*(c-1)+j];
+                    min_table2[i*(c-1) + j]= val2[i*(c-1)+j] - err2[i*(c-1)+j];
+                }
+
+            for ( i= 0; i < bad; ++i )
+            {
+                extr_min= extr_max= max_table2[i*(c-1) + 0];
+                for ( j= 0; j < c-1; ++j )
+                {
+                    if ( min_table2[i*(c-1) + j] < extr_min )
+                        extr_min= min_table2[i*(c-1) + j];
+                    if ( max_table2[i*(c-1) + j] > extr_max )
+                        extr_max= max_table2[i*(c-1) + j];
+                }
+                d_high[i]= extr_max;
+                d_low[i]= extr_min;
+            }
+
+            for ( i= 0; i < n_f; ++i )
+                if ( !good[i] )
+                {
+                    data[f[i]*c]= (d_high[i] + d_low[i])/2.0;
+                    unc[f[i]*c]= (d_high[i] - d_low[i])/2.0;
+                }
+    }
 }

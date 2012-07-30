@@ -249,3 +249,39 @@ int isemptyF(flag_t* a, int n)
             return 0;
     return 1;
 }
+
+int isemptyI(int* a, int n)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( a[i] )
+            return 0;
+    return 1;
+}
+
+int anyI(int* a, int n)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( a[i] )
+            return 1;
+    return 0;
+}
+
+int anyF(flag_t* f, int n)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( f[i] )
+            return 1;
+    return 0;
+}
+
+int anyB(bool* b, int n)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        if ( b[i] )
+            return 1;
+    return 0;
+}

@@ -707,7 +707,7 @@ void sortSE2DataByDate(stationElement2p se)
     for ( i= 0; i < se->n_data; ++i )
         tmp[i]= i;
 
-    qsortOTIA(tmp, se->n_data);
+    qsortORIA(tmp, se->n_dates);
 
     stationElement2p seTmp= createSE2NC(se);
     for ( i= 0; i < se->n_data; ++i )
@@ -753,5 +753,5 @@ void sortSE2DataByDate(stationElement2p se)
         free(seTmp->record_flags);
     if ( seTmp->primary_record_ids )
         free(seTmp->primary_record_ids);
-    free(se);
+    free(seTmp);
 }
