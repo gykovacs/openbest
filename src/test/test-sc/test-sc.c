@@ -60,7 +60,7 @@ int singleValuedTest(int argc, char** argv)
 
     loadStationElement2(&se, &n_stationElement2);
 
-    tprintf("start checkling multivaluedness...\n");
+    tprintf("start checking multivaluedness...\n");
     int i;
     for ( i= 0; i < n_stationElement2; ++i )
         if ( isMultiValued(se[i]) )
@@ -82,9 +82,49 @@ int makeSingleValuedTest(int argc, char** argv)
 
     //int i;
     //for ( i= 0; i < n_stationElement2; ++i )
-    int n= 6;
+    int n= 24;
     printf("%d\n", isMultiValued(se[n]));
-    se[n]= makeSingleValued(se[n], NULL, 0);
+    stationElement2p sv;
+    sv= makeSingleValued(se[n], NULL, 0);
+
+    displaySE2(sv);
+
+    destroySE2(sv);
+
+    finalizeDS();
+    destroySE2V(se, n_stationElement2);
+
+    return 0;
+}
+
+int makeSingleValuedAllTest(int argc, char** argv)
+{
+    initDS();
+    stationElement2p* se;
+    stationElement2p* ses;
+    int n_stationElement2;
+    loadPreliminaryData();
+    loadStationElement2(&se, &n_stationElement2);
+    ses= (stationElement2p*)malloc(sizeof(stationElement2p)*n_stationElement2);
+
+    printf("%d\n", n_stationElement2);
+    //getchar();
+
+    int i;
+    stationElement2p sv;
+    for ( i= 0; i < n_stationElement2; ++i )
+    {
+        if ( isMultiValued(se[i]) )
+            tprintf("================= WORKING ON %d =================\n", i);
+        sv= makeSingleValued(se[i], NULL, 0);
+        //displaySE2(se[i]);
+        ses[i]= sv;
+    }
+
+    tprintf("================= FINISHED ================\n");
+
+    for ( i= 0; i < n_stationElement2; ++i )
+            tprintf("%d: %d %d - %d %d\n", i, isMultiValued(se[i]), isMultiValued(ses[i]), se[i]->n_dates, ses[i]->n_dates);
 
     finalizeDS();
     destroySE2V(se, n_stationElement2);
@@ -268,6 +308,8 @@ int splitStationAllTest(int argc, char** argv)
     free(b);
     finalizeDS();
     destroyBAO(bao);
+
+    return 0;
 }
 
 /**
@@ -287,11 +329,13 @@ int main(int argc, char** argv)
     bool ssmtest= false;
     bool ssttest= false;
     bool ssatest= false;
+    bool mksingleall= false;
     int err;
     
     addOption(ot, "--shrink", OPTION_BOOL, (char*)&shrink, 0, "shrink station site vector");
     addOption(ot, "--issingle", OPTION_BOOL, (char*)&issingle, 0, "isSingleValued test");
     addOption(ot, "--mksingle", OPTION_BOOL, (char*)&mksingle, 0, "makeSingleValued test");
+    addOption(ot, "--mksingleall", OPTION_BOOL, (char*)&mksingleall, 0, "makeSingleValued all loaded data test");
     addOption(ot, "--ssb", OPTION_BOOL, (char*)&ssbtest, 0, "split station breaks test");
     addOption(ot, "--ssm", OPTION_BOOL, (char*)&ssmtest, 0, "split station moves test");
     addOption(ot, "--sst", OPTION_BOOL, (char*)&ssttest, 0, "split station tob test");
@@ -317,6 +361,8 @@ int main(int argc, char** argv)
         err= splitStationTOBChangesTest(argc, argv);
     else if ( ssatest )
         err= splitStationAllTest(argc, argv);
+    else if ( mksingleall )
+        err= makeSingleValuedAllTest(argc, argv);
     
     destroyOptionTable(ot);
 

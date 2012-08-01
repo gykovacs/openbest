@@ -84,4 +84,6 @@ int isnanGP2(geoPoint2* gp);
 
 geoPoint2* setUncertaintyGP2(geoPoint2* gp, real lat_error, real long_error, real elev_error);
 
+bool isValidGP2(geoPoint2* gp);
+
 #endif

@@ -225,9 +225,9 @@ real modeRMA(real* input, int n)
     maxV1= input[0];
     j= 1;
     for ( i= 1; i < n; ++i )
-        if ( i < n && tmp[i] == tmp[i-1] )
+        if ( tmp[i] == tmp[i-1] )
             ++j;
-        else if ( i == n || tmp[i] != tmp[i-1] )
+        else if ( tmp[i] != tmp[i-1] )
         {
             if ( j > maxL )
             {
@@ -235,6 +235,12 @@ real modeRMA(real* input, int n)
                 maxV1= tmp[i-1];
             }
             j= 1;
+        }
+    if ( tmp[i-1] == tmp[i-2] )
+        if ( j > maxL )
+        {
+            maxL= j;
+            maxV1= tmp[i-1];
         }
     free(tmp);
     return maxV1;
@@ -262,11 +268,18 @@ int modeRFA(real* input, int n)
             }
             j= 1;
         }
+    if ( tmp[i-1] == tmp[i-2] )
+        if ( j > maxL )
+        {
+            maxL= j;
+            maxV= tmp[i-1];
+        }
+
     free(tmp);
-    printf("modeRFA %d - \n", n);
+    /*printf("modeRFA %d - \n", n);
     for ( i= 0; i < n; ++i )
         printf("%f ", input[i]);
-    printf("\n");
+    printf("\n");*/
     return maxL;
 }
 

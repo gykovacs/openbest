@@ -3,6 +3,7 @@
 #include "openbest-ds/init-ds.h"
 #include "openbest-ds/optionTable.h"
 #include "openbest-io/loadData.h"
+#include "openbest-ds/makeSingleValued.h"
 #include "openbest-av/scalpelMethods.h"
 #include "openbest-av/berkeleyAverage.h"
 #include "openbest-av/berkeleyAverageOptions.h"
@@ -32,21 +33,24 @@ int berkeleyAverageTest(int argc, char** argv)
 
     loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
 
+    int j;
+    for ( j= 0; j < n_badFlags; ++j )
+        printf("%d ", iBadFlags[j]);
+
     berkeleyAverageOptions* bao= createBerkeleyAverageOptionsQuick();
 
+    int i;
+    stationElement2p tmp;
+    tprintf("Making dataset to be single valued\n");
+    for ( i= 0; i < n_stationElement2; ++i )
+    {
+        tmp= makeSingleValued(se[i], NULL, 0);
+        destroySE2(se[i]);
+        se[i]= tmp;
+    }
+    tprintf("Converting to single valued finished\n");
+
     berkeleyAverage(&se, &n_stationElement2, &ss, &n_stationSite2, bao);
-    /*int* a, *b;
-
-    splitStationBreaks(&se, &n_stationElement2, &ss, &n_stationSite2, bao->scalpelGapLength, bao->badFlags, bao->n_badFlags, &a, &b);
-    free(a);
-    free(b);
-    splitStationMoves(&se, &n_stationElement2, &ss, &n_stationSite2, bao->scalpelDeclaredMoves, bao->scalpelSuspectedMoves, &a, &b);
-    free(a);
-    free(b);
-    splitStationTOBChanges(&se, &n_stationElement2, &ss, &n_stationSite2, bao->scalpelTOBPersistence, bao->badFlags, bao->n_badFlags, bao->scalpelTOBDifference, &a, &b);
-
-    free(a);
-    free(b);*/
 
     destroySE2V(se, n_stationElement2);
     destroySS2V(ss, n_stationSite2);

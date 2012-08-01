@@ -580,18 +580,18 @@ bool isSingleValued(stationElement2* se)
     if ( se->n_dates <= 1 )
         return true;
 
+
     int i;
-    printf("%d\n", se->n_dates);
+    /*printf("%d\n", se->n_dates);
     for ( i= 0; i < se->n_dates; ++i )
         printf("%f ", se->dates[i]);
-    printf("\n");
+    printf("\n");*/
     real* d= diffRN(se->dates, se->n_dates);
-    for ( i= 0; i < se->n_dates-1; ++i )
+    /*for ( i= 0; i < se->n_dates-1; ++i )
         printf("%f ", d[i]);
-    printf("\n");
+    printf("\n");*/
 
-
-    printf("%f\n", minR(d, se->n_dates - 1));
+    //printf("%f\n", minR(d, se->n_dates - 1));
 
     if ( minR(d, se->n_dates-1) > 0 )
     {
@@ -599,6 +599,7 @@ bool isSingleValued(stationElement2* se)
         return true;
     }
 
+    free(d);
     return false;
 }
 
@@ -754,4 +755,84 @@ void sortSE2DataByDate(stationElement2p se)
     if ( seTmp->primary_record_ids )
         free(seTmp->primary_record_ids);
     free(seTmp);
+}
+
+void monthRange(stationElement2p* se, int n, real* min_month, real* max_month)
+{
+    *min_month= *max_month= monthNum(se[0]->dates[0]);
+
+    int i, j;
+    real tmp;
+
+    for ( i= 0; i < n; ++i )
+        for ( j= 0; j < se[i]->n_dates; ++j )
+        {
+            tmp= monthNum(se[i]->dates[j]);
+            if ( *min_month > tmp )
+                *min_month= tmp;
+            if ( *max_month < tmp )
+                *max_month= tmp;
+        }
+}
+
+int isMonthly(stationElement2p se)
+{
+    return true;
+}
+
+void removeBadFlaggedDataV(stationElement2p* se, int n, int* bf, int n_bf)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        removeBadFlaggedData(se[i], bf, n_bf);
+}
+
+void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf)
+{
+    int i, j, k;
+    for ( i= 0; i < se->n_n_flags; ++i )
+        for ( j= 0; j < se->n_flags[i]; ++j )
+            for ( k= 0; k < n_bf; ++k )
+                if ( se->flags[i][j] == bf[k] )
+                {
+                    k= n_bf;
+                    j= se->n_flags[i];
+                    se->flags[i][0]= -1;
+                }
+    j= 0;
+    for ( i= 0; i < se->n_data; ++i )
+        if ( se->flags[i][0] == -1 )
+        {
+            free(se->flags[i]);
+            free(se->sources[i]);
+        }
+        else
+        {
+            se->dates[j]= se->dates[i];
+            se->time_of_observation[j]= se->time_of_observation[i];
+            se->data[j]= se->data[i];
+            se->uncertainty[j]= se->uncertainty[i];
+            se->num_measurements[j]= se->num_measurements[i];
+            se->n_flags[j]= se->n_flags[i];
+            se->n_sources[j]= se->n_sources[i];
+            se->flags[j]= se->flags[i];
+            se->sources[j]= se->sources[i];
+            ++j;
+        }
+    se->n_dates= j;
+    se->n_time_of_observation= j;
+    se->n_uncertainty= j;
+    se->n_data= j;
+    se->n_num_measurements= j;
+    se->n_n_flags= j;
+    se->n_n_sources= j;
+    se->dates= realloc(se->dates, sizeof(real)*j);
+    se->time_of_observation= realloc(se->time_of_observation, sizeof(char)*j);
+    se->data= realloc(se->data, sizeof(temp_t)*j);
+    se->uncertainty= realloc(se->uncertainty, sizeof(real)*j);
+    se->num_measurements= realloc(se->num_measurements, sizeof(short)*j);
+    se->n_flags= realloc(se->n_flags, sizeof(char)*j);
+    se->flags= realloc(se->flags, sizeof(flag_t*)*j);
+    se->n_sources= realloc(se->n_sources, sizeof(char)*j);
+    se->sources= realloc(se->sources, sizeof(flag_t*)*j);
 }

@@ -117,6 +117,12 @@ int longestDataSeries(stationElement2p* se, int n);
 
 void sortSE2DataByDate(stationElement2p se);
 
-int monthNum(stationElement2p se);
+void monthRange(stationElement2p* se, int n, real* min_month, real* max_month);
+
+int isMonthly(stationElement2p se);
+
+void removeBadFlaggedDataV(stationElement2p* se, int n, int* bf, int n_bf);
+
+void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf);
 
 #endif

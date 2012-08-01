@@ -204,4 +204,8 @@ int anyF(flag_t* f, int n);
 
 int anyB(bool* b, int n);
 
+real stdR(real* a, int n);
+
+temp_t stdT(temp_t* a, int n);
+
 #endif

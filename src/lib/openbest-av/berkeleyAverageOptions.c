@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "openbest-av/berkeleyAverageOptions.h"
+#include "openbest-ds/primaryKeyTables.h"
 
 
 berkeleyAverageOptions* createBAON()

@@ -285,3 +285,33 @@ int anyB(bool* b, int n)
             return 1;
     return 0;
 }
+
+real stdR(real* a, int n)
+{
+    real e= 0;
+    real e2= 0;
+    int i;
+    for ( i= 0; i < n; ++i )
+    {
+        e+= a[i];
+        e2+= a[i]*a[i];
+    }
+    e/= n;
+    e2/= n;
+    return sqrt(e2 - e*e);
+}
+
+temp_t stdT(temp_t* a, int n)
+{
+    temp_t e= 0;
+    temp_t e2= 0;
+    int i;
+    for ( i= 0; i < n; ++i )
+    {
+        e+= a[i];
+        e2+= a[i]*a[i];
+    }
+    e/= n;
+    e2/= n;
+    return sqrt(e2 - e*e);
+}

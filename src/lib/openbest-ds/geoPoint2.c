@@ -143,3 +143,10 @@ void setGeoPoint2(geoPoint2* gp, real latitude, real longitude, real elevation, 
   gp->elev_uncertainty= elev_uncertainty;
   computeXYZ_GP2(gp);
 }
+
+bool isValidGP2(geoPoint2* gp)
+{
+    if ( gp->latitude == -99 || gp->longitude == -99 )
+        return false;
+    return true;
+}

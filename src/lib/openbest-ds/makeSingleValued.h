@@ -19,11 +19,11 @@ stationElement2* structureMerge(stationElement2* se);
 
 flag_t* anyismember(flag_t** flags, char* n_flags, int n_n_flags, int* bf, int n);
 
-stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, stationElement2p* result, int* result_count);
+stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, stationElement2p* result, int** result_count);
 
 void maskOverFlags(flag_t** flags, int* mask, int size1, int c, int l);
 
-void rangeResolver(real* data, real* unc, int** consistent, int* f, int n_f, real* max_table, real* min_table, int c);
+void rangeResolver(real* data, real* unc, int** consistent, int* f, int n_f, real* max_table, real* min_table, int c, int cc, int k);
 
 void getIndexValue(real* M, int* mask, int size1, int c, short* v, bool* est);
 

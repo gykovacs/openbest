@@ -41,7 +41,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     float precision_target= 0;
     int max_loop;
 
-    if ( options.useIterativeReweighting )
+    if ( options->useIterativeReweighting )
     {
         precision_target= options->precisionTarget;
         max_loop= options->maxIterations;
@@ -60,173 +60,79 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
 
     // Time range for station data
     real min_month, max_month;
+    monthRange(se, n_se, &min_month, &max_month);
+    int n_time_values= max_month - min_month + 1;
+    real* time_values= rnalloc(n_time_values);
+    for ( i= 0; i < n_time_values; ++i )
+        time_values[i]= (min_month + i)/12.0 - 1.0/24.0 + 1600;
+    tprintf("Month range: %f - %f; first and last time value: %f %f\n", min_month, max_month, time_values[0], time_values[n_time_values-1]);
 
-    bool* truly_bad= bnalloc(n);
-    setb(truly_bad, n, false);
+    // Get bad flag list
+    int* bf= iBadFlags;
+    int n_bf= n_badFlags;
 
-    real* limsMin= rnalloc(n);
-    real* limsMax= rnalloc(n);
+    // Remove any data points that are flagged with indicators of the "bad flags list" These points are not considered at all doing the averaging process
+    tprintf("Remove bad flagged data points\n");
+    removeBadFlaggedDataV(se, n_se, bf, n_bf);
+    tprintf("End of removing bad flagged data points\n");
 
-    int i, j, k;
-    for ( k= 0; k < n; ++k )
-    {
-        if ( se[k]->n_dates < 12 )
-            truly_bad[k]= true;
-        limsMin[k]= minR(se[k]->dates, se[k]->n_dates);
-        limsMax[k]= maxR(se[k]->dates, se[k]->n_dates);
-    }
+    int orig_length= n_se;
+    bool* orig_map= bnalloc(orig_length);
+    setb(orig_map, orig_length, true);
 
-    int block_size;
+    // Remove stations with no location
+    for ( i= 0; i < n_se; ++i )
+        if ( !isValidGP2(locations[i]))
+            orig_map[i]= false;
 
-    if ( !options->clusterMode )
-        block_size= 1000;
-    else
-        block_size= 50000;
+    // Temporary Fix: removing ultra-high variability created by bad sasonality procedure on sparse data. This will be removed in the future versions when the seasonality procedure is fixed.
+    for ( i= 0; i < n_se; ++i )
+        if ( stdT(se[i]->data, se[i]->n_data) > 7 )
+            orig_map[i]= false;
 
-    real* x= rnalloc(n);
-    real* y= rnalloc(n);
-    real* z= rnalloc(n);
-
-    for ( k= 0; k < n; ++k )
-    {
-        x[k]= ss[k]->location->x;
-        y[k]= ss[k]->location->y;
-        z[k]= ss[k]->location->z;
-    }
-
-    tprintf("Distance Mapping\n");
-
-    int** neighbor_list= (int**)malloc(sizeof(int*)*n);
-    for ( k= 0; k < n; ++k )
-        neighbor_list[k]= inalloc(consider + 1);
-    real* distances= rnalloc(n);
-    int* neighborhood= inalloc(n);
-    int n_neighborhood;
-
-    int block;
-    for ( block= 0; block < n; block+= block_size )
-    {
-        int max_block= (block + block_size - 1) < (n - 1) ? (block + block_size - 1) : (n - 1);
-
-        for ( k= block; k < max_block; ++k )
+    // Create a table of data occurances, used to generate spatial weights
+    bool* occurance_table= bnalloc(n_se*n_time_values); // dimensions: n_se x n_time_values; stride: n_time_values
+    setb(occurance_table, n_se*n_time_values, false);
+    for ( i= 0; i < n_se; ++i )
+        if ( orig_map[i] )
         {
-            for ( i= 0; i < n; ++i )
-                distances[i]= sqrt((x[i] - x[k]) * (x[i] - x[k]) + (y[i] - y[k])*(y[i] - y[k]) + (z[i] - z[k])*(z[i] - z[k]));
-            distances[k]= FLT_MAX;
-
-            n_neighborhood= 0;
-
-            for ( i= 0; i < n; ++i )
-                if ( distances[i] < max_dist && ! truly_bad[i] )
-                    neighborhood[n_neighborhood++]= i;
-
-            if ( n_neighborhood < consider )
+            for ( j= 0; j < se[i]->n_dates; ++j )
             {
-                for ( i= 0; i < n_neighborhood; ++i )
-                    neighbor_list[k][i]= neighborhood[i];
-                neighbor_list[k][i]= -1;
-            }
-            else
-            {
-                outer_array= distances;
-                qsortORIA(neighborhood, n_neighborhood);
-
-                for ( i= 0; i < consider; ++i )
-                    neighbor_list[k][i]= neighborhood[i];
-                neighbor_list[k][i]= -1;
+                real monthnum= monthNum(se[i]->dates[j]) - min_month;
+                occurance_table[i*n_time_values + (int)monthnum]= true;
             }
         }
-    }
-
-    real* data_high= rnalloc(size2*c);
-    real* data_low= rnalloc(size2*c);
-
-    int* consistent;
-    printf("command: \n"); fflush(stdout);
-    switch (command)
+    ded();
+    // Apply station length and minimum number of measurement requirements
+    bool changed= true;
+    int sum;
+    while ( changed )
     {
-        case 1: ;
-        case 5: ;
-            for ( i= 0; i < size2; ++i )
-                for ( j= 0; j < c; ++j )
-                    if ( mask[i*c + j] )
-                    {
-                        data2[i*c + j]= 0;
-                        unc2[i*c + j]= 0;
-                        counts2[i*c + j]= 0;
-                    }
+        changed= false;
 
-            for ( i= 0; i < size2; ++i )
-                for ( j= 0; j < c; ++j )
-                {
-                    data_high[i*c + j]= data2[i*c + j] + unc2[i*c + j];
-                    if ( ! counts2[i*c + j] )
-                        data_high[i*c + j]= FLT_MAX;
-                    data_low[i*c + j]= data2[i*c + j] - unc2[i*c + j];
-                    if ( ! counts2[i*c + j] )
-                        data_low[i*c + j]= -FLT_MAX;
-                }
-
-            for ( i= 0; i < size2; ++i )
+        // Remove stations with too little data
+        for ( i= 0; i < n_se; ++i )
+        {
+            sum= 0;
+            for ( j= 0; j < n_time_values; ++j )
+                sum+= occurance_table[i*n_time_values + j];
+            if ( sum < min_months && orig_map[i] )
             {
-                for ( j= 0; j < c; ++j )
-                {
-                    printf("%f,%f,%f ", data2[i*c + j], data_high[i*c + j], data_low[i*c + j]);
-                }
-                printf("\n");
+                if ( changed == false )
+                    changed= true;
+                orig_map[i]= false;
             }
+            for ( j= 0; j < n_time_values; ++j )
+                occurance_table[j]= false;
+        }
 
-            rangeResolver(data, unc, &consistent, f, size2, data_high, data_low, c);
-
-            for ( i= 0; i < size1; ++i )
-            {
-                for ( j= 0; j < c; ++j )
-                {
-                    printf("%f,%f ", data[i*c + j], unc[i*c + j]);
-                }
-                printf("\n");
-            }
-
-            real* unc3= rnalloc(size2*c);
-            for ( i= 0; i < size2; ++i )
-                for ( j= 0; j < c; ++j )
-                    unc3[i*c + j]= unc2[i*c + j];
-            for ( i= 0; i < size2; ++i )
-                for ( j= 0; j < c; ++j )
-                    if ( !counts[i*c + j] )
-                        unc3[i*c + j]= FLT_MAX;
-
-            real* min_unc= rnalloc(size2);
-            real minTmp;
-            for ( i= 0; i < size2; ++i )
-            {
-                minTmp= unc3[i*c];
-                for ( j= 0; j < c; ++j )
-                    if ( minTmp > unc3[i*c + j] )
-                        minTmp= unc3[i*c + j];
-                min_unc[i]= minTmp;
-            }
-
-            for ( i= 0; i < size1; ++i )
-                if ( unc[i*c] < min_unc[i] )
-                    unc[i*c]= min_unc[i];
-
-            if ( command == 5 )
-                for ( i= 0; i < size1; ++i )
-                    result_st->dates[i]= dates[i];
-
-            for ( i= 0; i < size1; ++i )
-            {
-                result_st->data[i]= data[i*c];
-                result_st->uncertainty[i]= unc[i*c];
-            }
-
-            printf("%d %d %d\n", result_st->n_dates, result_st->n_data, result_st->n_uncertainty);
-            for ( i= 0; i < result_st->n_dates; ++i )
-                printf("%f %f %f\n", result_st->dates[i], result_st->data[i], result_st->uncertainty[i]);
-
-    }
-
-
-
+        // Remove time steps where fewer than min_stations reported data
+        for ( i= 0; i < n_time_values; ++i )
+        {
+            sum= 0;
+            for ( j= 0; j < n_se; ++j )
+                sum+= occurance_table[j*n_time_values + i];
+            if ( sum < min_stations )
+                ;
+        }
 }

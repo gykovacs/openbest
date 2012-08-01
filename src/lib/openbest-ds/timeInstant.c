@@ -401,3 +401,13 @@ void setTI(timeInstant* ti, real year, real month, real day, real hour, real min
   ti->minute= minute;
   ti->second= second;
 }
+
+real monthNum(real year)
+{
+    return (year - 1600 + 1.0/24.0) * 12.0;
+}
+
+real yearNum(real month)
+{
+    return (month / 12.0) - 1.0/24.0 + 1600;
+}

@@ -14,9 +14,9 @@ void berkeleyAverage(stationElement2p** seIO, int* n_stationElement2IO, stationS
 
     displayBAO(options);
 
-    int* back_map;
-    int* start_pos;
-    int* break_flags;
+    int* back_map= NULL;
+    int* start_pos= NULL;
+    int* break_flags= NULL;
     if ( options->useScalpel )
     {
         tprintf("Berkeley Average Scalpel Methods\n");
@@ -148,4 +148,13 @@ void berkeleyAverage(stationElement2p** seIO, int* n_stationElement2IO, stationS
         for ( i= 0; i < *n_stationElement2IO; ++i )
             back_map[i]= i;
     }
+
+    berkeleyAverageCore(seIO, n_stationElement2IO, ssIO, n_stationSite2IO, options);
+
+    if ( start_pos )
+        free(start_pos);
+    if ( break_flags )
+        free(break_flags);
+    if ( back_map )
+        free(back_map);
 }

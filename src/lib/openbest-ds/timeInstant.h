@@ -197,4 +197,8 @@ timeInstant addIntervalN(timeInstant* t, real value, int type);
  */ 
 timeInstant* addIntervalP(timeInstant* t, real value, int type);
 
+real monthNum(real year);
+
+real yearNum(real monthNum);
+
 #endif
