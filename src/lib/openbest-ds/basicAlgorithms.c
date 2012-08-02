@@ -301,11 +301,6 @@ void findEqualsIA(int* input, int n, int v, int* f, int* n_f)
             f[(*n_f)++]= i;
 }
 
-void findNSmallerRA(real* input, int n, int N, real* output)
-{
-    qsortRA(input, n);
-}
-
 void uniqueIAN2(int* input, int n, int** collapsed, int* n_collapsed, int** expand_map, int* n_expand_map)
 {
     int k;

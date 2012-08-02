@@ -20,8 +20,18 @@
   */
 void loadPreliminaryData();
 
+/**
+  * loads stationElement data into parameter se, n_stationElement2 will contain the number of stationElement2 objects
+  * @param se output parameter - pointer to a stationElement2 pointer array
+  * @param n_stationElement2 output parameter - pointer to an integer
+  */
 void loadStationElement2(stationElement2p** se, int* n_stationElement2);
 
+/**
+  * loads stationSite data into parameter ss, n_stationSite2 will contain the number of stationSite2 objects
+  * @param ss output parameter - pointer to a stationSite2 pointer array
+  * @param n_stationSite2 output parameter - pointer to an integer
+  */
 void loadStationSite2(stationSite2p** ss, int* n_stationSite2);
 
 /**
@@ -33,6 +43,13 @@ void loadStationSite2(stationSite2p** ss, int* n_stationSite2);
   */
 void loadData(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2);
 
+/**
+  * matches the loaded stationSite2 and stationElement2 data by index; after this function call, the instances at the same indeces in arrays ss and se share the same station id
+  * @param ss pointer to the array of stationSite2 instances
+  * @param n_stationSite2 pointer to the length of array ss
+  * @param se pointer to the array of stationElement2 instances
+  * @param n_stationElement2 pointer to the length of array se
+  */
 void matchStationElementsAndSites(stationSite2p** ss, int* n_stationSite2, stationElement2p** se, int* n_stationElement2);
 
 #endif

@@ -42,9 +42,11 @@ typedef struct
     char* n_flags;
     /** data flags*/
     flag_t** flags;
-    /** source flag*/
+    /** length of sources vector*/
     int n_n_sources;
+    /** array containing the number of sources for each data element*/
     char* n_sources;
+    /** source flags*/
     flag_t** sources;
     /** number of record flags*/
     int n_record_flags;
@@ -55,11 +57,16 @@ typedef struct
     /** primary record ids*/
     int* primary_record_ids;
 
+    /** true, if the contents are compressed, false, otherwise*/
     bool compressed;
+    /** true, if the representation is packed, false, otherwise*/
     bool packed;
 
+    /** pointer of the compressed contents*/
     char* compressedRecord;
+    /** length of the compressed record*/
     unsigned int compressedRecordLength;
+    /** length of the content that is compressed*/
     unsigned int dataLength;
 } stationElement2;
 
@@ -72,8 +79,17 @@ typedef stationElement2* stationElement2p;
   */
 stationElement2* createSE2N();
 
+/**
+  * creates a stationElement2 instance with test content
+  * @returns pointer of the test stationElement2 instance
+  */
 stationElement2* createSE2Test();
 
+/**
+  * copies the contents of the parameter stationElement2 into a new instance
+  * @param se instance to copy
+  * @returns pointer of the new instance
+  */
 stationElement2* createSE2NC(stationElement2* se);
 
 /**
@@ -95,34 +111,110 @@ void destroySE2(stationElement2* se);
   */
 void destroySE2V(stationElement2p* se, int n);
 
-
-
+/**
+  * returns true if the parameter stationElement2 instance is single valued
+  * @param se stationElement2 instance to check
+  * @return true if se is single valued, false, otherwise
+  */
 bool isSingleValued(stationElement2* se);
 
+/**
+  * returns true if the parameter stationElement2 instance is multi valued
+  * @param se stationElement2 instance to check
+  * @return true if se is multi valued, false, otherwise
+  */
 bool isMultiValued(stationElement2* se);
 
+/**
+  * puts the indeces of those data elements into f, that is flagged by any of the badFlags
+  * @param se stationElement2 instance
+  * @param badFlags pointer to bad flags
+  * @param n_badFlags number of bad flags
+  * @param f preallocated area for the indeces
+  * @param n_f output parameter - length of f
+  */
 void findFlags(stationElement2* se, int* badFlags, int n_badFlags, int* f, int* n_f);
 
+/**
+  * creates a new stationElement2 instance by selecting the indexed elements of the parameter stationElement2 instance
+  * @param se input stationElement2 parameter
+  * @param f array of indeces
+  * @param n_f length of f
+  * @returns the new stationElement2 instance
+  */
 stationElement2* createSE2Select(stationElement2p se, int* f, int n_f);
 
+/**
+  * compresses the parameter stationElement2 instance
+  * @param se pointer to stationElement2 instance to compress
+  */
 void compressSE2(stationElement2p se);
 
+/**
+  * decompresses the parameter stationElement2 instance
+  * @param se pointer to stationElement2 instance to decompress
+  */
 void decompressSE2(stationElement2p se);
 
+/**
+  * computes the size required to store the parameter stationElement2 object
+  * @param se pointer to a stationElement2 instance
+  * @returns size of memory used to store the object, in bytes
+  */
 unsigned int sizeSE2(stationElement2p se);
 
+/**
+  * computes the size of the compressable content of the parameter stationElement2 object
+  * @param se pointer to a stationElement2 instance
+  * @returns size of memory in bytes, used to store the compressable contents
+  */
 unsigned int sizeOfCompressableSE2(stationElement2p se);
 
+/**
+  * returns the length of the longest data series in the parameter stationElement2 array
+  * @param se array of stationElement2 pointers
+  * @param n length of the array se
+  * @returns size of the longest data series
+  */
 int longestDataSeries(stationElement2p* se, int n);
 
+/**
+  * sorts the content of the parameter stationElement2 instance by date
+  * @param se pointer of the stationElement2 instance to sort
+  */
 void sortSE2DataByDate(stationElement2p se);
 
+/**
+  * computes the month range in the array of stationElement2 instances
+  * @param se array of stationElement2 instances
+  * @param n length of se
+  * @param min_month output parameter - minimum month
+  * @param max_month output parameter - maximum month
+  */
 void monthRange(stationElement2p* se, int n, real* min_month, real* max_month);
 
+/**
+  * checks whether the parameter stationElement2 instance contains monthly data
+  * @param se pointr of the input stationElement2 instance
+  * @returns true if se is monthly, false, otherwise
+  */
 int isMonthly(stationElement2p se);
 
+/**
+  * removes bad flagged data elements from an array of stationElement2 instances
+  * @param se array of stationElement2 pointers
+  * @param n length of se
+  * @param bf array of bad flags
+  * @param n_bf length of array bf
+  */
 void removeBadFlaggedDataV(stationElement2p* se, int n, int* bf, int n_bf);
 
+/**
+  * removes bad flagged data elements from a stationElement2 instance
+  * @param se pointer of stationElement2 instance
+  * @param bf array of bad flags
+  * @param n_bf length of array bf
+  */
 void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf);
 
 #endif

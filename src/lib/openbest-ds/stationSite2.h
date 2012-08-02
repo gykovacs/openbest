@@ -65,6 +65,11 @@ typedef stationSite2* stationSite2p;
   */
 stationSite2* createSS2N();
 
+/**
+  * creates a new instance of stationSite2 object with the copied contents of the parameter
+  * @param ss stationSite2 to copy
+  * @returns pointer of the new stationSite2 instance
+  */
 stationSite2* createSS2NC(stationSite2* ss);
 
 /**
@@ -94,6 +99,12 @@ void destroySS2V(stationSite2p* ss, int n);
   */
 void shrinkSS2V(stationSite2p** ss, int* n);
 
+/**
+  * comparator of stationSite2 instances by ID
+  * @param a pointer of one stationSite2 instance
+  * @param b pointer of the second stationSite2 instance
+  * @returns -1,0,1, regarding a<b, a=b, a>b
+  */
 int sortByIDSS2V(const void* a, const void* b);
 
 #endif

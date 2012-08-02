@@ -288,6 +288,8 @@ int anyB(bool* b, int n)
 
 real stdR(real* a, int n)
 {
+    if ( n == 0 )
+        return 0;
     real e= 0;
     real e2= 0;
     int i;
@@ -303,6 +305,8 @@ real stdR(real* a, int n)
 
 temp_t stdT(temp_t* a, int n)
 {
+    if ( n == 0 )
+        return 0;
     temp_t e= 0;
     temp_t e2= 0;
     int i;

@@ -138,6 +138,10 @@ void berkeleyAverageOptionsConsistency(berkeleyAverageOptions* p);
   */
 void displayBAO(berkeleyAverageOptions* bao);
 
+/**
+  * destroys the parameter berkeleyAverageOptions instance
+  * @param bao berkeleyAverageOptions object to destroy
+  */
 void destroyBAO(berkeleyAverageOptions* bao);
 
 #endif

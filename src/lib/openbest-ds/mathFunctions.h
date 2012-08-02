@@ -192,20 +192,70 @@ void diffR(real* input, int n, real* output);
   */
 real* diffRN(real* input, int n);
 
+/**
+  * returns a newly allocated array of logical values, indicating which flags of array a are present in array b
+  * @param a array A
+  * @param n length of array A
+  * @param b array B
+  * @param m length of array B
+  * @returns a newly allocated logical indicator array of size n
+  */
 flag_t* ismemberFA(flag_t* a, int n, flag_t* b, int m);
 
+/**
+  * checks whether array a is empty
+  * @param a array a
+  * @param n length of array a
+  * @returns logical value
+  */
 int isemptyF(flag_t* a, int n);
 
+/**
+  * checks whether array a is empty
+  * @param a array a
+  * @param n length of array a
+  * @returns logical value
+  */
 int isemptyI(int* a, int n);
 
+/**
+  * returns a logical true if any of the elements of array a is true
+  * @param a input array
+  * @param n length of input array
+  * @returns logical value
+  */
 int anyI(int* a, int n);
 
+/**
+  * returns a logical true if any of the elements of array a is true
+  * @param a input array
+  * @param n length of input array
+  * @returns logical value
+  */
 int anyF(flag_t* f, int n);
 
+/**
+  * returns a logical true if any of the elements of array a is true
+  * @param a input array
+  * @param n length of input array
+  * @returns logical value
+  */
 int anyB(bool* b, int n);
 
+/**
+  * computes and returns the standard deviation of the input array of real values
+  * @param a input array
+  * @param n length of input array
+  * @returns standard deviation
+  */
 real stdR(real* a, int n);
 
+/**
+  * computes and returns the standard deviation of the input array of temp_t values
+  * @param a input array
+  * @param n length of input array
+  * @returns standard deviation
+  */
 temp_t stdT(temp_t* a, int n);
 
 #endif
