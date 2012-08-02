@@ -850,7 +850,7 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
             k= 0;
             for ( j= 0; j < lf; ++j )
                 if ( flags[i*c*lf + j] )
-                    result_st->flags[i][k++]= flags[i*c*ls + j];
+                    result_st->flags[i][k++]= flags[i*c*lf + j];
             //ded();
         }
         //dea();

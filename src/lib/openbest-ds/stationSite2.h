@@ -65,6 +65,8 @@ typedef stationSite2* stationSite2p;
   */
 stationSite2* createSS2N();
 
+stationSite2* createSS2NC(stationSite2* ss);
+
 /**
   * prints the properties of the parameter stationSite2 object to stdout
   * @param ss stationSite2 object to display

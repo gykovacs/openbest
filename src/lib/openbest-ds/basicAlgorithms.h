@@ -3,14 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "openbest-ds/config-ds.h"
 
-#include <stdio.h>
-#include <stdlib.h> 
-
 real* outer_array;
 temp_t* outer_arrayT;
+int* outer_arrayI;
 
 /**
   * swaps two real variables
@@ -47,6 +46,8 @@ int compareORIA(const void* x, const void* y);
 
 int compareOTIA(const void* x, const void* y);
 
+int compareOIIA(const void* x, const void* y);
+
 /**
   * quick sorts an array of integer elemenets
   * @param t array to sort
@@ -57,6 +58,8 @@ void qsortIA(int* t, int n);
 void qsortORIA(int* t, int n);
 
 void qsortOTIA(int* t, int n);
+
+void qsortOIIA(int* t, int n);
 
 /**
   * compares two flag_t variables
@@ -120,6 +123,8 @@ void uniqueRA(real** t, int* n);
   */
 void uniqueRAN(real* input, int n, real** t, int* m);
 
+void uniqueIAN2(int* input, int n, int** collapsed, int* n_collapsed, int** expand_map, int* n_expand_map);
+
 real modeRMA(real* input, int n);
 
 int modeRFA(real* input, int n);
@@ -127,5 +132,11 @@ int modeRFA(real* input, int n);
 void findEqualsIA(int* input, int n, int v, int* f, int* n_f);
 
 void findNSmallerRA(real* input, int n, int N, real* output);
+
+void maxIA2(int* t, int n_t, int* m, int* fk, int* n_fk);
+
+void minRA2(real* t, int n_t, real* m, int* fk, int* n_fk);
+
+void setdiffIA(int* a, int n_a, int* b, int n_b, int* c, int* n_c);
 
 #endif

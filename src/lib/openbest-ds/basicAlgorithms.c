@@ -55,9 +55,13 @@ int compareORIA(const void* x, const void* y)
 
 int compareOTIA(const void* x, const void* y)
 {
-    return outer_arrayT[*(int*)x] > outer_array[*(int*)y];
+    return outer_arrayT[*(int*)x] > outer_arrayT[*(int*)y];
 }
 
+int compareOIIA(const void* x, const void* y)
+{
+    return outer_arrayI[*(int*)x] > outer_arrayI[*(int*)y];
+}
 
 void qsortIA(int* t, int n)
 {
@@ -72,6 +76,11 @@ void qsortORIA(int* t, int n)
 void qsortOTIA(int* t, int n)
 {
     qsort(t, n, sizeof(int), compareOTIA);
+}
+
+void qsortOIIA(int* t, int n)
+{
+    qsort(t, n, sizeof(int), compareOIIA);
 }
 
 int compareFA(const void *x, const void *y)
@@ -295,4 +304,84 @@ void findEqualsIA(int* input, int n, int v, int* f, int* n_f)
 void findNSmallerRA(real* input, int n, int N, real* output)
 {
     qsortRA(input, n);
+}
+
+void uniqueIAN2(int* input, int n, int** collapsed, int* n_collapsed, int** expand_map, int* n_expand_map)
+{
+    int k;
+    *collapsed= (int*)malloc(sizeof(int)*n);
+    *expand_map= (int*)malloc(sizeof(int)*n);
+    int* t= (int*)malloc(sizeof(int)*n);
+    memcpy(t, input, sizeof(int)*n);
+
+    qsortIA(t, n);
+    int i, j, d;
+    d= 1;
+    j= 1;
+    (*collapsed)[0]= t[0];
+    for ( i= 1; i < n; ++i )
+        if ( t[i-1] != t[i] )
+        {
+            ++d;
+            (*collapsed)[j++]= t[i];
+        }
+    *collapsed= (int*)realloc(*collapsed, sizeof(int)*d);
+    *n_collapsed= d;
+
+    for ( i= 0; i < d; ++i )
+        for ( j= 0; j < n; ++j )
+            if ( (*collapsed)[i] == input[j] )
+            {
+                (*collapsed)[i]= j;
+                break;
+            }
+    for ( i= 0; i < n; ++i )
+        for ( j= 0; j < d; ++j )
+            if ( input[i] == input[(*collapsed)[j]] )
+                (*expand_map)[i]= j;
+    *n_expand_map= n;
+}
+
+void maxIA2(int* t, int n_t, int* m, int* fk, int* n_fk)
+{
+    int m1= t[0];
+    int i;
+    for ( i= 0; i < n_t; ++i )
+        if ( t[i] > m1 )
+            m1= t[i];
+    *n_fk= 0;
+    *m= m1;
+    for ( i= 0; i < n_t; ++i )
+        if ( t[i] == m1 )
+            fk[(*n_fk)++]= i;
+}
+
+void minRA2(real* t, int n_t, real* m, int* fk, int* n_fk)
+{
+    real m1= t[0];
+    int i;
+    for ( i= 0; i < n_t; ++i )
+        if ( t[i] < m1 )
+            m1= t[i];
+    *n_fk= 0;
+    *m= m1;
+    for ( i= 0; i < n_t; ++i )
+        if ( t[i] == m1 )
+            fk[(*n_fk)++]= i;
+}
+
+void setdiffIA(int* a, int n_a, int* b, int n_b, int* c, int* n_c)
+{
+    *n_c= 0;
+    int i, j;
+    for ( i= 0; i < n_a; ++i )
+    {
+        for ( j= 0; j < n_b; ++j )
+            if ( a[i] == b[j] )
+                break;
+        if ( j == n_b )
+        {
+            c[(*n_c)++]= a[i];
+        }
+    }
 }

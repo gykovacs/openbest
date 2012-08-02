@@ -265,6 +265,46 @@ int compressSE2Test(int argc, char** argv)
     return 0;
 }
 
+int uniqueFullTest(int argc, char** argv)
+{
+    int* t= (int*)malloc(sizeof(int)*10);
+    int n= 10;
+    int i;
+
+    t[0]= 2;
+    t[1]= 1;
+    t[2]= 1;
+    t[3]= 3;
+    t[4]= 2;
+    t[5]= 4;
+    t[6]= 8;
+    t[7]= 0;
+    t[8]= 1;
+    t[9]= 5;
+
+    int* collapsed;
+    int n_collapsed;
+    int* expand_map;
+    int n_expand_map;
+
+    uniqueIAN2(t, n, &collapsed, &n_collapsed, &expand_map, &n_expand_map);
+
+    printf("original:\n");
+    for ( i= 0; i < n; ++i )
+        printf("%d ", t[i]);
+    printf("\n");
+    printf("collapsed:\n");
+    for ( i= 0; i < n_collapsed; ++i )
+        printf("%d ", t[collapsed[i]]);
+    printf("\n");
+    printf("expanded:\n");
+    for ( i= 0; i < n_expand_map; ++i )
+        printf("%d ", t[collapsed[expand_map[i]]]);
+    printf("\n");
+
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -287,6 +327,7 @@ int main(int argc, char** argv)
     bool qsortra= false;
     bool compress= false;
     bool compressSE2b= false;
+    bool uniqueFull= false;
     int err;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
@@ -301,6 +342,7 @@ int main(int argc, char** argv)
     addOption(ot, "--qsortra", OPTION_BOOL, (char*)&qsortra, 0, "qsortra function test");
     addOption(ot, "--compress", OPTION_BOOL, (char*)&compress, 0, "compression/decompression test");
     addOption(ot, "--compressSE2", OPTION_BOOL, (char*)&compressSE2b, 0, "compress/decompress StationElement2");
+    addOption(ot, "--uniqueFull", OPTION_BOOL, (char*)&uniqueFull, 0, "unique full functionalities test");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -332,6 +374,8 @@ int main(int argc, char** argv)
       err= compressTest(argc, argv);
     else if ( compressSE2b )
       err= compressSE2Test(argc, argv);
+    else if ( uniqueFull )
+      err= uniqueFullTest(argc, argv);
 
     destroyOptionTable(ot);
     

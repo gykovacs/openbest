@@ -11,7 +11,7 @@ berkeleyAverageOptions* createBAON()
     berkeleyAverageOptions* p= (berkeleyAverageOptions*)malloc(sizeof(berkeleyAverageOptions));
     p->localMode= true;
     p->gridSize= 16000;
-    p->gridApproximationDistance= 60;
+    p->gridApproximationDistance= 4000;
     p->useLandMask= true;
     p->minMonths= 6;
     p->minStations= 5;

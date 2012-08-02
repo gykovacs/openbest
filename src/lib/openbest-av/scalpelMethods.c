@@ -113,9 +113,11 @@ void splitStationBreaks(stationElement2p** seIO, int* n_stationElement2IO, stati
             }
             for ( j= cnt_start; j < cnt; ++j )
             {
-                ss2[j]= ss[k];
+                //ss2[j]= ss[k];
+                ss2[j]= createSS2NC(ss[k]);
                 back_map[j]= k;
             }
+            destroySS2(ss[k]);
             destroySE2(se[k]);
             se[k]= NULL;
         }
@@ -238,9 +240,11 @@ void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, statio
             se[k]= NULL;
             for ( j= cnt_start; j < cnt; ++j )
             {
-                ss2[j]= ss[k];
+                //ss2[j]= ss[k];
+                ss2[j]= createSS2NC(ss[k]);
                 back_map[j]= k;
             }
+            destroySS2(ss[k]);
         }
         else
         {
@@ -403,9 +407,11 @@ void splitStationTOBChanges(stationElement2p** seIO, int* n_stationElement2IO, s
             }
             for ( i= cnt_start; i < cnt-1; ++i )
             {
-                ss2[i]= ss[k];
+                //ss2[i]= ss[k];
+                ss2[i]= createSS2NC(ss[k]);
                 back_map[i]= k;
             }
+            destroySS2(ss[k]);
         }
         free(un);
     }

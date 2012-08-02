@@ -32,6 +32,8 @@ typedef struct
   real z;
 } geoPoint2;
 
+typedef geoPoint2* geoPoint2p;
+
 /**
  * creates a geoPoint2 instance and returns its pointer
  * @returns pointer of the new instance

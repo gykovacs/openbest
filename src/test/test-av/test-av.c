@@ -7,6 +7,7 @@
 #include "openbest-av/scalpelMethods.h"
 #include "openbest-av/berkeleyAverage.h"
 #include "openbest-av/berkeleyAverageOptions.h"
+#include "openbest-ds/printOut.h"
 
 int boptionsTest(int argc, char** argv)
 {

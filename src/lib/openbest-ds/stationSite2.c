@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "openbest-ds/stationSite2.h"
 #include "openbest-ds/primaryKeyTables.h"
@@ -57,6 +58,40 @@ stationSite2* createSS2N()
     tmp->n_flags= 0;
     tmp->n_sources= 0;
     tmp->n_relocations= 0;
+
+    return tmp;
+}
+
+stationSite2* createSS2NC(stationSite2* ss)
+{
+    stationSite2* tmp= createSS2N();
+    tmp->id= ss->id;
+    tmp->country= ss->country;
+    strcpy(tmp->state, ss->state);
+    strcpy(tmp->county, ss->county);
+    tmp->location= createGeoPoint2C(ss->location);
+    tmp->all_locations= ss->all_locations;
+    tmp->all_location_times= ss->all_location_times;
+    tmp->timezone= ss->timezone;
+    strcpy(tmp->primary_name, ss->primary_name);
+    tmp->alt_names= ss->alt_names;
+    tmp->relocated= ss->relocated;
+    tmp->possible_relocated= ss->possible_relocated;
+    tmp->instrument_changes= ss->instrument_changes;
+    tmp->primary_manifests= ss->primary_manifests;
+    tmp->secondary_manifests= ss->secondary_manifests;
+    tmp->n_flags= ss->n_flags;
+    tmp->flags= inalloc(tmp->n_flags);
+    memcpy(tmp->flags, ss->flags, sizeof(int)*(tmp->n_flags));
+    tmp->n_sources= ss->n_sources;
+    tmp->sources= inalloc(tmp->n_sources);
+    memcpy(tmp->sources, ss->sources, sizeof(int)*(tmp->n_sources));
+    tmp->archive_keys= ss->archive_keys;
+    tmp->n_relocations= ss->n_relocations;
+    tmp->relocations= rnalloc(tmp->n_relocations);
+    memcpy(tmp->relocations, ss->relocations, sizeof(real)*(tmp->n_relocations));
+    tmp->relocation_types= fnalloc(tmp->n_relocations);
+    memcpy(tmp->relocation_types, ss->relocation_types, sizeof(flag_t)*(tmp->n_relocations));
 
     return tmp;
 }

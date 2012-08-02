@@ -12,7 +12,7 @@ typedef struct
     /// Basic Mapping Options
     bool localMode;
     int gridSize;
-    int gridApproximationDistance;
+    real gridApproximationDistance;
     bool useLandMask;
 
     /// Minimum Data Size Requirements
