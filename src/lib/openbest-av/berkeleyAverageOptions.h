@@ -20,7 +20,8 @@ typedef struct
     int minStations;
 
     /// Correlation Function Parametrization
-    real correlationParameters;
+    real* correlationParameters;
+    int n_correlationParameters;
     real correlationLimitDistance;
 
     /// Bad Flags

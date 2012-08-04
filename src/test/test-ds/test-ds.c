@@ -17,6 +17,8 @@
 
 #include "openbest-ds/optionTable.h"
 
+#include <gsl/gsl_linalg.h>
+
 int helloTest(int argc, char** argv)
 {
   helloOpenBEST();
@@ -305,6 +307,47 @@ int uniqueFullTest(int argc, char** argv)
     return 0;
 }
 
+int roundTest(int argc, char** argv)
+{
+    int x= round(0.1);
+    printf("%d\n", x);
+    x= round(1.9);
+    printf("%d\n", x);
+    x= round(-0.1);
+    printf("%d\n", x);
+    x= round(-1.89);
+    printf("%d\n", x);
+
+    return 0;
+}
+
+int linearEquationTest(int argc, char** argv)
+{
+    double a_data[]= {  0.18, 0.60, 0.57, 0.96,
+			0.41, 0.24, 0.99, 0.58,
+			0.14, 0.30, 0.97, 0.66,
+			0.51, 0.13, 0.19, 0.85 };
+    double b_data[]= { 1.0, 2.0, 3.0, 4.0 };
+    gsl_matrix_view m= gsl_matrix_view_array(a_data, 4, 4);
+    gsl_vector_view b= gsl_vector_view_array(b_data, 4);
+    gsl_vector* x= gsl_vector_alloc(4);
+    
+    int s;
+    
+    gsl_permutation* p= gsl_permutation_alloc(4);
+    
+    gsl_linalg_LU_decomp(&m.matrix, p, &s);
+    gsl_linalg_LU_solve(&m.matrix, p, &b.vector, x);
+    
+    printf("x= \n");
+    gsl_vector_fprintf(stdout, x, "%g");
+    
+    gsl_permutation_free(p);
+    gsl_vector_free(x);
+    
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -328,6 +371,8 @@ int main(int argc, char** argv)
     bool compress= false;
     bool compressSE2b= false;
     bool uniqueFull= false;
+    bool roundM= false;
+    bool lineq= false;
     int err;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
@@ -343,6 +388,8 @@ int main(int argc, char** argv)
     addOption(ot, "--compress", OPTION_BOOL, (char*)&compress, 0, "compression/decompression test");
     addOption(ot, "--compressSE2", OPTION_BOOL, (char*)&compressSE2b, 0, "compress/decompress StationElement2");
     addOption(ot, "--uniqueFull", OPTION_BOOL, (char*)&uniqueFull, 0, "unique full functionalities test");
+    addOption(ot, "--round", OPTION_BOOL, (char*)&roundM, 0, "round test");
+    addOption(ot, "--lineq", OPTION_BOOL, (char*)&lineq, 0, "linear equation system");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -376,6 +423,10 @@ int main(int argc, char** argv)
       err= compressSE2Test(argc, argv);
     else if ( uniqueFull )
       err= uniqueFullTest(argc, argv);
+    else if ( roundM )
+      err= roundTest(argc, argv);
+    else if ( lineq )
+      err= linearEquationTest(argc, argv);
 
     destroyOptionTable(ot);
     

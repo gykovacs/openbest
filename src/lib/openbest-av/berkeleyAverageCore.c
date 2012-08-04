@@ -9,6 +9,10 @@
 #include "openbest-ds/basicAlgorithms.h"
 #include "openbest-ds/memFunctions.h"
 #include "openbest-ds/mathFunctions.h"
+#include "openbest-av/idealGrid.h"
+#include "openbest-av/buildCovarianceTable.h"
+#include "openbest-av/buildTargetTable.h"
+#include "openbest-ds/geoPoint2.h"
 
 void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** ssIO, int* n_ssIO, berkeleyAverageOptions* options)
 {
@@ -344,6 +348,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     for ( i= 0; i < n_collapsed; ++i )
         locations_short[i]= locations[collapsed[i]];
     int num_sites= n_collapsed;
+    int n_locations_short= n_collapsed;
 
     free(locHashes);
 
@@ -446,5 +451,107 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     int* collapse_indices;
     int n_collapse_indices;
 
-    collapseLocations(locations_short, num_sites, options->gridApproximationDistance, &locations_collapsed, &n_locations_collapsed, &collapse_indices, &n_collapse_indices);
+    collapseLocations(locations_short, n_locations_short, options->gridApproximationDistance, &locations_collapsed, &n_locations_collapsed, &collapse_indices, &n_collapse_indices);
+
+    locations_short= locations_collapsed;
+    n_locations_short= n_locations_collapsed;
+    for ( i= 0; i < n_expand_map; ++i )
+        expand_map[i]= collapse_indices[expand_map[i]];
+
+    real* lat2;
+    int n_lat2;
+    real* long2;
+    int n_long2;
+    idealGrid(options->gridSize, &lat2, &n_lat2, &long2, &n_long2);
+    geoPoint2** map_pts= (geoPoint2**)malloc(sizeof(geoPoint2*)*n_lat2);
+    int n_map_pts= n_lat2;
+    for ( i= 0; i < n_lat2; ++i )
+        map_pts[i]= createGeoPoint22(lat2[i], long2[i]);
+    /*for ( i= 0; i < n_lat2; ++i )
+    {
+        printf("%f %f %f %f %f\n", map_pts[i]->latitude, map_pts[i]->longitude, map_pts[i]->x, map_pts[i]->y, map_pts[i]->z);
+        getchar();
+    }*/
+
+    free(lat2);
+    free(long2);
+
+    real* areal_weight= NULL;
+    real* map_elev= NULL;
+    if ( options->useLandMask || options->fullBaselineMapping )
+    {
+        if ( options->gridSize == 16000 )
+        {
+            //TODO: load mask16000.mat
+        }
+        else
+        {
+            //TODO: makeLandMask function
+        }
+        //transpose and convert areal_weight and map_elev
+        if ( !options->useLandMask )
+        {
+            //TODO: initialize areal_weight with ones
+        }
+    }
+    else
+    {
+        areal_weight= rnalloc(n_map_pts);
+        set(areal_weight, n_map_pts, 1);
+    }
+
+    // If using the full climatology model, we need to assign an elevation to
+    // each station
+
+    real* site_elev= NULL;
+    real* site_lat= NULL;
+    real* map_lat= NULL;
+    if ( options->fullBaselineMapping )
+    {
+        site_elev= rnalloc(n_locations);
+        site_lat= rnalloc(n_locations);
+        map_lat= rnalloc(n_map_pts);
+
+        for ( i= 0; i < n_locations; ++i )
+        {
+            site_elev[i]= assignElevation(locations[i]);
+            site_lat[i]= locations[i]->latitude;
+            map_lat[i]= map_pts[i]->latitude;
+        }
+    }
+
+    tprintf("Averaging: %d records used from %d sites\n", n_n_data_array, num_sites);
+    tprintf("%d sites used for network approximation\n", n_locations_short);
+
+    float* correlation_table;
+    int n_correlation_table;
+    float nugget;
+    buildCovarianceTable(locations_short, n_locations_short, options, &correlation_table, &n_correlation_table, &nugget);
+
+    /*for ( i= 0; i < n_correlation_table; ++i )
+    {
+        for ( j= 0; j < n_correlation_table; ++j )
+        {
+            printf("%f ", correlation_table[i*n_correlation_table + j]);
+        }
+        printf("\n");
+    }*/
+
+    // Build spatial target function
+    float* target_map;
+    int* near_index;
+    int n_target_map;
+    int n_near_index;
+    buildTargetTable(locations_short, n_locations_short, map_pts, n_map_pts, options, &target_map, &n_target_map, &near_index, &n_near_index);
+    // target_map - size: n_target_map x n_near_index
+
+    /*printf("%d %d\n", n_target_map, n_near_index);
+    for ( i= 0; i < n_target_map; ++i )
+    {
+        for ( j= 0; j < n_near_index; ++j )
+            printf("%f ", target_map[i*n_near_index + i]);
+        printf("\n");
+    }*/
+
+    tprintf("End of Berkeley Average Core\n");
 }

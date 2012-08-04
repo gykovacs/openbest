@@ -8,7 +8,7 @@
 
 /**
   * In order to improve computational performance, we treat station sites
-  * that ar closely located in space as if they occur at the same location
+  * that are closely located in space as if they occur at the same location
   * for the purpose of computing the initial Kriging coefficients. This
   * function performs the "collapse" that replaces closely colocated
   * stations location information with an effective value in-between. The

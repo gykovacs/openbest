@@ -319,3 +319,24 @@ temp_t stdT(temp_t* a, int n)
     e2/= n;
     return sqrt(e2 - e*e);
 }
+
+real sign(real x)
+{
+    if ( x < 0.0 )
+        return -1.0;
+    return 1.0;
+}
+
+/*int round(real x )
+{
+    return ((x - floor(x)) >= 0.5) ? ceil (x) : floor(x);
+}*/
+
+real polyval(real* p, int n_p, real x)
+{
+    int i;
+    real res= 0;
+    for ( i= 0; i < n_p; ++i )
+        res+= p[i]*pow(x, n_p - i - 1);
+    return res;
+}

@@ -4,7 +4,7 @@
 
 #include "openbest-av/berkeleyAverageOptions.h"
 #include "openbest-ds/primaryKeyTables.h"
-
+#include "openbest-io/loadOptions.h"
 
 berkeleyAverageOptions* createBAON()
 {
@@ -15,8 +15,10 @@ berkeleyAverageOptions* createBAON()
     p->useLandMask= true;
     p->minMonths= 6;
     p->minStations= 5;
-    p->correlationParameters= 0;
-    p->correlationLimitDistance= 0;
+
+    load_r_p(&(p->correlationParameters), &(p->n_correlationParameters));
+    p->correlationLimitDistance= load_max_d();
+
     p->badFlags= iBadFlags;
     p->n_badFlags= n_badFlags;
     p->useSiteWeighting= true;
@@ -333,17 +335,20 @@ void displayBAO(berkeleyAverageOptions* b)
     tprintf("BASIC MAPPING OPTIONS\n");
     tprintf("localMode: %d\n", b->localMode);
     tprintf("gridSize: %d\n", b->gridSize);
-    tprintf("girdApproximationDistance: %d\n", b->gridApproximationDistance);
+    tprintf("girdApproximationDistance: %f\n", b->gridApproximationDistance);
     tprintf("useLandMask: %d\n", b->useLandMask);
     tprintf("MINIMUM DATA SIZE REQUIREMENTS\n");
     tprintf("minMonths: %d\n", b->minMonths);
     tprintf("minStations: %d\n", b->minStations);
     tprintf("CORRELATION FUNCTION PARAMTERIZATION\n");
-    tprintf("correlationParameters: %f\n", b->correlationParameters);
+    tprintf("correlationParameters: %d - \n", b->n_correlationParameters);
+    int i;
+    for ( i= 0; i < b->n_correlationParameters; ++i )
+        printf("%g ", b->correlationParameters[i]);
+    printf("\n");
     tprintf("correlationLimitDistance: %f\n", b->correlationLimitDistance);
     tprintf("BAD FLAGS:\n");
     tprintf("badFlags: %d - ", b->n_badFlags);
-    int i;
     for ( i= 0; i < b->n_badFlags; ++i )
         printf("%d ", b->badFlags[i]);
     printf("\n");
@@ -428,5 +433,6 @@ void displayBAO(berkeleyAverageOptions* b)
 
 void destroyBAO(berkeleyAverageOptions* bao)
 {
+    free(bao->correlationParameters);
     free(bao);
 }

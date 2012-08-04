@@ -28,6 +28,7 @@ geoPoint2* createGeoPoint22(real latitude, real longitude)
   geoPoint2* p= createGeoPoint2N();
   p->latitude= latitude;
   p->longitude= longitude;
+  p->elevation= 0;
   
   computeXYZ_GP2(p);
   
@@ -56,6 +57,9 @@ geoPoint2* createGeoPoint26(real latitude, real longitude, real elevation, real 
 
 void computeXYZ_GP2(geoPoint2* pt)
 {
+
+  if ( pt->elevation < 0 )
+      pt->elevation= 0;
   real R= pt->elevation;
   if ( pt->elevation != FLT_MAX )
   {
@@ -68,6 +72,7 @@ void computeXYZ_GP2(geoPoint2* pt)
   pt->x= R * sin(theta) * cos(phi);
   pt->y= R * sin(theta) * sin(phi);
   pt->z= R * cos(theta);
+  //displayGP2(pt);
 }
 
 void displayGP2(geoPoint2* pt)

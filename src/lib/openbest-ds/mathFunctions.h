@@ -258,4 +258,10 @@ real stdR(real* a, int n);
   */
 temp_t stdT(temp_t* a, int n);
 
+real sign(real x);
+
+real polyval(real* p, int n_p, real x);
+
+//int round(real x );
+
 #endif
