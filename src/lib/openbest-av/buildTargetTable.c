@@ -2,7 +2,7 @@
 #include "openbest-ds/mathFunctions.h"
 #include "openbest-ds/memFunctions.h"
 
-void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, int n_map, berkeleyAverageOptions* options, float** target_map, int* n_target_map, int** nearest, int* n_nearest)
+void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, int n_map, berkeleyAverageOptions* options, float** target_map, int* n_target_map1, int* n_target_map2, int** nearest, int* n_nearest)
 {
     tprintf("Begin Build Target Map\n");
 
@@ -34,6 +34,9 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
         Y[i]= map[i]->y;
         Z[i]= map[i]->z;
     }
+    /*for ( i= 0; i < n_map; ++i )
+        printf("%f,%f,%f ", X[i], Y[i], Z[i]);
+    getchar();*/
     int n_X, n_Y, n_Z;
     n_X= n_Y= n_Z= n_map;
 
@@ -50,6 +53,10 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
         R[i*3 + 1]= targ_y[i];
         R[i*3 + 2]= targ_z[i];
     }
+
+    /*for ( i= 0; i < n_targx; ++i )
+        printf("%f,%f,%f ", R[i*3 + 0], R[i*3 + 1], R[i*3 + 2]);
+    getchar();*/
 
     int lenR= n_targx;
 
@@ -69,6 +76,7 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
             tmp3*= tmp3;
             dd= sqrt(tmp1 + tmp2 + tmp3);
             //printf("%f ", X[j]);
+
             if ( dd <= maxd )
                 (*target_map)[j*lenR + i]= exp(polyval(p, n_p, dd));
             else
@@ -78,7 +86,9 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
 
     *nearest= inalloc(lenR);
     for ( i= 0; i < lenR; ++i )
-        (*nearest)[i]= (*target_map)[i];
+        (*nearest)[i]= 0;
+
+
     for ( i= 0; i < lenR; ++i )
         for ( j= 0; j < n_X; ++j )
         {
@@ -86,7 +96,8 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
                 (*nearest)[i]= j;
         }
 
-    *n_target_map= n_X;
+    *n_target_map1= n_X;
+    *n_target_map2= lenR;
     *n_nearest= lenR;
 
     tprintf("End of Build Target Map\n");

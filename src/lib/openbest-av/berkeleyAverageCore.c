@@ -13,6 +13,7 @@
 #include "openbest-av/buildCovarianceTable.h"
 #include "openbest-av/buildTargetTable.h"
 #include "openbest-ds/geoPoint2.h"
+#include "openbest-av/buildBaselineTable.h"
 
 void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** ssIO, int* n_ssIO, berkeleyAverageOptions* options)
 {
@@ -55,6 +56,10 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
 
     // TODO: options->useSeed
 
+    for ( i= 0; i < n_se; ++i )
+        printf("%d ", se[i]->n_dates);
+    printf("\n");
+
     tprintf("Beginning Berkeley Average Core Process\n");
 
     // Convert locations to geoPoint format
@@ -91,10 +96,20 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
         if ( !isValidGP2(locations[i]))
             orig_map[i]= false;
 
+    int sum_orig_map= 0;
+    for ( i= 0; i < n_orig_map; ++i )
+        sum_orig_map+= orig_map[i];
+    tprintf("sum orig_map isvalidgp2: %d\n", sum_orig_map);
+
     // Temporary Fix: removing ultra-high variability created by bad sasonality procedure on sparse data. This will be removed in the future versions when the seasonality procedure is fixed.
     for ( i= 0; i < n_se; ++i )
         if ( stdT(se[i]->data, se[i]->n_data) > 7 )
             orig_map[i]= false;
+
+    sum_orig_map= 0;
+        for ( i= 0; i < n_orig_map; ++i )
+            sum_orig_map+= orig_map[i];
+        tprintf("sum orig_map > 7: %d\n", sum_orig_map);
 
     /*printf("ORIG_MAP: ");
     for ( i= 0; i < n_se; ++i )
@@ -114,6 +129,12 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
                 occurance_table[i*n_time_values + (int)monthnum]= true;
             }
         }
+
+    int sum_occ_table= 0;
+    for ( i= 0; i < n_se * n_time_values; ++i )
+        sum_occ_table+= occurance_table[i];
+    tprintf("sum occ table: %d\n", sum_occ_table);
+    getchar();
 
     /*int tmp;
     for ( i= 0; i < n_se; ++i )
@@ -208,7 +229,9 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
             }
             if ( n_select != se[i]->n_dates )
             {
+                //printf("%d\n", n_select);
                 stationElement2p seTmp= createSE2Select(se[i], select, n_select);
+                //printf("%d %d\n", se[i]->n_dates, seTmp->n_dates);
                 destroySE2(se[i]);
                 se[i]= seTmp;
                 change[i]= true;
@@ -224,6 +247,17 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
             for ( j= 0; j < n_not_fittable; ++j )
                 occurance_table[i*n_time_values + not_fittable[j]]= false;
     }
+
+    sum_orig_map= 0;
+        for ( i= 0; i < n_orig_map; ++i )
+            sum_orig_map+= orig_map[i];
+        tprintf("sum orig_map changed: %d\n", sum_orig_map);
+
+    sum_occ_table=0;
+    for ( i= 0; i < n_se * n_time_values; ++i )
+        sum_occ_table+= occurance_table[i];
+    tprintf("sum occ table: %d\n", sum_occ_table);
+    getchar();
 
     free(change);
     free(select);
@@ -251,6 +285,8 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
                 max_month= MM[i];
         }
     }
+
+
 
     free(not_fittable);
     free(MM);
@@ -360,8 +396,11 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
         if ( orig_map[i] == true )
             n_se2++;
 
+    printf("%d\n", n_orig_map);
+    printf("sum orig_map: %d\n", n_se2);
+
     occurance_table2= bnalloc(n_time_values*n_se2);
-    for ( i= 0; i < n_se2; ++i )
+    for ( i= 0; i < n_orig_map; ++i )
     {
         j= 0;
         if ( orig_map[i] == true )
@@ -380,6 +419,12 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
 
     se= se2;
     n_se= n_se2;
+
+    sum_occ_table=0;
+    for ( i= 0; i < n_se * n_time_values; ++i )
+        sum_occ_table+= occurance_table[i];
+    tprintf("sum occ table: %d\n", sum_occ_table);
+    getchar();
 
     tprintf("Elmination of station locations finished\n");
     tprintf("occurance_table: %d x %d; se: %d; locations: %d; locations_short: %d\n", n_time_values, n_se, n_se, n_locations, num_sites);
@@ -535,23 +580,87 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
             printf("%f ", correlation_table[i*n_correlation_table + j]);
         }
         printf("\n");
-    }*/
+    }
+    getchar();*/
 
     // Build spatial target function
     float* target_map;
     int* near_index;
-    int n_target_map;
+    int n_target_map1, n_target_map2;
     int n_near_index;
-    buildTargetTable(locations_short, n_locations_short, map_pts, n_map_pts, options, &target_map, &n_target_map, &near_index, &n_near_index);
+    buildTargetTable(locations_short, n_locations_short, map_pts, n_map_pts, options, &target_map, &n_target_map1, &n_target_map2, &near_index, &n_near_index);
+    tprintf("buildTargetTable finished: n_target_map1,2 %d %d, n_near_index: %d\n", n_target_map1, n_target_map2, n_near_index);
     // target_map - size: n_target_map x n_near_index
 
-    /*printf("%d %d\n", n_target_map, n_near_index);
-    for ( i= 0; i < n_target_map; ++i )
+    printf("%d %d %d\n", n_target_map1, n_target_map2, n_near_index);
+    /*for ( i= 0; i < n_target_map1; ++i )
     {
-        for ( j= 0; j < n_near_index; ++j )
-            printf("%f ", target_map[i*n_near_index + i]);
+        for ( j= 0; j < n_target_map2; ++j )
+            printf("%f ", target_map[i*n_target_map2 + j]);
         printf("\n");
-    }*/
+    }
+    getchar();*/
+
+    int* near_index_new= inalloc(n_expand_map);
+    for ( i= 0; i < n_expand_map; ++i )
+        near_index_new[i]= near_index[expand_map[i]];
+    free(near_index);
+    near_index= near_index_new;
+    n_near_index= n_expand_map;
+
+    tprintf("free-ing locations_short, locations_collapsed\n");
+    free(locations_short);
+    //free(locations_collapsed);
+    tprintf("free finished\n");
+
+    // Variable for storing spatial weights
+    // spatial_map - I did not find any use of this structure in the rest of the code, so I ignore it's reimplementation
+
+    int* num_months= inalloc(n_se2);
+    seti(num_months, n_se2, 0);
+    for ( i= 0; i < n_se2; ++i )
+        for ( j= 0; j < n_time_values; ++j )
+            num_months[i]+= occurance_table[i*n_time_values + j];
+    int n_num_months= n_se2;
+
+    int* total_cnts= inalloc(n_correlation_table);
+    seti(total_cnts, n_correlation_table, 0);
+    int n_total_cnts= n_correlation_table;
+    for ( k= 0; k < n_expand_map; ++k )
+        total_cnts[expand_map[k]]= total_cnts[expand_map[k]] + num_months[k];
+
+    tprintf("Determine baseline mixing weights\n");
+    // Determine baseline mixing weights
+
+    real* baseline_weights;
+    int n_baseline_weights;
+    double completeness;
+    double global_completeness;
+    real* cov_map;
+    int n_cov_map;
+    double* base_map;
+    int n_base_map1;
+    int n_base_map2;
+    if ( options->fullBaselineMapping )
+    {
+        // TODO
+    }
+    else
+    {
+        buildBaselineTable(correlation_table, n_correlation_table,
+                           target_map, n_target_map1, n_target_map2,
+                           occurance_table, n_se2, n_time_values,
+                           expand_map, n_expand_map, nugget,
+                           areal_weight, n_map_pts, options,
+                           NULL, 0, NULL, 0, NULL, 0, NULL, 0,
+
+                           &baseline_weights, &n_baseline_weights,
+                           &completeness, &global_completeness,
+                           &cov_map, &n_cov_map,
+                           &base_map, &n_base_map1, &n_base_map2,
+                           NULL, NULL);
+    }
+
 
     tprintf("End of Berkeley Average Core\n");
 }

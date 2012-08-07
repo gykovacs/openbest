@@ -86,6 +86,94 @@ int eqsolveTest(int argc, char** argv)
     return 0;
 }
 
+int eqsolve2Test(int argc, char** argv)
+{
+    double a_data[] = { 0.0, 0.60, 0.57, 0.96,
+                               0.0, 0.24, 0.99, 0.58,
+                               0.0, 0.30, 0.97, 0.66,
+                               0.0, 0.13, 0.19, 0.85};
+
+    double b_data[] = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+
+    double x[4];
+
+    solveLinEq(a_data, 4, 4, b_data, x);
+
+    int i;
+    for ( i= 0; i < 4; ++i )
+        printf("%f ", x[i]);
+
+    return 0;
+}
+
+int eqsolve3Test(int argc, char** argv)
+{
+    const int n= 251;
+    double a_data[n*n];
+    double a2_data[n*n];
+    double a3_data[n*n];
+
+    double b_data[n];
+    double b2_data[n];
+
+    int i;
+    for ( i= 0; i < n*n; ++i )
+    {
+        a_data[i]= (double)(rand()%10000)/(double)(rand()%20000);
+        if ( a_data[i] > 1 )
+            a_data[i]= 1.0/a_data[i];
+        if ( a_data[i] < 0.0001)
+            a_data[i]= 0;
+        a3_data[i]= a2_data[i]= a_data[i];
+    }
+    for ( i= 0; i < n; ++i )
+        b2_data[i]= b_data[i]= (double)(rand()%10000)/(double)(rand()%20000);
+
+    /*a_data[0]= 1;
+    a_data[1]= 2;
+    a_data[2]= 3;
+    a_data[3]= 4;*/
+
+    double x[n];
+    double x2[n];
+
+    solveLinEq(a_data, n, n, b_data, x);
+
+    for ( i= 0; i < n; ++i )
+        printf("%f ", x[i]);
+
+    printf("\n");
+    solveLinEqSquare2(a2_data, n, n, b2_data, n, 1);
+
+    for ( i= 0; i < n; ++i )
+        printf("%f ", b2_data[i]);
+
+    printf("\n\n");
+    int j;
+    for ( i= 0; i < n; ++i )
+    {
+        double tmp= 0;
+        for ( j= 0; j < n; ++j )
+        {
+            tmp+= b2_data[j]*a3_data[i*n + j];
+        }
+        printf("%f - %f\n", tmp, b_data[i]);
+    }
+
+    printf("\n\n");
+    for ( i= 0; i < n; ++i )
+    {
+        double tmp= 0;
+        for ( j= 0; j < n; ++j )
+        {
+            tmp+= x[j]*a3_data[i*n + j];
+        }
+        printf("%f - %f\n", tmp, b_data[i]);
+    }
+
+    return 0;
+}
+
 int idealGridTest(int argc, char** argv)
 {
     real* latitude;
@@ -117,6 +205,8 @@ int main(int argc, char** argv)
     bool displaybao= false;
     bool berkeleyav= false;
     bool solveeq= false;
+    bool solveeq2= false;
+    bool solveeq3= false;
     bool idealgrid= false;
 
     int err;
@@ -125,6 +215,8 @@ int main(int argc, char** argv)
     addOption(ot, "--displaybao", OPTION_BOOL, (char*)&displaybao, 0, "displays the berkeleyAverageOptoins object");
     addOption(ot, "--berkeleyav", OPTION_BOOL, (char*)&berkeleyav, 0, "berkeleyAverage test");
     addOption(ot, "--solveeq", OPTION_BOOL, (char*)&solveeq, 0, "equation solver test");
+    addOption(ot, "--solveeq2", OPTION_BOOL, (char*)&solveeq2, 0, "equation solver test 2");
+    addOption(ot, "--solveeq3", OPTION_BOOL, (char*)&solveeq3, 0, "equation solver test 3");
     addOption(ot, "--idealgrid", OPTION_BOOL, (char*)&idealgrid, 0, "ideal grid test");
 
     if ( processArgs(ot, &argc, argv) )
@@ -141,6 +233,10 @@ int main(int argc, char** argv)
         err= berkeleyAverageTest(argc, argv);
     else if ( solveeq )
         err= eqsolveTest(argc, argv);
+    else if ( solveeq2 )
+        err= eqsolve2Test(argc, argv);
+    else if ( solveeq3 )
+        err= eqsolve3Test(argc, argv);
     else if ( idealgrid )
         err= idealGridTest(argc, argv);
 

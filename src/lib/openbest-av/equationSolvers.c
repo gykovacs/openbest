@@ -1,27 +1,69 @@
+#include <stdio.h>
+#include <string.h>
 #include <gsl/gsl_linalg.h>
 
+#include "openbest-ds/memFunctions.h"
 #include "openbest-av/equationSolvers.h"
+#include "openbest-ds/printOut.h"
 
 void solveLinEq(double* A, int rows, int columns, double* b, double* x)
 {
     if ( rows == columns )
-        solveLinEqSquare(A, rows, columns, b, x);
+    {
+        //solveLinEqSquare(A, rows, columns, b, x);
+        memcpy(x, b, sizeof(double)*rows);
+        solveLinEqSquare2(A, rows, columns, x, rows, 1);
+    }
     else
         solveLinEqNonSquare(A, rows, columns, b, x);
 }
 
+void solveLinEqHD(double* A, int rows, int columns, double* b, int b_columns, double* x)
+{
+    memcpy(x, b, sizeof(double)*rows * b_columns);
+    solveLinEqSquare2(A, rows, columns, x, rows, b_columns);
+}
+
 void solveLinEqSquare(double* A, int rows, int columns, double* bb, double* xx)
 {
+    /*int i;
+    for ( i= 0; i < rows*columns; ++i )
+        printf("%f ", A[i]);
+    printf("\n");
+    getchar();
+    for ( i= 0; i < rows; ++i )
+        printf("%f ", bb[i]);
+    printf("\n");*/
+    /*getchar();
+    getchar();*/
+    int i;
+    for ( i= 0; i < rows*columns; ++i )
+        if ( A[i] != A[i] )
+            printf("%d ", i);
+    //getchar();
     gsl_matrix_view m= gsl_matrix_view_array(A, rows, columns);
     gsl_vector_view b= gsl_vector_view_array(bb, rows);
     gsl_vector_view x= gsl_vector_view_array(xx, columns);
+
+    gsl_matrix_fprintf(stdout, &m.matrix, "%g ");
 
     gsl_permutation* p= gsl_permutation_alloc(columns);
 
     int s;
 
-    gsl_linalg_LU_decomp(&m.matrix, p, &s);
-    gsl_linalg_LU_solve(&m.matrix, p, &b.vector, &x.vector);
+    int e= gsl_linalg_LU_decomp(&m.matrix, p, &s);
+    printf("s: %d\n", s);
+    printf("gsl_linalg_LU_decomp: %d\n", e);
+    gsl_matrix_fprintf(stdout, &m.matrix, "%g ");
+
+    double det= gsl_linalg_LU_det(&m.matrix, s);
+    printf("determinant: %f\n", det);
+
+    //getchar();
+    int err= gsl_linalg_LU_solve(&m.matrix, p, &b.vector, &x.vector);
+
+    //gsl_vector_fprintf(stdout, &x.vector, "%g ");
+    printf("gsl_linalg_LU_solve: %d\n", err);
 
     gsl_permutation_free(p);
 }
@@ -40,4 +82,84 @@ void solveLinEqNonSquare(double* A, int rows, int columns, double* bb, double* x
 
     gsl_vector_free(tau);
     gsl_vector_free(residual);
+}
+
+void solveLinEqSquare2(double* a, int rows, int columns, double* b, int bb_rows, int bb_columns)
+{
+    int i, icol, irow, j, k, l, ll, n= rows, m= bb_columns;
+
+    double big, dum, pivinv, tmp;
+    int* indxc= inalloc(n);
+    int* indxr= inalloc(n);
+    int* ipiv= inalloc(n);
+
+    for ( j= 0; j < n; ++j )
+        ipiv[j]= 0;
+    for ( i= 0; i < n; ++i )
+    {
+        big= 0.0;
+        for ( j= 0; j < n; ++j )
+            if ( ipiv[j] != 1 )
+                for ( k= 0; k < n; ++k )
+                {
+                    if ( ipiv[k] == 0 )
+                    {
+                        if ( fabs(a[j*columns + k]) >= big )
+                        {
+                            big= fabs(a[j*columns + k]);
+                            irow= j;
+                            icol= k;
+                        }
+                    }
+                }
+        ++(ipiv[icol]);
+        if ( irow != icol )
+        {
+            for ( l= 0; l < n; ++l )
+            {
+                tmp= a[irow * columns + l];
+                a[irow * columns + l]= a[icol*columns + l];
+                a[icol * columns + l]= tmp;
+            }
+            for ( l= 0; l < m; ++l )
+            {
+                tmp= b[irow * bb_columns + l];
+                b[irow * bb_columns + l]= b[icol*bb_columns + l];
+                b[icol * bb_columns + l]= tmp;
+            }
+        }
+        indxr[i]= irow;
+        indxc[i]= icol;
+        /*if ( a[icol*columns + icol] == 0.0 )
+            eprintf("Singular Matrix\n");*/
+        pivinv= 1.0/a[icol*columns + icol];
+        a[icol*columns + icol]= 1.0;
+        for ( l= 0; l < n; ++l )
+            a[icol*columns + l]*= pivinv;
+        for ( l= 0; l < m; ++l )
+            b[icol*bb_columns + l]*= pivinv;
+
+        for ( ll= 0; ll < n; ++ll )
+        {
+            if ( ll != icol )
+            {
+                dum= a[ll*columns + icol];
+                a[ll*columns + icol]= 0.0;
+                for ( l= 0; l < n; ++l )
+                    a[ll*columns + l]-= a[icol*columns + l]*dum;
+                for ( l= 0; l < m; ++l )
+                    b[ll*bb_columns + l]-= b[icol*bb_columns + l]*dum;
+            }
+        }
+    }
+    for ( l= n-1; l>= 0; --l )
+    {
+        if ( indxr[l] != indxc[l] )
+            for ( k= 0; k < n; ++k )
+            {
+                tmp= a[k*columns + indxr[l]];
+                a[k*columns + indxr[l]]= a[k*columns + indxc[l]];
+                a[k*columns + indxc[l]]= tmp;
+            }
+    }
 }

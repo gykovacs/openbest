@@ -10,10 +10,12 @@ berkeleyAverageOptions* createBAON()
 {
     berkeleyAverageOptions* p= (berkeleyAverageOptions*)malloc(sizeof(berkeleyAverageOptions));
     p->localMode= true;
-    p->gridSize= 16000;
+    //p->gridSize= 16000;
+    p->gridSize= 2000;
     p->gridApproximationDistance= 4000;
-    p->useLandMask= true;
-    p->minMonths= 6;
+    //p->useLandMask= true;
+    p->useLandMask= false;
+    p->minMonths= 2;
     p->minStations= 5;
 
     load_r_p(&(p->correlationParameters), &(p->n_correlationParameters));
@@ -111,6 +113,9 @@ berkeleyAverageOptions* createBAON1(char* mode)
 
         p->clusterMode= false;
 
+        p->fullBaselineMapping= false;
+
+        p->useScalpel= false;
         //TODO: clear
         /*p->scalpelEmpirical= true;
         p->scalpelEmpiricalMaxPairs= 20;*/
