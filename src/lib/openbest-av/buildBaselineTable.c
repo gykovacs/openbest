@@ -112,6 +112,25 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     {*/
 
 
+    FILE* ctable= fopen("correlation_table.txt", "w");
+    for ( i= 0; i < n_correlation_table; ++i )
+    {
+        for ( j= 0; j < n_correlation_table; ++j )
+            fprintf(ctable, "%g ", correlation_table_T[i*n_correlation_table + j]);
+        fprintf(ctable, "\n");
+    }
+    fclose(ctable);
+    FILE* targetmap= fopen("targetmap.txt", "w");
+    for ( i= 0; i < n_target_map1; ++i )
+    {
+        for ( j= 0; j < n_target_map2; ++j )
+        {
+            fprintf(targetmap, "%g ", target_map_T[j*n_target_map1 + i]);
+        }
+        fprintf(targetmap, "\n");
+    }
+    fclose(targetmap);
+
         //printf("%d ", i); fflush(stdout);
         solveLinEqHD(correlation_table_T, n_correlation_table, n_correlation_table, target_map_T, n_target_map1, base_map);
         /*for ( j= 0; j < n_target_map2; ++j )
@@ -235,6 +254,8 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
             correlation_table_T[j*n_correlation_table + i]= correlation_table[i*n_correlation_table + j];
 
     double* tmpM= dnalloc(n_correlation_table);
+
+
     solveLinEq(correlation_table_T, n_correlation_table, n_correlation_table, target2, tmpM);
     double global_completeness= 0;
     for ( i= 0; i < n_correlation_table; ++i )

@@ -400,9 +400,10 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     printf("sum orig_map: %d\n", n_se2);
 
     occurance_table2= bnalloc(n_time_values*n_se2);
+    j= 0;
     for ( i= 0; i < n_orig_map; ++i )
     {
-        j= 0;
+
         if ( orig_map[i] == true )
         {
             for ( k= 0; k < n_time_values; ++k )
@@ -411,6 +412,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
         }
     }
 
+    occurance_table= occurance_table2;
     stationSite2p* se2= (stationElement2p*)malloc(sizeof(stationElement2p*)*n_se2);
     j= 0;
     for ( i= 0; i < n_se; ++i )
@@ -422,7 +424,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
 
     sum_occ_table=0;
     for ( i= 0; i < n_se * n_time_values; ++i )
-        sum_occ_table+= occurance_table[i];
+        sum_occ_table+= occurance_table2[i];
     tprintf("sum occ table: %d\n", sum_occ_table);
     getchar();
 

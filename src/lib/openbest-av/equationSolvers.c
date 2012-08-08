@@ -6,6 +6,47 @@
 #include "openbest-av/equationSolvers.h"
 #include "openbest-ds/printOut.h"
 
+#include <openbest-av/lapacke/lapacke.h>
+
+/* DGELS prototype */
+//extern void dgels( char* trans, int* m, int* n, int* nrhs, double* a, int* lda,
+//                double* b, int* ldb, double* work, int* lwork, int* info );
+
+void solveLinEqNonSquareLAPACK(double* a, int rows, int columns, double* b, int bb_rows, int bb_columns)
+{
+    int info, m, n, lda, ldb, nrhs;
+
+    m= rows;
+    n= columns;
+    nrhs= bb_columns;
+    lda= columns;
+    ldb= bb_columns;
+    //tprintf("calling dgels_ nrhs: %d\n", nrhs);
+
+    double wkopt;
+    double work[10000];
+    int lwork= 10000;
+    int i;
+    /*for ( i= 0; i < rows * columns; ++i )
+        printf("%f ", a[i]);
+    printf("\n");
+    for ( i= 0; i < bb_rows * bb_columns; ++i )
+        printf("%f ", b[i]);
+    printf("\n");*/
+
+    //tprintf("m: %d; n: %d; nrhs: %d; lda: %d; ldb: %d\n", m, n, nrhs, lda, ldb);
+    info= LAPACKE_dgels(LAPACK_ROW_MAJOR, 'N', m, n, nrhs, a, lda, b, ldb);
+    /*printf("%d %f\n", lwork, work[0]);
+    printf("LAPACKE info: %d\n", info);*/
+
+    /*for ( i= 0; i < rows * columns; ++i )
+        printf("%f ", a[i]);
+    printf("\n");
+    for ( i= 0; i < bb_rows*bb_columns; ++i )
+        printf("%f,%f ", b[i], work[i]);
+    printf("\n");*/
+}
+
 void solveLinEq(double* A, int rows, int columns, double* b, double* x)
 {
     if ( rows == columns )
@@ -20,8 +61,11 @@ void solveLinEq(double* A, int rows, int columns, double* b, double* x)
 
 void solveLinEqHD(double* A, int rows, int columns, double* b, int b_columns, double* x)
 {
-    memcpy(x, b, sizeof(double)*rows * b_columns);
-    solveLinEqSquare2(A, rows, columns, x, rows, b_columns);
+    double* bb= dnalloc(rows * b_columns);
+    memcpy(bb, b, sizeof(double)*rows * b_columns);
+    //solveLinEqSquare2(A, rows, columns, x, rows, b_columns);
+    solveLinEqNonSquareLAPACK(A, rows, columns, bb, rows, b_columns);
+    memcpy(x, bb, sizeof(double)*b_columns * columns);
 }
 
 void solveLinEqSquare(double* A, int rows, int columns, double* bb, double* xx)

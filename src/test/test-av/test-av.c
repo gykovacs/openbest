@@ -88,20 +88,27 @@ int eqsolveTest(int argc, char** argv)
 
 int eqsolve2Test(int argc, char** argv)
 {
-    double a_data[] = { 0.0, 0.60, 0.57, 0.96,
-                               0.0, 0.24, 0.99, 0.58,
-                               0.0, 0.30, 0.97, 0.66,
-                               0.0, 0.13, 0.19, 0.85};
+    double a_data[] = { 1, 1, 1,
+                        2, 3, 4,
+                        3, 5, 2,
+                        4, 2, 5,
+                        5, 4, 3};
 
-    double b_data[] = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+    double b_data[] = { -10, -3,
+                        12, 14,
+                        14, 12,
+                        16, 16,
+                        18, 16};
 
-    double x[4];
+    double x[10];
 
-    solveLinEq(a_data, 4, 4, b_data, x);
+    solveLinEqHD(a_data, 5, 3, b_data, 2, x);
 
+    printf("\n");
     int i;
-    for ( i= 0; i < 4; ++i )
+    for ( i= 0; i < 6; ++i )
         printf("%f ", x[i]);
+
 
     return 0;
 }
