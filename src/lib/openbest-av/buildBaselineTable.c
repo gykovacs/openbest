@@ -146,7 +146,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
         printf("\n");
     }
     getchar();*/
-    double* base_map2= dnalloc(n_base_map1*n_base_map2);
+    /*double* base_map2= dnalloc(n_base_map1*n_base_map2);
     for ( i= 0; i < n_base_map1; ++i )
         for ( j= 0; j < n_base_map2; ++j )
             base_map2[j*n_base_map1 + i]= base_map[i*n_base_map2 + j];
@@ -156,7 +156,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
         if ( base_map[i] != base_map[i] )
         {
             printf("%d ", i); fflush(stdout);
-        }
+        }*/
 
     for ( i= 0; i < n_correlation_table; ++i )
         printf("%f ", base_map[i]);
@@ -200,7 +200,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     // Limit empirical region for increased stability
     if ( options->limitEmpiricalBaselineRegion )
         for ( i= 0; i < n_cov_map; ++i )
-            if ( cov_map[i] >= options->empiricalBaselineRegionCutoff )
+            if ( !(cov_map[i] >= options->empiricalBaselineRegionCutoff) )
                 mask[i]= 0;
 
     // Perform numerical integral to generate final baseline mixing coefficients
@@ -214,7 +214,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
         baseline_weights[i]= 0;
         for ( j= 0; j < n_base_map1; ++j )
         {
-            baseline_weights[i]+= mask[j]*baseline_weights[j*n_base_map2 + i];
+            baseline_weights[i]+= mask[j]*base_map[j*n_base_map2 + i];
         }
     }
 
@@ -232,7 +232,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     dec();
     real* baseline_weights2= rnalloc(n_expand_map);
     for ( i= 0; i < n_expand_map; ++i )
-        baseline_weights2[i]= base_map[expand_map[i]]*num_months[i];
+        baseline_weights2[i]= baseline_weights[expand_map[i]]*num_months[i];
     free(baseline_weights);
     baseline_weights= baseline_weights2;
     n_baseline_weights= n_expand_map;
@@ -241,11 +241,20 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
         printf("%f ", baseline_weights[i]);
     printf("\n");
 
+    tprintf("target_map: %d, %d\n", n_target_map1, n_target_map2);
     double* target2= dnalloc(n_target_map2);
     set(target2, n_target_map2, 0);
     for ( i= 0; i < n_target_map1; ++i )
         for ( j= 0; j < n_target_map2; ++j )
             target2[j]+= target_map[i*n_target_map2 + j];
+
+    for ( i= 0; i < n_target_map2; ++i )
+        target2[i]= target2[i]/(double)(n_target_map2);
+
+    printf("target2\n");
+    for ( i= 0; i < n_target_map2; ++i )
+        printf("%f ", target2[i]);
+    printf("\n");
 
     tprintf("computing global completeness: correlation_table: %d,%d; target2: %d\n", n_correlation_table, n_correlation_table, n_target_map2);
 
@@ -256,7 +265,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     double* tmpM= dnalloc(n_correlation_table);
 
 
-    solveLinEq(correlation_table_T, n_correlation_table, n_correlation_table, target2, tmpM);
+    solveLinEqHD(correlation_table_T, n_correlation_table, n_correlation_table, target2, 1, tmpM);
     double global_completeness= 0;
     for ( i= 0; i < n_correlation_table; ++i )
     {
@@ -291,6 +300,11 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     *base_mapping_sitesIO= base_mapping_sites;
     if ( base_mapping_mapIO != NULL )
     *base_mapping_mapIO= base_mapping_map;
+
+    if ( options->fullBaselineMapping )
+    {
+        // TODO
+    }
 
     tprintf("End of Build Baseline Table\n");
 }

@@ -380,3 +380,71 @@ void setdiffIA(int* a, int n_a, int* b, int n_b, int* c, int* n_c)
         }
     }
 }
+
+void createSubArrayIndex2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2)
+{
+    float* tmp= (float*)malloc(sizeof(float)*in1*in2);
+    int i, j, k, l;
+    for ( i= 0; i < in1; ++i )
+    {
+        for ( j= 0; j < in2; ++j )
+            tmp[i*in2 + j]= a[i1[i]*n2 + i2[j]];
+    }
+    *b= tmp;
+    *bn1= in1;
+    *bn2= in2;
+}
+
+void createSubArrayMask2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2)
+{
+    int tmpn1= 0;
+    int tmpn2= 0;
+
+    int i, j, k, l;
+    for ( i= 0; i < in1; ++i )
+        tmpn1+= i1[i];
+    for ( i= 0; i < in2; ++i )
+        tmpn2+= i2[i];
+
+    float* tmp= (float*)malloc(sizeof(float)*tmpn1*tmpn2);
+
+    for ( i= 0; i < n1; ++i )
+    {
+        l= 0;
+        for ( j= 0; j < n2; ++j )
+            if ( i1[i] && i2[j] )
+                tmp[k*tmpn2 + l++]= a[i*n2 + j];
+        if ( i1[i] )
+            ++k;
+    }
+    *b= tmp;
+    *bn1= tmpn1;
+    *bn2= tmpn2;
+}
+
+
+void createSubArrayIndexI(int* a, int n, int* idx, int n_idx, int** b, int* bn)
+{
+    int* tmp= inalloc(n_idx);
+    int i;
+    for ( i= 0; i < n_idx; ++i )
+        tmp[i]= a[idx[i]];
+    *b= tmp;
+    *bn= n_idx;
+}
+
+void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn)
+{
+    int tmpn= 0;
+    int i;
+    for ( i= 0; i < n_idx; ++i )
+        tmpn+= idx[i];
+
+    int* tmp= inalloc(tmpn);
+    int i;
+    for ( i= 0; i < n_idx; ++i )
+        if ( idx[i] )
+            tmp[i++]= a[i];
+    *b= tmp;
+    *bn= tmpn;
+}

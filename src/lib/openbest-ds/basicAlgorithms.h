@@ -227,4 +227,12 @@ void minRA2(real* t, int n_t, real* m, int* fk, int* n_fk);
   */
 void setdiffIA(int* a, int n_a, int* b, int n_b, int* c, int* n_c);
 
+void createSubArrayIndex2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2);
+
+void createSubArrayMask2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2);
+
+void createSubArrayIndexI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
+
+void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
+
 #endif

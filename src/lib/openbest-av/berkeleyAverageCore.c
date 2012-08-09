@@ -525,6 +525,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
 
     real* areal_weight= NULL;
     real* map_elev= NULL;
+    int n_areal_weight;
     if ( options->useLandMask || options->fullBaselineMapping )
     {
         if ( options->gridSize == 16000 )
@@ -545,6 +546,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     {
         areal_weight= rnalloc(n_map_pts);
         set(areal_weight, n_map_pts, 1);
+        n_areal_weight= n_map_pts;
     }
 
     // If using the full climatology model, we need to assign an elevation to
@@ -634,15 +636,15 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     tprintf("Determine baseline mixing weights\n");
     // Determine baseline mixing weights
 
-    real* baseline_weights;
-    int n_baseline_weights;
+    real* all_station_mix;
+    int n_all_station_mix;
     double completeness;
     double global_completeness;
-    real* cov_map;
-    int n_cov_map;
-    double* base_map;
-    int n_base_map1;
-    int n_base_map2;
+    real* coverage_map;
+    int n_coverage_map;
+    double* base_weights_map;
+    int n_base_weights_map1;
+    int n_base_weights_map2;
     if ( options->fullBaselineMapping )
     {
         // TODO
@@ -653,15 +655,44 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
                            target_map, n_target_map1, n_target_map2,
                            occurance_table, n_se2, n_time_values,
                            expand_map, n_expand_map, nugget,
-                           areal_weight, n_map_pts, options,
+                           areal_weight, n_areal_weight, options,
                            NULL, 0, NULL, 0, NULL, 0, NULL, 0,
 
-                           &baseline_weights, &n_baseline_weights,
+                           &all_station_mix, &n_all_station_mix,
                            &completeness, &global_completeness,
-                           &cov_map, &n_cov_map,
-                           &base_map, &n_base_map1, &n_base_map2,
+                           &coverage_map, &n_coverage_map,
+                           &base_weights_map, &n_base_weights_map1, &n_base_weights_map2,
                            NULL, NULL);
     }
+
+    // Crop fit region if requested
+    if ( options->limitEmpiricalFitRegion )
+        for ( i= 0; i < n_coverage_map; ++i )
+            if ( coverage_map[i] < options->empiricalFitRegionCutoff )
+                areal_weight[i]= 0;
+
+    // Perform numerical integral.
+    double sum_areal_weight= 0;
+    for ( i= 0; i < n_areal_weight; ++i )
+        sum_areal_weight+= areal_weight[i];
+
+    tprintf("areal_weight: %d; target_map: %d, %d\n", n_areal_weight, n_target_map1, n_target_map2);
+    real* target= rnalloc(n_target_map2);
+    int n_target= n_target_map2;
+    for ( i= 0; i < n_target_map2; ++i )
+    {
+        target[i]= 0;
+        for ( j= 0; j < n_target_map1; ++j )
+            target[i]+= areal_weight[j]*target_map[j*n_target_map2 + i];
+        target[i]/= sum_areal_weight;
+    }
+
+    for ( i= 0; i < n_target; ++i )
+        printf("%f ", target[i]);
+    printf("\n");
+
+    // Spatial weights for the global average
+    tprintf("Spatial weights for the global average\n");
 
 
     tprintf("End of Berkeley Average Core\n");
