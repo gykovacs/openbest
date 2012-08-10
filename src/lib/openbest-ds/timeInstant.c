@@ -404,7 +404,7 @@ void setTI(timeInstant* ti, real year, real month, real day, real hour, real min
 
 real monthNum(real year)
 {
-    return (year - 1600 + 1.0/24.0) * 12.0;
+    return floor((year - 1600 + 1.0/24.0) * 12.0 + 0.5);
 }
 
 real yearNum(real month)

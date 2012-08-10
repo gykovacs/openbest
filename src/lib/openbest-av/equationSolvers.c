@@ -207,3 +207,40 @@ void solveLinEqSquare2(double* a, int rows, int columns, double* b, int bb_rows,
             }
     }
 }
+
+void invertMatrixFloatN(float* a, int rows, int columns, float** b)
+{
+    *b= (float*)malloc(sizeof(float)*(rows*columns));
+
+    invertMatrixFloat(a, rows, columns, *b);
+}
+
+void invertMatrixFloat(float* a, int rows, int columns, float* b)
+{
+    double* A= (double*)malloc(sizeof(double)*(rows*columns));
+    int i, j, k;
+    for ( i= 0; i < rows * columns; ++i )
+        A[i]= a[i];
+
+    double* B= (double*)malloc(sizeof(double)*(rows*columns));
+
+    gsl_matrix_view m= gsl_matrix_view_array(A, rows, columns);
+    gsl_matrix_view n= gsl_matrix_view_array(B, rows, columns);
+
+    gsl_permutation* p= gsl_permutation_alloc(columns);
+
+    int s;
+
+    int e= gsl_linalg_LU_decomp(&m.matrix, p, &s);
+    int err= gsl_linalg_LU_invert(&m.matrix, p, &n.matrix);
+
+    for ( i= 0; i < rows*columns; ++i )
+        (b)[i]= B[i];
+
+    gsl_permutation_free(p);
+}
+
+void invertMatrixFloatP(float* a, int rows, int columns)
+{
+
+}

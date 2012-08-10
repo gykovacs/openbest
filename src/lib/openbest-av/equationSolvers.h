@@ -14,4 +14,10 @@ void solveLinEqSquare2(double* a, int rows, int columns, double* b, int bb_rows,
 
 void solveLinEqNonSquareLAPACK(double* a, int rows, int columns, double* b, int bb_rows, int bb_columns);
 
+void invertMatrixFloatN(float* a, int rows, int columns, float** b);
+
+void invertMatrixFloat(float* a, int rows, int columns, float* b);
+
+void invertMatrixFloatP(float* a, int rows, int columns);
+
 #endif

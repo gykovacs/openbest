@@ -33,7 +33,7 @@ real* modA(real* x, real* y, int n)
 
 real minR(real* x, int n)
 {
-  real t= FLT_MAX;
+    real t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] < t )
@@ -43,7 +43,7 @@ real minR(real* x, int n)
 
 real maxR(real* x, int n)
 {
-  real t= -FLT_MAX;
+    real t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] > t )
@@ -53,7 +53,7 @@ real maxR(real* x, int n)
 
 int minI(int* x, int n)
 {
-  int t= INT_MAX;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] < t )
@@ -63,7 +63,7 @@ int minI(int* x, int n)
 
 int maxI(int* x, int n)
 {
-  int t= -INT_MAX;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] > t )
@@ -73,7 +73,7 @@ int maxI(int* x, int n)
 
 flag_t minF(flag_t* x, int n)
 {
-  int t= 255;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] < t )
@@ -83,7 +83,7 @@ flag_t minF(flag_t* x, int n)
 
 flag_t maxF(flag_t* x, int n)
 {
-  int t= 0;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] > t )
@@ -93,7 +93,7 @@ flag_t maxF(flag_t* x, int n)
 
 char minC(char* x, int n)
 {
-  int t= 255;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] < t )
@@ -103,7 +103,7 @@ char minC(char* x, int n)
 
 char maxC(char* x, int n)
 {
-  int t= 0;
+    int t= x[0];
   int i;
   for ( i= 0; i < n; ++i )
     if ( x[i] > t )

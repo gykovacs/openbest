@@ -35,7 +35,7 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     for ( i= 0; i < n_num_months; ++i )
         printf("%d ", num_months[i]);
     printf("\n");
-    getchar();
+    //getchar();
 
     int len_R= n_correlation_table;
     if ( options->clusterMode )

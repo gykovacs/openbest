@@ -235,4 +235,6 @@ void createSubArrayIndexI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
 
 void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
 
+void matrixMultiplicationNF(float* a, int na1, int na2, float* b, int nb1, int nb2, float** c, int* nc1, int* nc2);
+
 #endif

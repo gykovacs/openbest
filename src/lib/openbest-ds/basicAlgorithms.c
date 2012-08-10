@@ -121,6 +121,10 @@ void uniqueIA1(int* t, int* n1)
 
 void uniqueIA(int** t1, int* n1)
 {
+    if ( *n1 == 0 )
+    {
+        return;
+    }
     int* t= *t1;
     int n= *n1;
     qsortIA(t, n);
@@ -140,6 +144,12 @@ void uniqueIA(int** t1, int* n1)
 
 void uniqueIAN(int* t, int n, int** output, int* m)
 {
+    if ( n == 0 )
+    {
+        *output= NULL;
+        *m= 0;
+        return;
+    }
     int k;
     /*printf("%d: ", n);
     for ( k= 0; k < n; ++k )
@@ -179,6 +189,10 @@ void uniqueRA1(real* t, int* n1)
 
 void uniqueRA(real** t1, int* n1)
 {
+    if ( *n1 == 0 )
+    {
+        return;
+    }
     real* t= *t1;
     int n= *n1;
     qsortRA(t, n);
@@ -202,6 +216,12 @@ void uniqueRA(real** t1, int* n1)
 
 void uniqueRAN(real* t, int n, real** output, int* m)
 {
+    if ( n == 0 )
+    {
+        *output= NULL;
+        *m= 0;
+        return;
+    }
     *output= (real*)malloc(sizeof(real)*n);
     memcpy(*output, t, sizeof(real)*n);
     qsortRA(*output, n);
@@ -441,10 +461,27 @@ void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn)
         tmpn+= idx[i];
 
     int* tmp= inalloc(tmpn);
-    int i;
     for ( i= 0; i < n_idx; ++i )
         if ( idx[i] )
             tmp[i++]= a[i];
     *b= tmp;
     *bn= tmpn;
+}
+
+void matrixMultiplicationNF(float* a, int na1, int na2, float* b, int nb1, int nb2, float** c, int* nc1, int* nc2)
+{
+    float* x= (float*)malloc(sizeof(float)*na1 * nb2);
+
+    int i, j, k;
+
+    for ( i= 0; i < na1; ++i )
+        for ( j= 0; j < nb2; ++j )
+        {
+            x[i*nb2 + j]= 0;
+            for ( k= 0; k < na2; ++k )
+                x[i*nb2 + j]+= a[i*na2 + k]*b[k*nb2 + j];
+        }
+    *c= x;
+    *nc1= na1;
+    *nc2= nb2;
 }
