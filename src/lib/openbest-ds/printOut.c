@@ -81,3 +81,108 @@ void deh(){    printf("h"); fflush(stdout); }
 void dei(){    printf("i"); fflush(stdout); }
 void dej(){    printf("j"); fflush(stdout); }
 void dek(){    printf("k"); fflush(stdout); }
+
+void printArrayI(char* name, int* a, int n)
+{
+    printf("%s %d:\n", name, n);
+    int i;
+    for ( i= 0; i < n; ++i )
+        printf("%d ", a[i]);
+    printf("\n");
+}
+
+void printArray2I(char* name, int* a, int n1, int n2)
+{
+    printf("%s %dx%d:\n", name, n1, n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+    {
+        for ( j= 0; j < n2; ++j )
+            printf("%d ", a[i*n2 + j]);
+        printf("\n");
+    }
+}
+
+void printArrayB(char* name, bool* a, int n)
+{
+    printf("%s %d:\n", name, n);
+    int i;
+    for ( i= 0; i < n; ++i )
+        printf("%d ", a[i]);
+    printf("\n");
+}
+
+void printArray2B(char* name, bool* a, int n1, int n2)
+{
+    printf("%s %dx%d:\n", name, n1, n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+    {
+        for ( j= 0; j < n2; ++j )
+            printf("%d ", a[i*n2 + j]);
+        printf("\n");
+    }
+}
+
+void printArrayFloat(char* name, float* a, int n)
+{
+    printf("%s %d:\n", name, n);
+    int i;
+    for ( i= 0; i < n; ++i )
+        printf("%f ", a[i]);
+    printf("\n");
+}
+
+void printArray2Float(char* name, float* a, int n1, int n2)
+{
+    printf("%s %dx%d:\n", name, n1, n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+    {
+        for ( j= 0; j < n2; ++j )
+            printf("%f ", a[i*n2 + j]);
+        printf("\n");
+    }
+}
+
+void printArrayD(char* name, double* a, int n)
+{
+    printf("%s %d:\n", name, n);
+    int i;
+    for ( i= 0; i < n; ++i )
+        printf("%f ", a[i]);
+    printf("\n");
+}
+
+void printArray2D(char* name, double* a, int n1, int n2)
+{
+    printf("%s %dx%d:\n", name, n1, n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+    {
+        for ( j= 0; j < n2; ++j )
+            printf("%f ", a[i*n2 + j]);
+        printf("\n");
+    }
+}
+
+void printArrayR(char* name, real* a, int n)
+{
+    printf("%s %d:\n", name, n);
+    int i;
+    for ( i= 0; i < n; ++i )
+        printf("%f ", a[i]);
+    printf("\n");
+}
+
+void printArray2R(char* name, real* a, int n1, int n2)
+{
+    printf("%s %dx%d:\n", name, n1, n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+    {
+        for ( j= 0; j < n2; ++j )
+            printf("%f ", a[i*n2 + j]);
+        printf("\n");
+    }
+}

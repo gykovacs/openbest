@@ -470,6 +470,7 @@ void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn)
 
 void matrixMultiplicationNF(float* a, int na1, int na2, float* b, int nb1, int nb2, float** c, int* nc1, int* nc2)
 {
+    //tprintf("A: %d %d, b: %d %d\n", na1, na2, nb1, nb2);
     float* x= (float*)malloc(sizeof(float)*na1 * nb2);
 
     int i, j, k;

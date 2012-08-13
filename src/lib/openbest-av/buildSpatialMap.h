@@ -23,12 +23,11 @@ void computeSpatialMapBlock(int* common, int n_common,
                             int* remap, int n_remap,
                             int* remap_s, int n_remap_s,
                             float* weight, int n_weight1, int n_weight2,
-                            float* target_map, int n_target_map,
+                            real* target_map, int n_target_map1, int n_target_map2,
                             int len_M, int len_W,
                             int* index, int n_index,
                             double mix_term,
                             berkeleyAverageOptions* options,
-
                             float** exports1IO, int* n1_exports1IO, int* n2_exports1IO,
                             float** exports2IO, int* n1_exports2IO, int* n2_exports2IO,
                             float** exports3IO, int* n1_exports3IO, int* n2_exports3IO,
@@ -40,5 +39,10 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
                                  float* Ai, int n_Ai1, int n_Ai2,
 
                                  float** XIO, int* n_X1IO, int* n_X2IO);
+
+void invWithPartial2(float* M_B, int n_M_B1, int n_M_B2,
+                     float* M_D, int n_M_D1, int n_M_D2,
+                     float* Ai, int n_Ai1, int n_Ai2,
+                     float** res, int* n_res1, int* n_res2);
 
 #endif

@@ -695,6 +695,7 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
         sum_areal_weight+= areal_weight[i];
 
     tprintf("areal_weight: %d; target_map: %d, %d\n", n_areal_weight, n_target_map1, n_target_map2);
+    getchar();
     real* target= rnalloc(n_target_map2);
     int n_target= n_target_map2;
     for ( i= 0; i < n_target_map2; ++i )
@@ -717,12 +718,18 @@ void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** s
     int n_spatial_table2;
 
     buildSpatialMap(correlation_table, n_correlation_table,
-                    target_map, n_target_map1, n_target_map2,
+                    target_map, 1, n_target,
                     occurance_table, n_occurance_table1, n_occurance_table2,
                     expand_map, n_expand_map, nugget, options,
                     &spatial_table, &n_spatial_table1, &n_spatial_table2,
                     NULL, NULL, NULL);
 
+    for ( i= 0; i < n_spatial_table1; ++i )
+    {
+        for ( j= 0; j < n_spatial_table2; ++j )
+            printf("%g ", spatial_table[i*n_spatial_table2 + j]);
+        printf("\n");
+    }
 
     tprintf("End of Berkeley Average Core\n");
 }

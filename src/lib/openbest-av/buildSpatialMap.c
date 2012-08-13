@@ -5,7 +5,7 @@
 #include "openbest-av/equationSolvers.h"
 
 //#define CONSTANT1 50
-#define CONSTANT1 5
+#define CONSTANT1 20
 //#define CONSTANT2 0.7
 #define CONSTANT2 0.4
 
@@ -148,6 +148,17 @@ void buildSpatialMap(float* weight, int n_weight,
     common_list= common_list2;
     n_common_list2= max_common_index;
 
+    float** exports1= (float**)malloc(sizeof(float*)*len_T);
+    int* n1_exports1= inalloc(len_T);
+    int* n2_exports1= inalloc(len_T);
+    float** exports2= (float**)malloc(sizeof(float*)*len_T);
+    int* n1_exports2= inalloc(len_T);
+    int* n2_exports2= inalloc(len_T);
+    float** exports3= (float**)malloc(sizeof(float*)*len_T);
+    int* n1_exports3= inalloc(len_T);
+    int* n2_exports3= inalloc(len_T);
+
+    int entries= 0;
 
     int n;
 
@@ -155,21 +166,21 @@ void buildSpatialMap(float* weight, int n_weight,
     int* n_remap_pass= inalloc(pool_size);
     int** remap_s_pass= (int**)malloc(sizeof(int*)*pool_size);
     int* n_remap_s_pass= inalloc(pool_size);
-    float** weight2_pass= (float**)malloc(sizeof(float*)*pool_size);
-    int* n_weight2_pass1= inalloc(pool_size);
-    int* n_weight2_pass2= inalloc(pool_size);
+    float** weight2_pass;
+    int* n_weight2_pass1;
+    int* n_weight2_pass2;
     float** weight2_copy;
     int* n_weight2_copy1;
     int* n_weight2_copy2;
-    real** target_map2_pass= (real**)malloc(sizeof(real*)*pool_size);
-    int* n_target_map2_pass1= inalloc(pool_size);
-    int* n_target_map2_pass2= inalloc(pool_size);
+    real** target_map2_pass;
+    int* n_target_map2_pass1;
+    int* n_target_map2_pass2;
     real** target_map2_copy;
     int* n_target_map2_copy1;
     int* n_target_map2_copy2;
     bool* need_inv= bnalloc(pool_size);
-    float** B_pass= (float**)malloc(sizeof(float*)*pool_size);
-    int* n_B_pass= inalloc(pool_size);
+    float** B_pass;
+    int* n_B_pass;
     int** common_cnts= (int**)malloc(sizeof(int*)*pool_size);
     int* n_common_cnts= inalloc(pool_size);
     float* B= NULL;
@@ -180,17 +191,24 @@ void buildSpatialMap(float* weight, int n_weight,
     bool** occ_copy;
     int* n_occ_copy1;
     int* n_occ_copy2;
+    //int* n_occ_copy2;
 
     float* weight2= NULL;
-    float* target_map2= NULL;
+    real* target_map2= NULL;
 
     tprintf("expand_map: \n");
     for ( i= 0; i < n_expand_map; ++i )
         printf("%d ", expand_map[i]);
 
+    int* f;
+    int n_f;
+
     tprintf("max_common_index: %d\n", max_common_index);
+    //getchar();
+
     for ( n= 0; n < max_common_index; n+= pool_size )
     {
+        tprintf("======== n= %d\n", n); //getchar();
         tprintf("Begin of Build Spatial Maps %d %f\n", n, (float)n / max_common_index );
 
         // Preallocate exchange variable used for communicating with parallel nodes (when available)
@@ -200,7 +218,14 @@ void buildSpatialMap(float* weight, int n_weight,
         }
         else
         {
-
+            B_pass= (float**)malloc(sizeof(float*)*pool_size);
+            n_B_pass= inalloc(pool_size);
+            target_map2_pass= (real**)malloc(sizeof(real*)*pool_size);
+            n_target_map2_pass1= inalloc(pool_size);
+            n_target_map2_pass2= inalloc(pool_size);
+            weight2_pass= (float**)malloc(sizeof(float*)*pool_size);
+            n_weight2_pass1= inalloc(pool_size);
+            n_weight2_pass2= inalloc(pool_size);
         }
 
         for ( k= 0; k < pool_size; ++k )
@@ -211,14 +236,17 @@ void buildSpatialMap(float* weight, int n_weight,
         bool** occ_fragment;
         occ_fragment= (bool**)malloc(sizeof(bool*)*(n+1));
         int n_n_occ_fragment= n + 1;
-        int* n_occ_fragment= inalloc(n_n_occ_fragment);
-        seti(n_occ_fragment, n_n_occ_fragment, 0);
+        int* n_occ_fragment1= inalloc(n_n_occ_fragment);
+        seti(n_occ_fragment1, n_n_occ_fragment, 0);
+        int* n_occ_fragment2= inalloc(n_n_occ_fragment);
+        seti(n_occ_fragment2, n_n_occ_fragment, 0);
 
-        tprintf("j iteration %d\n", j);
+
         for ( j= n; j <= n + pool_size - 1; ++j )
         {
-            int* f= inalloc(n_common_index);
-            int n_f= 0;
+            tprintf("j iteration %d\n", j); //getchar();
+            f= inalloc(n_common_index);
+            n_f= 0;
             for ( i= 0; i < n_common_index; ++i )
                 if ( common_index[i] == j )
                     f[n_f++]= i;
@@ -229,12 +257,9 @@ void buildSpatialMap(float* weight, int n_weight,
             // not related to the current time slice in order to conserve memory
             // during the parallel operations.
 
-            /*tprintf("n_f: %d\n", n_f);
-            for ( i= 0; i < n_f; ++i )
-                printf("%d ", f[i]);
-            printf("\n"); fflush(stdout);*/
             occ_fragment[j - n]= bnalloc(n_f*n_occurance_table1);
-            n_occ_fragment[j - n]= n_f;
+            n_occ_fragment1[j - n]= n_occurance_table1;
+            n_occ_fragment2[j - n]= n_f;
 
             for ( i= 0; i < n_occurance_table1; ++i )
                 for ( k= 0; k < n_f; ++k )
@@ -245,11 +270,6 @@ void buildSpatialMap(float* weight, int n_weight,
             for ( i= 0; i < n_occurance_table1; ++i )
                 for ( k= 0; k < n_f; ++k )
                     needed[i]|= occurance_table[i*n_occurance_table2 + f[k]];
-
-            /*printf("needed: ");
-            for ( i= 0; i < n_occurance_table1; ++i )
-                printf("%d ", needed[i]);
-            printf("\n"); fflush(stdout);*/
 
             int* needed_expand= inalloc(n_occurance_table1);
             int n_needed_expand= 0;
@@ -262,73 +282,40 @@ void buildSpatialMap(float* weight, int n_weight,
             free(needed);
             needed= needed_expand;
 
-            /*printf("needed: ");
-            for ( i= 0; i < n_needed; ++i )
-                printf("%d ", needed[i]);
-            printf("\n"); fflush(stdout);*/
-
             if ( n_needed == 0 )
                 continue;
 
             int* list= copyIA(needed, n_needed);
             int n_list= n_needed;
 
-            //tprintf("---\n");
             int max_needed= maxI(needed, n_needed);
             int* remap= inalloc(max_needed+1);
-            int n_remap= max_needed;
-            seti(remap, max_needed, 0);
+            int n_remap= max_needed+1;
+            seti(remap, n_remap, 0);
 
-            /*printf("list %d: ", max_needed);
-            for ( i= 0; i < n_list; ++i )
-                printf("%d ", list[i]);
-            printf("\n"); fflush(stdout);*/
             for ( i= 0; i < n_list; ++i )
                 remap[list[i]]= i;
 
-            //tprintf("...\n");
             int common_set= j;
 
             int* needed_s= inalloc(n_occurance_table1);
             int n_needed_s= n_occurance_table1;
             int minns, maxns;
 
-            /*tprintf("f: \n");
-            for ( i= 0; i < n_f; ++i )
-                printf("%d ", f[i]);
-            printf("\n");
-
-            tprintf("n_expand_map: %d\n", n_expand_map);
-
-            for ( i= 0; i < n_occurance_table1; ++i )
-                printf("%d ", common_list[i*n_common_list2 + j]);
-            printf("\n");*/
-
             if ( common_set != 0 )
             {
-                //dea();
                 for ( i= 0; i < n_occurance_table1; ++i )
                 {
                     needed_s[i]= 0;
                     for ( k= 0; k < n_f; ++k )
                         needed_s[i]|= occurance_table[i*n_occurance_table2 + f[k]];
-                    //printf("%d ", needed_s[i]);
-                    needed_s[i]&= common_list[i*n_common_list2 + j];
+                    needed_s[i]&= !common_list[i*n_common_list2 + j];
                 }
-                /*for ( i= 0; i < n_needed_s; ++i )
-                    if ( needed_s[i] != 0 )
-                        printf("%d ", needed_s[i]);
-                printf("\n");*/
-                /*minns= minI(needed_s, n_needed_s);
-                maxns= maxI(needed_s, n_needed_s);*/
-                //printf("%d %d\n", minns, maxns);
-                //deb();
                 n_needed_s= 0;
                 for ( i= 0; i < n_occurance_table1; ++i )
                     if ( needed_s[i] )
                         needed_s[n_needed_s++]= expand_map[i];
                 uniqueIA(&needed_s, &n_needed_s);
-                //dec();
             }
             else
             {
@@ -337,13 +324,6 @@ void buildSpatialMap(float* weight, int n_weight,
                 n_needed_s= 0;
             }
 
-            printf("needed_s: \n");
-            if ( needed_s )
-            {
-                for ( i= 0; i < n_needed_s; ++i )
-                    printf("%d ", needed_s[i]);
-                printf("\n");
-            }
             if ( n_needed_s == 0 )
             {
                 needed_s= needed;
@@ -356,8 +336,10 @@ void buildSpatialMap(float* weight, int n_weight,
 
             int max_needed_s= maxI(needed_s, n_needed_s);
             int* remap_s= inalloc(max_needed_s+1);
-            seti(remap_s, max_needed_s, 0);
-            int n_remap_s= max_needed_s;
+            int n_remap_s= max_needed_s + 1;
+            seti(remap_s, n_remap_s, 0);
+
+            printArrayI("list", list, n_list);
 
             for ( i= 0; i < n_list; ++i )
                 remap_s[list[i]]= i;
@@ -368,16 +350,11 @@ void buildSpatialMap(float* weight, int n_weight,
 
             int l= 0, m;
 
-            target_map2= (float*)malloc(sizeof(float)*n_target_map1 * n_needed);
+            target_map2= rnalloc(n_target_map1 * n_needed);
             int n_target_map21= n_target_map1;
             int n_target_map22= n_needed;
             l= 0;
 
-            /*printf("%f\n", target_map[n_target_map1*n_target_map2 - 1]); fflush(stdout);
-            printf("%d,%d\n", n_target_map1, n_target_map2);
-            for ( i= 0; i < n_needed; ++i )
-                printf("%d ", needed[i]);
-            fflush(stdout);*/
             for ( i= 0; i < n_target_map1; ++i )
                 for ( k= 0; k < n_needed; ++k )
                     target_map2[i * n_needed + k]= target_map[i*n_target_map2 + needed[k]];
@@ -392,6 +369,15 @@ void buildSpatialMap(float* weight, int n_weight,
             target_map2_pass[j-n]= target_map2;
             n_target_map2_pass1[j-n]= n_target_map21;
             n_target_map2_pass2[j-n]= n_target_map22;
+            /*printf("target_map: %d, %d %f\n", n_target_map21, n_target_map22, target_map2[n_target_map21*n_target_map22-1]);
+            getchar();*/
+
+            printArrayI("needed", needed, n_needed);
+            printArrayI("needed_s", needed_s, n_needed_s);
+            printArrayI("remap", remap, n_remap);
+            printArrayI("remap_s", remap_s, n_remap_s);
+
+            //getchar();
 
             if ( j != 0 )
             {
@@ -400,42 +386,78 @@ void buildSpatialMap(float* weight, int n_weight,
                 for ( i= 0; i < n_common_list1; ++i )
                     common[i]= common_list[i*n_common_list2 + j];
 
+                printArrayI("common", common, n_common_list1);
+
                 float* weight3;
                 int n_weight31;
                 int n_weight32;
 
-                createSubArrayIndex2Float(weight2, n_weight21, n_weight22, needed, n_needed, needed, n_needed, &weight3, &n_weight31, &n_weight32);
+                createSubArrayIndex2Float(weight, n_weight, n_weight, needed, n_needed, needed, n_needed, &weight3, &n_weight31, &n_weight32);
+
+                printArray2Float("weight3", weight3, n_weight31, n_weight32);
+
+                //getchar();
 
                 int l= 0, m;
 
                 int* cnts= inalloc(n_remap);
                 int n_cnts= n_remap;
                 seti(cnts, n_remap, 0);
-                int* expanded= inalloc(n_common);
-                int n_expanded= n_common;
+
+                int sum_common= 0;
                 for ( i= 0; i < n_common; ++i )
-                    expanded[i]= expand_map[common[i]];
+                    sum_common+= common[i];
+
+                int* expanded= inalloc(sum_common);
+                int n_expanded= 0;
+                for ( i= 0; i < n_common; ++i )
+                    if ( common[i] )
+                        expanded[n_expanded++]= expand_map[i];
+                printArrayI("expanded", expanded, n_expanded);
 
                 for ( m= 0; m < n_expanded; ++m )
                     cnts[expanded[m]]= cnts[expanded[m]] + 1;
+                printArrayI("cnts", cnts, n_cnts);
+                //getchar();
 
                 int* selection= inalloc(n_cnts);
                 int n_selection= n_cnts;
                 for ( i= 0; i < n_cnts; ++i )
                     selection[i]= cnts[i] > 0;
 
-                int* remap_selection= inalloc(n_selection);
-                int n_remap_selection= n_selection;
+                printArrayI("selection", selection, n_selection);
+
+                int n_remap_selection= 0;
                 for ( i= 0; i < n_selection; ++i )
-                    remap_selection[i]= remap[selection[i]];
+                    if ( selection[i] )
+                        ++n_remap_selection;
+
+                int* remap_selection= inalloc(n_remap_selection);
+
+                k= 0;
+                for ( i= 0; i < n_selection; ++i )
+                    if ( selection[i] )
+                        remap_selection[k++]= remap[i];
+
+
+                printArrayI("remap_selection", remap_selection, n_remap_selection);
 
                 createSubArrayIndex2Float(weight3, n_weight31, n_weight32, remap_selection, n_remap_selection, remap_selection, n_remap_selection, &B, &n_B1, &n_B2);
 
-                for ( i= 0; i < n_weight31; ++i )
-                    B[i*n_weight32 + i]= (1.0 + (cnts[selection[i]] - 1.0) * mix_term)/(double)(cnts[selection[i]]);
+                printArray2Float("B", B, n_B1, n_B2);
+
+                //for ( i= 0; i < n_B1; ++i )
+                k= 0;
+                for ( i= 0; i < n_selection; ++i )
+                    if ( selection[i] )
+                        B[k*n_B2 + k++]= (1.0 + (cnts[i] - 1.0) * mix_term)/(double)(cnts[i]);
+
+                tprintf("ccc\n");
+                //printArray2Float("B_", B, n_B1, n_B2);
 
                 if ( n_B1 * n_B2 * 8 > 100e6 && ! options->clusterMode )
                 {
+                    tprintf("aaa\n");
                     need_inv[j-n]= false;
                     //invertMatrix(B, n_B1);
                     float* B_inv;
@@ -448,15 +470,19 @@ void buildSpatialMap(float* weight, int n_weight,
                     need_inv[j-n]= true;
                 }
 
+                tprintf("bbb\n");
                 B_pass[j-n]= B;
                 n_B_pass[j-n]= n_B1;
                 common_cnts[j-n]= cnts;
                 n_common_cnts[j-n]= n_cnts;
-                free(weight3);
+                tprintf("ddd\n");
+                //free(weight3);
+                tprintf("eee\n");
             }
             else
             {
                 B_pass[j-n]= NULL;
+                n_B_pass[j-n]= 0;
                 common_cnts[j-n]= NULL;
                 n_common_cnts[j-n]= 0;
             }
@@ -474,12 +500,14 @@ void buildSpatialMap(float* weight, int n_weight,
             }
         }
 
-        if ( weight2 )
+        tprintf("end of j iteration\n"); //getchar();
+
+        /*if ( weight2 )
             free(weight2);
         if ( target_map2 )
             free(target_map2);
         if ( B )
-            free(B);
+            free(B);*/
 
         if ( pool_size > 1 )
         {
@@ -490,32 +518,53 @@ void buildSpatialMap(float* weight, int n_weight,
             B_copy= B_pass;
             n_B_copy= n_B_pass;
             target_map2_copy= target_map2_pass;
+            n_target_map2_copy1= n_target_map2_pass1;
+            n_target_map2_copy2= n_target_map2_pass2;
             occ_copy= occ_fragment;
+            n_occ_copy1= n_occ_fragment1;
+            n_occ_copy2= n_occ_fragment2;
             weight2_copy= weight2_pass;
+            n_weight2_copy1= n_weight2_pass1;
+            n_weight2_copy2= n_weight2_pass2;
         }
 
         /*free(B_pass);
+        free(n_B_pass);
         free(target_map2_pass);
+        free(n_target_map2_pass1);
+        free(n_target_map2_pass2);
         free(weight2_pass);
+        free(n_weight2_pass1);
+        free(n_weight2_pass2);
         free(occ_fragment);*/
-        //B_pass= NULL;
-        //target_map2_pass= NULL;
-        //weight2_pass= NULL;
-        //occ_fragment= NULL;
+        /*B_pass= NULL;
+        n_B_pass= NULL;*/
+        target_map2_pass= NULL;
+        n_target_map2_pass1= NULL;
+        n_target_map2_pass2= NULL;
+        weight2_pass= NULL;
+        n_weight2_pass1= NULL;
+        n_weight2_pass2= NULL;
+        occ_fragment= NULL;
+        n_occ_fragment1= NULL;
+        n_occ_fragment2= NULL;
 
-        /*int len_W= n_weight1;
+        int len_W= n_weight;
         int n_items= (n + pool_size - 1) < max_common_index ? (n + pool_size - 1) : max_common_index;
-        n_items= n - n_items + 1;
-        int* items= inalloc(n_items);
-        for ( i= n + pool_size - 1; i <= max_common_index; ++i )
-            items[i]= i;
+        n_items= n_items - n + 1;
+        int* items= inalloc(n_items+1);
 
+        for ( i= n ; i <= n + n_items; ++i )
+            items[i - n]= i;
+
+        tprintf("end of iteration\n");
         if ( pool_size > 1 )
         {
             // TODO
         }
         else
         {
+            // Version of the above for single threaded computation.
             int* index= inalloc(n_common_index);
             int n_index= 0;
 
@@ -524,10 +573,11 @@ void buildSpatialMap(float* weight, int n_weight,
                     index[n_index++]= i;
 
             int* common= inalloc(n_common_list1);
-            int* common_cnts_;
-            int n_common_cnts_;
-            float* Bi;
-            int n_Bi1, n_Bi2;
+            int n_common= n_common_list1;
+            int* common_cnts_= NULL;
+            int n_common_cnts_= 0;
+            float* Bi= NULL;
+            int n_Bi1= 0, n_Bi2= 0;
             if ( n > 0 )
             {
                 for ( i= 0; i < n_common_list1; ++i )
@@ -536,31 +586,70 @@ void buildSpatialMap(float* weight, int n_weight,
                 n_common_cnts_= n_common_cnts[0];
                 if ( need_inv[0] )
                 {
-                    Bi= invertMatrix(B_copy[0], n_B_copy[0], n_B_copy[0]);
-                    n_Bi1= n_B_copy1[0];
-                    n_Bi2= n_B_copy2[0];
+                    //printArray2Float("B_copy", B_copy[0], n_B_copy[0], n_B_copy[0]);
+
+                    invertMatrixFloatN(B_copy[0], n_B_copy[0], n_B_copy[0], &Bi);
+
+                    n_Bi1= n_B_copy[0];
+                    n_Bi2= n_B_copy[0];
+                    printArray2Float("Bi", Bi, n_Bi1, n_Bi2);
                 }
                 else
                 {
                     Bi= B_copy[0];
-                    n_Bi1= n_B_copy1[0];
-                    n_Bi2= n_B_copy2[0];
+                    n_Bi1= n_B_copy[0];
+                    n_Bi2= n_B_copy[0];
                 }
-
-                // computeSpatialMapBlock
             }
+            else
+            {
+                free(common);
+                common= NULL;
+                n_common= 0;
+                common_cnts[0]= NULL;
+                n_common_cnts[0]= 0;
+                Bi= NULL;
+                n_Bi1= n_Bi2= 0;
+            }
+            tprintf("%d %d\n", n_target_map2_copy1[0], n_target_map2_copy2[0]);
+            tprintf("%f\n", target_map2_copy[0][n_target_map2_copy1[0]*(n_target_map2_copy2[0])-1]);
+            //getchar();
+            /*for ( i= 0; i < n_expand_map; ++i )
+                if ( expand_map[i] >= n_remap_pass[0] )
+                {
+                    printf("em: %d,%d \n", expand_map[i], n_remap_pass[0]);
+                    getchar();
+                }*/
+            computeSpatialMapBlock(common, n_common,
+                                   common_cnts_, n_common_cnts_,
+                                   Bi, n_Bi1, n_Bi2,
+                                   occ_copy[0], n_occ_copy1[0], n_occ_copy2[0],
+                                   expand_map, n_expand_map,
+                                   remap_pass[0], n_remap_pass[0],
+                                   remap_s_pass[0], n_remap_s_pass[0],
+                                   weight2_copy[0], n_weight2_copy1[0], n_weight2_copy2[0],
+                                   target_map2_copy[0], n_target_map2_copy1[0], n_target_map2_copy2[0],
+                                   len_M, len_W,
+                                   index, n_index,
+                                   mix_term,
+                                   options,
+                                   exports1, n1_exports1, n2_exports1,
+                                   exports2, n1_exports2, n2_exports2,
+                                   exports3, n1_exports3, n2_exports3,
+                                   f, n_f);
+            for ( i= 0; i < n_f; ++i )
+                entries+= f[i];
         }
 
         // Periodically consolidate and compress the returned values to save
         // memory.
-
-        if ( ( entries > 100 || maxI(items, n_itmes) == maxI(common_index, n_common_index)) && !table_mode )
+        if ( ( entries > 100 || maxI(items, n_items) == maxI(common_index, n_common_index)) && !table_mode )
         {
             // TODO
-        }*/
+        }
     }
 
-    /*tprintf("End of Build Spatial Maps\n");
+    tprintf("End of Build Spatial Maps\n");
 
     if ( !table_mode )
     {
@@ -570,19 +659,47 @@ void buildSpatialMap(float* weight, int n_weight,
     {
         // Operations for values that are already globally integrated
 
-        for ( k= 0; k < n_n_exports1; ++k )
+        /*for ( k= 0; k < n_n_exports1; ++k )
         {
             if ( exports1[k] == 0 || n_exports1[k] == 2 )
                 exports1[k]= sparse(len_S, 1);
             else
                 esports1[k]= spares(exports1[k]);
-        }
+        }*/
 
         /**spatial_tableIO= exports1;
         int n_spatial_table1= n_n_export*/
 
         //tprintf("End of Generate Spatial Table\n");
-    //}*/
+
+        int len_SM= n1_exports1[0];
+
+        *spatial_tableIO= (double*)malloc(sizeof(double)*len_T*len_SM);
+
+        printf("aaa\n"); fflush(stdout);
+
+        int sum;
+        for ( i= 0; i < len_T; ++i )
+        {
+            sum= 0;
+            for ( j= 0; j < n1_exports1[i]; ++j )
+                if ( exports1[i][j] != 0 )
+                    sum+= 1;
+            printf("%d ", sum);
+        }
+
+        for ( i= 0; i < len_SM; ++i )
+            for ( j= 0; j < len_T; ++j )
+                if ( n1_exports1[j] == 0 || n1_exports1[j] == 2 )
+                    (*spatial_tableIO)[i*len_T+j]= 0;
+                else
+                    (*spatial_tableIO)[i*len_T+j]= exports1[j][i];
+        printf("bbb\n"); fflush(stdout);
+        *n_spatial_table1= len_SM;
+        printf("ccc\n"); fflush(stdout);
+        *n_spatial_table2= len_T;
+        printf("ddd\n"); fflush(stdout);
+    }
 }
 
 
@@ -595,18 +712,23 @@ void computeSpatialMapBlock(int* common, int n_common,
                             int* remap, int n_remap,
                             int* remap_s, int n_remap_s,
                             float* weight, int n_weight1, int n_weight2,
-                            float* target_map, int n_target_map,
+                            real* target_map, int n_target_map1, int n_target_map2,
                             int len_M, int len_W,
                             int* index, int n_index,
                             double mix_term,
                             berkeleyAverageOptions* options,
 
+
                             float** exports1IO, int* n1_exports1IO, int* n2_exports1IO,
                             float** exports2IO, int* n1_exports2IO, int* n2_exports2IO,
                             float** exports3IO, int* n1_exports3IO, int* n2_exports3IO,
-                            int* f, int n_f)
+                            int* f1, int n_f1)
 {
-    /*bool table_mode;
+    /*tprintf("n_common: %d, n_common_cnts: %d, n_Bi1, n_Bi2: %d x %d\n", n_common, n_common_cnts, n_Bi1, n_Bi2);
+    tprintf("n_occ_fragment1 x 2: %d x %d, n_expand_map: %d, n_remap: %d, n_remap_s: %d\n", n_occ_fragment1, n_occ_fragment2, n_expand_map, n_remap, n_remap_s);
+    tprintf("n_weight1,2: %d x %d, n_target_map1,2: %d x %d\n", n_weight1, n_weight2, n_target_map1, n_target_map2);
+    tprintf("len_M: %d, len_W: %d, n_index: %d, mix_term: %f\n", len_M, len_W, n_index, mix_term);*/
+    bool table_mode;
     if ( len_M == 1 )
         table_mode= true;
     else
@@ -614,20 +736,23 @@ void computeSpatialMapBlock(int* common, int n_common,
 
     int loops= n_occ_fragment2;
 
-    float** exports1= (int**)malloc(sizeof(int*)*loops);
+    float** exports1= (float**)malloc(sizeof(float*)*loops);
     int* n1_exports1= inalloc(loops);
     int* n2_exports1= inalloc(loops);
-    float** exports2= (int**)malloc(sizeof(int*)*loops);
+    float** exports2= (int**)malloc(sizeof(float*)*loops);
     int* n1_exports2= inalloc(loops);
     int* n2_exports2= inalloc(loops);
-    float** exports3= (int**)malloc(sizeof(int*)*loops);
+    float** exports3= (int**)malloc(sizeof(float*)*loops);
     int* n1_exports3= inalloc(loops);
     int* n2_exports3= inalloc(loops);
 
     int i, j, k;
 
+    tprintf("loops: %d\n", loops);
+
     for ( j= 0; j < loops; ++j )
     {
+        tprintf("iteration: %d\n", j);
         bool* f= fnalloc(n_occ_fragment1);
         int n_f= n_occ_fragment1;
 
@@ -640,18 +765,18 @@ void computeSpatialMapBlock(int* common, int n_common,
 
         if ( !any_f )
         {
-            exports1[j]= inalloc(2);
-            exports1[j][0]= 0;
-            exports1[j][1]= 0;
-            n_exports1[j]= 2;
+            exports1[j]= (float*)malloc(sizeof(float)*2);
+            exports1[j][0]= 0.0;
+            exports1[j][1]= 0.0;
+            n1_exports1[j]= 2;
 
             exports2[j]= inalloc(1);
             exports2[j][0]= 0;
-            n_exports2[j]= 1;
+            n1_exports2[j]= 1;
 
             exports3[j]= inalloc(1);
             exports3[j][0]= 0;
-            n_exports3[j]= 1;
+            n1_exports3[j]= 1;
 
             continue;
         }
@@ -664,10 +789,19 @@ void computeSpatialMapBlock(int* common, int n_common,
 
         int* cnts= inalloc(n_remap);
         int n_cnts= n_remap;
-        int* expanded= inalloc(n_f);
-        int n_expanded= n_f;
+        seti(cnts, n_cnts, 0);
+
+        int sum_f= 0;
         for ( i= 0; i < n_f; ++i )
-            expanded[i]= expanded_map[f[i]];
+            sum_f+= f[i];
+
+        int* expanded= inalloc(sum_f);
+        int n_expanded= 0;
+        for ( i= 0; i < n_f; ++i )
+            if ( f[i] )
+                expanded[n_expanded++]= expand_map[i];
+
+        //printArrayI("expanded", expanded, n_expanded);
 
         int m;
         for ( m= 0; m < n_expanded; ++m )
@@ -679,25 +813,25 @@ void computeSpatialMapBlock(int* common, int n_common,
         for ( i= 0; i < n_selection; ++i )
         {
             selection[i]= cnts[i] > 0;
-            sum_select+= selection[i];
+            sum_selection+= selection[i];
         }
+
+        //printArrayB("selection", selection, n_selection);
 
         // Select rows of weight function corresponding to active stations and
         // add in the nugget.
 
         int* re_select= inalloc(sum_selection);
-        int n_re_select= sum_selection;
-        k= 0;
+        int n_re_select= 0;
         for ( i= 0; i < n_selection; ++i )
             if ( selection[i] )
-                re_select[k++]= remap[i];
+                re_select[n_re_select++]= remap[i];
 
         int* re_select_s= inalloc(sum_selection);
-        int n_re_select_s= sum_selection;
-        k= 0;
-        for ( i= 0; i < n_selection; ++i )
+        int n_re_select_s= 0;
+        for ( i= 0; i < n_selection && i < n_remap_s; ++i )
             if ( selection[i] )
-                re_select_s[k++]= remap[i];
+                re_select_s[n_re_select_s++]= remap_s[i];
 
         float* B_b;
         int n_B_b1;
@@ -726,9 +860,12 @@ void computeSpatialMapBlock(int* common, int n_common,
 
         createSubArrayIndex2Float(weight, n_weight1, n_weight2, re_select, n_re_select, re_select_s, n_re_select_s, &B_d, &n_B_d1, &n_B_d2);
 
+        int k= 0;
         for ( i= 0; i < n_B_d1; ++i )
-            B_d[i*n_B_d2 + i]= (1.0 + (cnts[selection[i]] - 1.0) * mix_term)/cnts[selection[i]];
+            if ( selection[i] )
+                B_d[k*n_B_d2 + k++]= (1.0 + (cnts[i] - 1.0) * mix_term)/cnts[i];
 
+ //       tprintf("Target weights for active stations\n");
         // Target weights for active stations
         int* fx= inalloc(n_common_cnts + n_selection);
         int n_fx= 0;
@@ -739,49 +876,117 @@ void computeSpatialMapBlock(int* common, int n_common,
             if ( selection[i] > 0 )
                 fx[n_fx++]= i;
 
-        float* A1= (float*)malloc(sizeof(float)*n_fx);
-        int n_A1= n_fx;
-        for ( i= 0; i < n_fx; ++i )
-            A1[i]= target_map[remap[fx[i]]];
+   //     printArrayI("remap", remap, n_remap);
+     //   printArrayI("fx", fx, n_fx);
+
+        float* A1= (float*)malloc(sizeof(float)*n_fx*n_target_map1);
+        int n_A11= n_target_map1;
+        int n_A12= n_fx;
+        for ( k= 0; k < n_target_map1; ++k )
+            for ( i= 0; i < n_fx; ++i )
+                A1[k*n_fx + i]= target_map[k*n_target_map2 + remap[fx[i]]];
 
         float* f_weights_map;
         int n_f_weights_map1;
         int n_f_weights_map2;
         if ( !table_mode )
         {
-
+            //tprintf("Compute A1*inv(B)\n");
+            float* Bi2;
+            int n_Bi21;
+            int n_Bi22;
+            if ( common != NULL && n_common != 0 )
+            {
+                //tprintf("invWithPartial2\n");
+                invWithPartial2(B_b, n_B_b1, n_B_b2, B_d, n_B_d1, n_B_d2, Bi, n_Bi1, n_Bi2, &Bi2, &n_Bi21, &n_Bi22);
+            }
+            else
+            {
+                //tprintf("invertMatrixFloatN\n");
+                invertMatrixFloatN(B_d, n_B_d1, n_B_d2, &Bi2);
+                n_Bi21= n_B_d2;
+                n_Bi22= n_B_d1;
+                //printArray2Float("Bi2", Bi2, n_Bi21,n_Bi22);
+            }
+            //printArray2Float("A1", A1, n_A11, n_A12);
+            matrixMultiplicationNF(A1, n_A11, n_A12, Bi2, n_Bi21, n_Bi22, &f_weights_map, &n_f_weights_map1, &n_f_weights_map2);
+            //getchar();
+            //printArray2Float("f_weights_map", f_weights_map, n_f_weights_map1, n_f_weights_map2);
+            //getchar();
         }
         else
         {
             // Compute A1/B
-            if ( !(n_Bi1 == 0 || n_Bi2 == 0 || Bi == 0) )
+            // TODO
+            if ( Bi != NULL && n_Bi1 != 0 && n_Bi2 != 0 )
             {
                 // Quick division with known partial inverse
-                float* BiT= (float*)malloc(sizeof(float)*(n_Bi1*n_Bi2));
+                //tprintf("Quick division with known partial inverse\n");
+                float* A1T= (float*)malloc(sizeof(float)*n_A11*n_A12);
+                float* BiT= (float*)malloc(sizeof(float)*n_Bi1*n_Bi2);
+
+                for ( i= 0; i < n_A11; ++i )
+                    for ( k= 0; k < n_A12; ++k )
+                        A1T[k*n_A11 + i]= A1[i*n_A12 + k];
                 for ( i= 0; i < n_Bi1; ++i )
                     for ( k= 0; k < n_Bi2; ++k )
-                    {
                         BiT[k*n_Bi1 + i]= Bi[i*n_Bi2 + k];
-                    }
-                mldivideWithPartialInverse2(B_b, n_B_b1, n_B_b2, B_d, n_B_d1, n_B_d2, A1, n_A1, BiT, n_Bi2, n_Bi1, &f_weights_map, &n_f_weights_map1, &n_f_weights_map2);
+
+                int n_A1= n_A11 > n_A12 ? n_A11 : n_A12;
+                /*printArray2Float("A1T", A1T, n_A11, n_A12);
+                printArray2Float("BiT", BiT, n_Bi1, n_Bi2);
+                printArray2Float("B_b", B_b, n_B_b1, n_B_b2);
+                printArray2Float("B_d", B_d, n_B_d1, n_B_d2);*/
+                mldivideWithParitalInverse2(B_b, n_B_b1, n_B_b2, B_d, n_B_d1, n_B_d2, A1T, n_A1, BiT, n_Bi2, n_Bi1, &f_weights_map, &n_f_weights_map1, &n_f_weights_map2);
             }
             else
             {
-                // We do direct division when the common portion is too small to
-                // be worth worrying about
-                f_weights_map= (float*)malloc(sizeof(float)*n_B_b2);
-                float* B_dT= (float*)(sizeof(float)*(n_B_d1 * n_B_d2));
+                //tprintf("Direct division %d,%d %d,%d\n", n_B_d1, n_B_d2, n_A11, n_A12);
+                // We do direct division when the common portion is too small to be worth worrying about
+                f_weights_map= (float*)malloc(sizeof(float)*n_B_d1);
+                double* ftmp= dnalloc(n_B_d1);
+
+                double* B_dT= dnalloc(n_B_d1 * n_B_d2);
+
+                double* Atmp= dnalloc(n_A11*n_A12);
+
+                for ( i= 0; i < n_A11*n_A12; ++i )
+                    Atmp[i]= A1[i];
                 for ( i= 0; i < n_B_d1; ++i )
                     for ( k= 0; k < n_B_d2; ++k )
                     {
                         B_dT[k*n_B_d1 + i]= B_d[i*n_B_d2 + k];
                     }
-                solveLinEqHD(B_dT, n_B_d2, n_B_d1, A1, n_A1, f_weights_map);
+
+                int n_A1= n_A11 > n_A12 ? n_A11 : n_A12;
+
+                solveLinEqHD(B_dT, n_B_d2, n_B_d1, Atmp, 1, ftmp);
+
+                n_f_weights_map1= n_B_d1;
+                n_f_weights_map2= 1;
+
+                for ( i= 0; i < n_f_weights_map1*n_f_weights_map2; ++i )
+                    f_weights_map[i]= ftmp[i];
+                //tprintf("End of direct division\n");
             }
+            //printArray2Float("f_weights_map", f_weights_map, n_f_weights_map2, n_f_weights_map1);
         }
-        free(A1);
-        free(B_b);
-        free(B_d);
+        //getchar();
+        if ( A1 )
+        {
+            free(A1);
+            A1= NULL;
+        }
+        if ( B_b )
+        {
+            free(B_b);
+            B_b= NULL;
+        }
+        if ( B_d )
+        {
+            free(B_d);
+            B_d= NULL;
+        }
 
         if ( !table_mode )
         {
@@ -790,22 +995,34 @@ void computeSpatialMapBlock(int* common, int n_common,
 
         int tmp_cnts= 0;
         for ( i= 0; i < n_common_cnts; ++i )
-            if ( n_common_cnts[i] >= 1 )
+            if ( common_cnts[i] >= 1 )
                 ++tmp_cnts;
         for ( i= 0; i < n_selection; ++i )
             if ( selection[i] )
                 ++tmp_cnts;
 
-        cnts= (int*)realloc(cnts, sizeof(int)*tmp_cnts);
-        n_cnts= 0;
+        int* cnts_n= inalloc(tmp_cnts);
+        int n_cnts_n= 0;
         for ( i= 0; i < n_common_cnts; ++i )
-            if ( n_common_cnts[i] >= 1 )
-                cnts[n_cnts++]= common_cnts[i];
+            if ( common_cnts[i] >= 1 )
+                cnts_n[n_cnts_n++]= common_cnts[i];
         for ( i= 0; i < n_selection; ++i )
             if ( selection[i] )
-                cnts[n_cnts++]= cnts[i];
+                cnts_n[n_cnts_n++]= cnts[i];
+
+        if ( cnts )
+        {
+            //tprintf("cnts: %d %d\n", cnts[0], n_cnts);
+            free(cnts);
+            cnts= NULL;
+        }
+        cnts= cnts_n;
+        n_cnts= n_cnts_n;
 
         // TODO bsxfun
+        int n_f_weights_map= n_f_weights_map1 > n_f_weights_map2 ? n_f_weights_map1 : n_f_weights_map2;
+
+        //tprintf("f_weights_map, cnts: %d %d\n", n_f_weights_map, n_cnts);
         for ( i= 0; i < n_f_weights_map; ++i )
             f_weights_map[i]/= cnts[i];
 
@@ -822,32 +1039,58 @@ void computeSpatialMapBlock(int* common, int n_common,
         {
             // Store in spatial table
             float* temp_reduced= (float*)malloc(sizeof(float)*len_M*len_W);
-            int* indices= (int*)malloc(sizeof(int)*(n_common_cnts + n_selection));
+            for ( i= 0; i < len_M*len_W; ++i )
+                temp_reduced[i]= 0;
+
+            int* indices= inalloc(n_common_cnts + n_selection);
             int n_indices= 0;
             for ( i= 0; i < n_common_cnts; ++i )
                 if ( common_cnts[i] >= 1 )
                     indices[n_indices++]= i;
-            for ( i= 0; i < selection; ++i )
+            for ( i= 0; i < n_selection; ++i )
                 if ( selection[i] )
                     indices[n_indices++]= i;
 
+            /*tprintf("n_indeces: %d,%d\n", n_indices, n_f_weights_map);
+            for ( i= 0; i < n_f_weights_map; ++i )
+                printf("%d,%g ", indices[i], f_weights_map[i]);
+            printf("\n");*/
+            //getchar();
+
             for ( i= 0; i < len_M; ++i )
-                for ( k= 0; k < n_indeces; ++k )
+                for ( k= 0; k < n_indices; ++k )
                 {
-                    temp_reduced[i*len_W + indeces[k]]= f_weights_map[k];
+                    temp_reduced[i*len_W + indices[k]]= f_weights_map[k];
                 }
 
             float* temp_full= (float*)malloc(sizeof(float)*len_M*n_expand_map);
             for ( i= 0; i < len_M*n_expand_map; ++i )
                 temp_full[i]= 0;
 
+            /*tprintf("temp_reduced: %d %d\n", len_M, len_W);
+            tprintf("temp_full: %d %d\n", len_M, n_expand_map);
+            tprintf("f: %d\n", n_f);
+            tprintf("n_expanded: %d\n", n_expanded);*/
+            //getchar();
+            int l= 0;
             for ( i= 0; i < len_M; ++i )
-                for ( k= 0; k < n_f; ++k )
-                    temp_full[i*n_expand_map + f[k]]= temp_reduced[i*len_W + expanded[k]];
-            for ( i= 0; i < len_M; +3i )
-                for ( k= 0; k < n_common; ++k )
-                    temp_full[i*n_expand_map + common[k]]= temp_reduced[i*len_W + expand_map[common[k]]];
+            {
+                l= 0;
+                for ( k= 0; k < n_expand_map; ++k )
+                    if ( f[k] )
+                        temp_full[i*n_expand_map + k]= temp_reduced[i*len_W + expanded[l++]];
+            }
 
+            for ( i= 0; i < len_M; ++i )
+                for ( k= 0; k < n_common; ++k )
+                {
+                    if ( common[k] )
+                        //temp_full[i*n_expand_map + common[k]]= temp_reduced[i*len_W + expand_map[common[k]]];
+                        temp_full[i*n_expand_map + k]= temp_reduced[i*len_W + expand_map[k]];
+                    //printf("%f ", temp_full[i*n_expand_map + k]);
+                }
+
+            //getchar();
             float* temp_fullT= (float*)malloc(sizeof(float)*len_M*n_expand_map);
             for ( i= 0; i < len_M; ++i )
                 for ( k= 0; k < n_expand_map; ++k )
@@ -856,21 +1099,29 @@ void computeSpatialMapBlock(int* common, int n_common,
             exports1[j]= temp_fullT;
             n1_exports1[j]= n_expand_map;
             n2_exports1[j]= len_M;
+
+            int tmpsum= 0;
+            /*for ( k= 0; k < len_M*n_expand_map; ++k )
+                if ( temp_fullT[k] != 0 )
+                    printf("%g ", temp_fullT[k]);
+            printf("\n");
+            getchar();*/
+            //printf("=========%d\n", tmpsum);
         }
 
     }
-    for ( i= 0; i < n_f; ++i )
+    for ( i= 0; i < n_f1; ++i )
     {
-        exports1IO[f[i]]= exports1[i];
-        exports2IO[f[i]]= exports2[i];
-        exports3IO[f[i]]= exports3[i];
-        n1_exports1IO[f[i]]= n1_exports1[i];
-        n2_exports1IO[f[i]]= n2_exports1[i];
-        n1_exports2IO[f[i]]= n1_exports2[i];
-        n2_exports2IO[f[i]]= n2_exports2[i];
-        n1_exports3IO[f[i]]= n1_exports3[i];
-        n2_exports3IO[f[i]]= n2_exports3[i];
-    }*/
+        exports1IO[f1[i]]= exports1[i];
+        exports2IO[f1[i]]= exports2[i];
+        exports3IO[f1[i]]= exports3[i];
+        n1_exports1IO[f1[i]]= n1_exports1[i];
+        n2_exports1IO[f1[i]]= n2_exports1[i];
+        n1_exports2IO[f1[i]]= n1_exports2[i];
+        n2_exports2IO[f1[i]]= n2_exports2[i];
+        n1_exports3IO[f1[i]]= n1_exports3[i];
+        n2_exports3IO[f1[i]]= n2_exports3[i];
+    }
 }
 
 void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
@@ -883,29 +1134,33 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
     // Helper function for determining a matrix division solution given a known
     // partial inverse.
 
-    /*float* M_B= (float*)malloc(sizeof(float)*n_M_C1*n_M_C2);
+
+
+    float* M_B= (float*)malloc(sizeof(float)*n_M_C1*n_M_C2);
     int n_M_B1= n_M_C2;
     int n_M_B2= n_M_C1;
+
+    //tprintf("Ai, T, M_B: %d,%d %d %d,%d\n", n_Ai1, n_Ai2, n_T, n_M_B1, n_M_B2);
 
     int i, j, k, l;
     for ( i= 0; i < n_M_C1; ++i )
         for ( j= 0; j < n_M_C2; ++j )
-            n_B[j*n_M_C1 + i]= M_C[i*n_M_C2 + j];
+            M_B[j*n_M_C1 + i]= M_C[i*n_M_C2 + j];
 
-    float* T1= (float*)malloc(sizeof(float)*n_M_B1);
-    int n_T1= n_M_B1;
-    for ( i= 0; i < n_M_B1; ++i )
+    float* T1= (float*)malloc(sizeof(float)*n_M_B2);
+    int n_T1= n_M_B2;
+    for ( i= 0; i < n_M_B2; ++i )
         T1[i]= T[i];
-    float* T2= (float*)malloc(sizeof(float)*(n_T - n_M_B1));
-    int n_T2= n_T - n_M_B1;
-    for ( i= n_M_B1; i < n_T; ++i )
-        T2[i]= T[i];
+    float* T2= (float*)malloc(sizeof(float)*(n_T - n_M_B2));
+    int n_T2= n_T - n_M_B2;
+    for ( i= n_M_B2; i < n_T; ++i )
+        T2[i - n_M_B2]= T[i];
 
     float* X;
     if ( M_D == NULL || n_M_D1 == 0 || n_M_D2 == 0 )
     {
         // MATRIX AND VECTOR DIMENSIONS DO NOT AGREE!!!
-        tprintf("T: %d, Ai: %d x %d\n", n_T, n_Ai1, n_Ai2);
+        //tprintf("T: %d, Ai: %d x %d\n", n_T, n_Ai1, n_Ai2);
         X= (float*)malloc(sizeof(float)*n_Ai1);
 
         for ( i= 0; i < n_Ai1; ++i )
@@ -923,6 +1178,8 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
     float* Y;
     int n_Y1;
     int n_Y2;
+    /*printArray2Float("Ai", Ai, n_Ai1, n_Ai2);
+    printArrayFloat("T1", T1, n_T1);*/
     matrixMultiplicationNF(Ai, n_Ai1, n_Ai2, T1, n_T1, 1, &Y, &n_Y1, &n_Y2);
 
     int n_Y= n_Y1 > n_Y2 ? n_Y1 : n_Y2;
@@ -944,24 +1201,38 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
     int n_MBY2;
 
     matrixMultiplicationNF(M_B, n_M_B1, n_M_B2, Y, n_Y, 1, &MBY, &n_MBY1, &n_MBY2);
+    //printArray2Float("M_D", M_D, n_M_D1, n_M_D2);
+    //printArray2Float("MBAiMC", MBAiMC, n_MBAiMC1, n_MBAiMC2);
 
     int n_MBY= n_MBY1 > n_MBY2 ? n_MBY1 : n_MBY2;
 
-    float* A= (float*)malloc(sizeof(float)*n_M_D1*n_M_D2);
+    double* A= dnalloc(n_M_D1*n_M_D2);
     int n_A1= n_M_D1;
     int n_A2= n_M_D2;
     for ( i= 0; i < n_M_D1 * n_M_D2; ++i )
         A[i]= M_D[i] - MBAiMC[i];
 
-    float* b= (float*)malloc(sizeof(float)*n_MBY);
+    //printf("%d %d\n", n_MBY, n_T2);
+    double* b= dnalloc(n_MBY);
     for ( i= 0; i < n_MBY; ++i )
         b[i]= T2[i] - MBY[i];
     int n_b= n_MBY;
 
-    float* X2= (float*)malloc(sizeof(float)*n_A2);
-    int n_X2= n_A2;
+    double* X2tmp= dnalloc(n_A2);
+    int n_X2tmp= n_A2;
 
-    solveLinEqHD(A, n_A1, n_A2, b, 1, X2);
+    //tprintf("A: %d,%d b: %d\n", n_A1, n_A2, n_b);
+    //printArray2D("A", A, n_A1, n_A2);
+    //printArrayD("b", b, n_A1);
+    solveLinEqHD(A, n_A1, n_A2, b, 1, X2tmp);
+
+    //printArrayD("X2d", X2tmp, n_X2tmp);
+    float* X2= (float*)malloc(sizeof(float)*n_X2tmp);
+    int n_X2= n_X2tmp;
+    for ( i= 0; i < n_X2tmp; ++i )
+        X2[i]= X2tmp[i];
+
+    //printArrayFloat("X2", X2, n_X2);
 
     float* X1= (float*)malloc(sizeof(float)*n_Y);
     int n_X1= n_Y;
@@ -978,6 +1249,9 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
         matrixMultiplicationNF(Ai, n_Ai1, n_Ai2, tmp, n_tmp1, n_tmp2, &res, &n_res1, &n_res2);
         int n_res= n_res1 > n_res2 ? n_res1 : n_res2;
 
+        /*printf("X, Y, res: %d %d %d\n", n_X1, n_Y, n_res);
+        printArrayFloat("Y", Y, n_Y);
+        printArrayFloat("res", res, n_res);*/
         for ( i= 0; i < n_Y; ++i )
             X1[i]= Y[i] - res[i];
     }
@@ -998,13 +1272,124 @@ void mldivideWithParitalInverse2(float* M_C, int n_M_C1, int n_M_C2,
             X1[i]= Y[i] - res[i];
     }
 
-    float* X= (float*)malloc(sizeof(float)*(n_X1 + n_X2));
+    X= (float*)malloc(sizeof(float)*(n_X1 + n_X2));
     for ( i= 0; i < n_X1; ++i )
         X[i]= X1[i];
-    for ( ; i < n_X2; ++i )
+    for ( ; i < n_X2 + n_X1; ++i )
         X[i]= X2[i-n_X1];
 
     *XIO= X;
     *n_X1IO= n_X1 + n_X2;
-    *n_X2IO= 1;*/
+    *n_X2IO= 1;
+}
+
+void invWithPartial2(float* M_B, int n_M_B1, int n_M_B2,
+                     float* M_D, int n_M_D1, int n_M_D2,
+                     float* Ai, int n_Ai1, int n_Ai2,
+                     float** resIO, int* n_res1IO, int* n_res2IO)
+{
+    printArray2Float("M_B", M_B, n_M_B1, n_M_B2);
+    printArray2Float("M_D", M_D, n_M_D1, n_M_D2);
+    printArray2Float("Ai", Ai, n_Ai1, n_Ai2);
+    //getchar();
+
+    // Helper function for computing an inverse matrix given a known partial inverse
+    float* M_C= (float*)malloc(sizeof(float)*n_M_B1*n_M_B2);
+    int i, j, k;
+    int n_M_C1= n_M_B2;
+    int n_M_C2= n_M_B1;
+
+    for ( i= 0; i < n_M_B1; ++i )
+        for ( j= 0; j < n_M_B2; ++j )
+            M_C[j*n_M_C2 + i]= M_B[i*n_M_B2 + j];
+
+    float* SS;
+    int n_SS1, n_SS2;
+    matrixMultiplicationNF(Ai, n_Ai1, n_Ai2, M_B, n_M_B1, n_M_B2, &SS, &n_SS1, &n_SS2);
+    float* M_CSS;
+    int n_M_CSS1, n_M_CSS2;
+
+    matrixMultiplicationNF(M_C, n_M_C1, n_M_C2, SS, n_SS1, n_SS2, &M_CSS, &n_M_CSS1, &n_M_CSS2);
+
+    float* SP= (float*)malloc(sizeof(float)*n_M_D1*n_M_D2);
+    int n_SP1= n_M_D1;
+    int n_SP2= n_M_D2;
+
+    for ( i= 0; i < n_SP1*n_SP2; ++i )
+        SP[i]= M_D[i] - M_CSS[i];
+
+    float* SPi;
+    int n_SPi1;
+    int n_SPi2;
+    invertMatrixFloatN(SP, n_SP1, n_SP2, &SPi);
+    n_SPi1= n_SP2;
+    n_SPi2= n_SP1;
+
+    float* SPiM_C;
+    int n_SPiM_C1;
+    int n_SPiM_C2;
+
+    matrixMultiplicationNF(SPi, n_SPi1, n_SPi2, M_C, n_M_C1, n_M_C2, &SPiM_C, &n_SPiM_C1, &n_SPiM_C2);
+
+    float* RR;
+    int n_RR1;
+    int n_RR2;
+
+    matrixMultiplicationNF(SPiM_C, n_SPiM_C1, n_SPiM_C2, Ai, n_Ai1, n_Ai2, &RR, &n_RR1, &n_RR2);
+
+    float* SSRR;
+    int n_SSRR1;
+    int n_SSRR2;
+
+    matrixMultiplicationNF(SS, n_SS1, n_SS2, RR, n_RR1, n_RR2, &SSRR, &n_SSRR1, &n_SSRR2);
+
+    float* SSSPi;
+    int n_SSSPi1;
+    int n_SSSPi2;
+
+    matrixMultiplicationNF(SS, n_SS1, n_SS2, SPi, n_SPi1, n_SPi2, &SSSPi, &n_SSSPi1, &n_SSSPi2);
+
+    float* AiSSRR= (float*)malloc(sizeof(float)*n_Ai1 * n_Ai2);
+    for ( i= 0; i < n_Ai1*n_Ai2; ++i )
+        AiSSRR[i]= Ai[i] + SSRR[i];
+    for ( i= 0; i < n_SSSPi1*n_SSSPi2; ++i )
+        SSSPi[i]= -SSSPi[i];
+    for ( i= 0; i < n_RR1*n_RR2; ++i )
+        RR[i]= -RR[i];
+
+    float* res;
+    int n_res1= n_Ai1 + n_RR1;
+    int n_res2= n_Ai2 + n_SSSPi2;
+    res= (float*)malloc(sizeof(float)*n_res1*n_res2);
+
+    int ii;
+    int jj;
+    for ( i= 0; i < n_res1; ++i )
+        for ( j= 0; j < n_res2; ++j )
+        {
+            if ( i < n_Ai1 && j < n_Ai2 )
+            {
+                res[i*n_res2 + j]= AiSSRR[i*n_Ai2 + j];
+            }
+            else if ( i < n_Ai1 )
+            {
+                jj= j - n_Ai2;
+                res[i*n_res2 + j]= SSRR[i*n_SSRR2 + jj];
+            }
+            else if ( i >= n_Ai1 && j < n_Ai2 )
+            {
+                ii= i - n_Ai1;
+                res[i*n_res2 + j]= RR[ii*n_RR2 + j];
+            }
+            else
+            {
+                ii= i - n_Ai1;
+                jj= j - n_Ai2;
+                res[i*n_res2 + j]= SPi[ii*n_SPi1 + jj];
+            }
+        }
+
+    *resIO= res;
+    *n_res1IO= n_res1;
+    *n_res2IO= n_res2;
 }
