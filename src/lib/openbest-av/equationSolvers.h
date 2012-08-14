@@ -20,4 +20,6 @@ void invertMatrixFloat(float* a, int rows, int columns, float* b);
 
 void invertMatrixFloatP(float* a, int rows, int columns);
 
+double conditionNumberEstimateD(double* a, int rows, int columns);
+
 #endif

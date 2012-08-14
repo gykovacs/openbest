@@ -2,6 +2,7 @@
 #define _BERKELEY_AVERAGE_CORE_H_
 
 #include "openbest-av/berkeleyAverageOptions.h"
+#include "openbest-av/berkeleyAverageResults.h"
 #include "openbest-ds/stationSite2.h"
 #include "openbest-ds/stationElement2.h"
 #include "openbest-ds/mathFunctions.h"
@@ -16,6 +17,6 @@
   * @param n_ssIO pointer to the length of ssIO array
   * @param options berkeleyAverageOptions object pointer
   */
-void berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** ssIO, int* n_ssIO, berkeleyAverageOptions* options);
+berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** ssIO, int* n_ssIO, berkeleyAverageOptions* options);
 
 #endif

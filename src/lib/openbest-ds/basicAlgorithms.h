@@ -239,4 +239,26 @@ void matrixMultiplicationNF(float* a, int na1, int na2,
                             float* b, int nb1, int nb2,
                             float** c, int* nc1, int* nc2);
 
+void matrixMultiplicationND(double* a, int na1, int na2,
+                            double* b, int nb1, int nb2,
+                            double** c, int* nc1, int* nc2);
+
+double* transposeMatrixND(double* a, int n1, int n2);
+
+void matrixSubtractND(double* a, int na1, int na2,
+                      double* b, int nb1, int nb2,
+                      double** c, int* nc1, int* nc2);
+
+void matrixSubtractVectorND(double* a, int na1, int na2,
+                            double* b, int nb1, int nb2,
+                            double** c, int* nc1, int* nc2);
+
+void matrixMultiplicationByVector(double* a, int na1, int na2,
+                                  double* b, int nb,
+                                  double** c, int* nc);
+
+void vectorMultiplicationByMatrix(double* a, int na,
+                                  double* b, int nb1, int nb2,
+                                  double**c, int* nc);
+
 #endif

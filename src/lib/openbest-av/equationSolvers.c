@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include <gsl/gsl_linalg.h>
 
@@ -243,4 +245,25 @@ void invertMatrixFloat(float* a, int rows, int columns, float* b)
 void invertMatrixFloatP(float* a, int rows, int columns)
 {
 
+}
+
+double conditionNumberEstimateD(double* a, int rows, int columns)
+{
+    int n_ipiv= rows < columns ? rows : columns;
+    int* ipiv= inalloc(n_ipiv);
+
+    int err= LAPACKE_dgetrf(LAPACK_ROW_MAJOR, rows, columns, a, rows, ipiv);
+    tprintf("err: %d\n", err);
+
+    double anorm= fabs(a[0]);
+    int i;
+    for ( i= 0; i < rows*columns; ++i )
+        if ( anorm < fabs(a[i]) )
+            anorm= fabs(a[i]);
+
+    double rcond;
+    err= LAPACKE_dgecon(LAPACK_ROW_MAJOR, '1', columns, a, rows, anorm, &rcond);
+    tprintf("err: %d\n", err);
+
+    return rcond;
 }

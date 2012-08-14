@@ -81,7 +81,7 @@ void buildSpatialMap(float* weight, int n_weight,
             common_index[j]= 0;
         else if ( common_index[j] == 0 )
         {
-            printf("ci%d ", j);
+            //printf("ci%d ", j);
             //dea();
             int m= j;
             while ( m < len_T )
@@ -133,10 +133,10 @@ void buildSpatialMap(float* weight, int n_weight,
         }
     }
 
-    tprintf("common_index:\n");
+    /*tprintf("common_index:\n");
     for ( i= 0; i < n_common_index; ++i )
         printf("%d ", common_index[i]);
-    printf("\n");
+    printf("\n");*/
 
     int max_common_index= maxI(common_index, n_common_index) + 1;
     bool* common_list2= bnalloc(n_common_list1 * max_common_index );
@@ -196,19 +196,19 @@ void buildSpatialMap(float* weight, int n_weight,
     float* weight2= NULL;
     real* target_map2= NULL;
 
-    tprintf("expand_map: \n");
+    /*tprintf("expand_map: \n");
     for ( i= 0; i < n_expand_map; ++i )
-        printf("%d ", expand_map[i]);
+        printf("%d ", expand_map[i]);*/
 
     int* f;
     int n_f;
 
-    tprintf("max_common_index: %d\n", max_common_index);
+    //tprintf("max_common_index: %d\n", max_common_index);
     //getchar();
 
     for ( n= 0; n < max_common_index; n+= pool_size )
     {
-        tprintf("======== n= %d\n", n); //getchar();
+        //tprintf("======== n= %d\n", n); //getchar();
         tprintf("Begin of Build Spatial Maps %d %f\n", n, (float)n / max_common_index );
 
         // Preallocate exchange variable used for communicating with parallel nodes (when available)
@@ -244,7 +244,7 @@ void buildSpatialMap(float* weight, int n_weight,
 
         for ( j= n; j <= n + pool_size - 1; ++j )
         {
-            tprintf("j iteration %d\n", j); //getchar();
+            //tprintf("j iteration %d\n", j); //getchar();
             f= inalloc(n_common_index);
             n_f= 0;
             for ( i= 0; i < n_common_index; ++i )
@@ -339,7 +339,7 @@ void buildSpatialMap(float* weight, int n_weight,
             int n_remap_s= max_needed_s + 1;
             seti(remap_s, n_remap_s, 0);
 
-            printArrayI("list", list, n_list);
+            //printArrayI("list", list, n_list);
 
             for ( i= 0; i < n_list; ++i )
                 remap_s[list[i]]= i;
@@ -372,10 +372,10 @@ void buildSpatialMap(float* weight, int n_weight,
             /*printf("target_map: %d, %d %f\n", n_target_map21, n_target_map22, target_map2[n_target_map21*n_target_map22-1]);
             getchar();*/
 
-            printArrayI("needed", needed, n_needed);
+            /*printArrayI("needed", needed, n_needed);
             printArrayI("needed_s", needed_s, n_needed_s);
             printArrayI("remap", remap, n_remap);
-            printArrayI("remap_s", remap_s, n_remap_s);
+            printArrayI("remap_s", remap_s, n_remap_s);*/
 
             //getchar();
 
@@ -386,7 +386,7 @@ void buildSpatialMap(float* weight, int n_weight,
                 for ( i= 0; i < n_common_list1; ++i )
                     common[i]= common_list[i*n_common_list2 + j];
 
-                printArrayI("common", common, n_common_list1);
+                //printArrayI("common", common, n_common_list1);
 
                 float* weight3;
                 int n_weight31;
@@ -394,7 +394,7 @@ void buildSpatialMap(float* weight, int n_weight,
 
                 createSubArrayIndex2Float(weight, n_weight, n_weight, needed, n_needed, needed, n_needed, &weight3, &n_weight31, &n_weight32);
 
-                printArray2Float("weight3", weight3, n_weight31, n_weight32);
+                //printArray2Float("weight3", weight3, n_weight31, n_weight32);
 
                 //getchar();
 
@@ -413,11 +413,11 @@ void buildSpatialMap(float* weight, int n_weight,
                 for ( i= 0; i < n_common; ++i )
                     if ( common[i] )
                         expanded[n_expanded++]= expand_map[i];
-                printArrayI("expanded", expanded, n_expanded);
+                //printArrayI("expanded", expanded, n_expanded);
 
                 for ( m= 0; m < n_expanded; ++m )
                     cnts[expanded[m]]= cnts[expanded[m]] + 1;
-                printArrayI("cnts", cnts, n_cnts);
+                //printArrayI("cnts", cnts, n_cnts);
                 //getchar();
 
                 int* selection= inalloc(n_cnts);
@@ -425,7 +425,7 @@ void buildSpatialMap(float* weight, int n_weight,
                 for ( i= 0; i < n_cnts; ++i )
                     selection[i]= cnts[i] > 0;
 
-                printArrayI("selection", selection, n_selection);
+                //printArrayI("selection", selection, n_selection);
 
                 int n_remap_selection= 0;
                 for ( i= 0; i < n_selection; ++i )
@@ -440,11 +440,11 @@ void buildSpatialMap(float* weight, int n_weight,
                         remap_selection[k++]= remap[i];
 
 
-                printArrayI("remap_selection", remap_selection, n_remap_selection);
+                //printArrayI("remap_selection", remap_selection, n_remap_selection);
 
                 createSubArrayIndex2Float(weight3, n_weight31, n_weight32, remap_selection, n_remap_selection, remap_selection, n_remap_selection, &B, &n_B1, &n_B2);
 
-                printArray2Float("B", B, n_B1, n_B2);
+                //printArray2Float("B", B, n_B1, n_B2);
 
                 //for ( i= 0; i < n_B1; ++i )
                 k= 0;
@@ -452,12 +452,12 @@ void buildSpatialMap(float* weight, int n_weight,
                     if ( selection[i] )
                         B[k*n_B2 + k++]= (1.0 + (cnts[i] - 1.0) * mix_term)/(double)(cnts[i]);
 
-                tprintf("ccc\n");
+                //tprintf("ccc\n");
                 //printArray2Float("B_", B, n_B1, n_B2);
 
                 if ( n_B1 * n_B2 * 8 > 100e6 && ! options->clusterMode )
                 {
-                    tprintf("aaa\n");
+                    //tprintf("aaa\n");
                     need_inv[j-n]= false;
                     //invertMatrix(B, n_B1);
                     float* B_inv;
@@ -470,14 +470,14 @@ void buildSpatialMap(float* weight, int n_weight,
                     need_inv[j-n]= true;
                 }
 
-                tprintf("bbb\n");
+                //tprintf("bbb\n");
                 B_pass[j-n]= B;
                 n_B_pass[j-n]= n_B1;
                 common_cnts[j-n]= cnts;
                 n_common_cnts[j-n]= n_cnts;
-                tprintf("ddd\n");
+                //tprintf("ddd\n");
                 //free(weight3);
-                tprintf("eee\n");
+                //tprintf("eee\n");
             }
             else
             {
@@ -500,7 +500,7 @@ void buildSpatialMap(float* weight, int n_weight,
             }
         }
 
-        tprintf("end of j iteration\n"); //getchar();
+        //tprintf("end of j iteration\n"); //getchar();
 
         /*if ( weight2 )
             free(weight2);
@@ -557,7 +557,7 @@ void buildSpatialMap(float* weight, int n_weight,
         for ( i= n ; i <= n + n_items; ++i )
             items[i - n]= i;
 
-        tprintf("end of iteration\n");
+        //tprintf("end of iteration\n");
         if ( pool_size > 1 )
         {
             // TODO
@@ -592,7 +592,7 @@ void buildSpatialMap(float* weight, int n_weight,
 
                     n_Bi1= n_B_copy[0];
                     n_Bi2= n_B_copy[0];
-                    printArray2Float("Bi", Bi, n_Bi1, n_Bi2);
+                    //printArray2Float("Bi", Bi, n_Bi1, n_Bi2);
                 }
                 else
                 {
@@ -611,8 +611,8 @@ void buildSpatialMap(float* weight, int n_weight,
                 Bi= NULL;
                 n_Bi1= n_Bi2= 0;
             }
-            tprintf("%d %d\n", n_target_map2_copy1[0], n_target_map2_copy2[0]);
-            tprintf("%f\n", target_map2_copy[0][n_target_map2_copy1[0]*(n_target_map2_copy2[0])-1]);
+            //tprintf("%d %d\n", n_target_map2_copy1[0], n_target_map2_copy2[0]);
+            //tprintf("%f\n", target_map2_copy[0][n_target_map2_copy1[0]*(n_target_map2_copy2[0])-1]);
             //getchar();
             /*for ( i= 0; i < n_expand_map; ++i )
                 if ( expand_map[i] >= n_remap_pass[0] )
@@ -676,7 +676,7 @@ void buildSpatialMap(float* weight, int n_weight,
 
         *spatial_tableIO= (double*)malloc(sizeof(double)*len_T*len_SM);
 
-        printf("aaa\n"); fflush(stdout);
+        //printf("aaa\n"); fflush(stdout);
 
         int sum;
         for ( i= 0; i < len_T; ++i )
@@ -685,7 +685,7 @@ void buildSpatialMap(float* weight, int n_weight,
             for ( j= 0; j < n1_exports1[i]; ++j )
                 if ( exports1[i][j] != 0 )
                     sum+= 1;
-            printf("%d ", sum);
+            //printf("%d ", sum);
         }
 
         for ( i= 0; i < len_SM; ++i )
@@ -694,11 +694,11 @@ void buildSpatialMap(float* weight, int n_weight,
                     (*spatial_tableIO)[i*len_T+j]= 0;
                 else
                     (*spatial_tableIO)[i*len_T+j]= exports1[j][i];
-        printf("bbb\n"); fflush(stdout);
+        //printf("bbb\n"); fflush(stdout);
         *n_spatial_table1= len_SM;
-        printf("ccc\n"); fflush(stdout);
+        //printf("ccc\n"); fflush(stdout);
         *n_spatial_table2= len_T;
-        printf("ddd\n"); fflush(stdout);
+        //printf("ddd\n"); fflush(stdout);
     }
 }
 
@@ -748,11 +748,11 @@ void computeSpatialMapBlock(int* common, int n_common,
 
     int i, j, k;
 
-    tprintf("loops: %d\n", loops);
+    //tprintf("loops: %d\n", loops);
 
     for ( j= 0; j < loops; ++j )
     {
-        tprintf("iteration: %d\n", j);
+        //tprintf("iteration: %d\n", j);
         bool* f= fnalloc(n_occ_fragment1);
         int n_f= n_occ_fragment1;
 
@@ -1288,9 +1288,9 @@ void invWithPartial2(float* M_B, int n_M_B1, int n_M_B2,
                      float* Ai, int n_Ai1, int n_Ai2,
                      float** resIO, int* n_res1IO, int* n_res2IO)
 {
-    printArray2Float("M_B", M_B, n_M_B1, n_M_B2);
+    /*printArray2Float("M_B", M_B, n_M_B1, n_M_B2);
     printArray2Float("M_D", M_D, n_M_D1, n_M_D2);
-    printArray2Float("Ai", Ai, n_Ai1, n_Ai2);
+    printArray2Float("Ai", Ai, n_Ai1, n_Ai2);*/
     //getchar();
 
     // Helper function for computing an inverse matrix given a known partial inverse

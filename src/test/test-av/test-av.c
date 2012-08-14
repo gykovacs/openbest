@@ -201,6 +201,16 @@ int idealGridTest(int argc, char** argv)
     return 0;
 }
 
+int conditionNumberTest(int argc, char** argv)
+{
+    double a[]= {2.0, 0.2, 1.8,
+                 0.2, 2.4, 0.5,
+                 1.8, 0.5, 0.1};
+    double cn= conditionNumberEstimateD(a, 3, 3);
+    tprintf("condition number: %f\n");
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     optionTable* ot= createOptionTable();
@@ -215,6 +225,7 @@ int main(int argc, char** argv)
     bool solveeq2= false;
     bool solveeq3= false;
     bool idealgrid= false;
+    bool condnum= false;
 
     int err;
 
@@ -225,6 +236,7 @@ int main(int argc, char** argv)
     addOption(ot, "--solveeq2", OPTION_BOOL, (char*)&solveeq2, 0, "equation solver test 2");
     addOption(ot, "--solveeq3", OPTION_BOOL, (char*)&solveeq3, 0, "equation solver test 3");
     addOption(ot, "--idealgrid", OPTION_BOOL, (char*)&idealgrid, 0, "ideal grid test");
+    addOption(ot, "--condnum", OPTION_BOOL, (char*)&condnum, 0, "condition number");
 
     if ( processArgs(ot, &argc, argv) )
     {
@@ -246,6 +258,8 @@ int main(int argc, char** argv)
         err= eqsolve3Test(argc, argv);
     else if ( idealgrid )
         err= idealGridTest(argc, argv);
+    else if ( condnum )
+        err= conditionNumberTest(argc, argv);
 
     destroyOptionTable(ot);
 

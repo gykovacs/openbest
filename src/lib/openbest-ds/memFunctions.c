@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/memFunctions.h"
@@ -85,6 +86,13 @@ void setb(bool* p, int n, bool v)
         p[i]= v;
 }
 
+void setd(double* p, int n, double v)
+{
+    int i;
+    for ( i= 0; i < n; ++i )
+        p[i]= v;
+}
+
 real* copyRA(real* input, int n)
 {
     if ( n > 0 )
@@ -146,6 +154,17 @@ temp_t* copyTA(temp_t* input, int n)
     {
         temp_t* tmp= (temp_t*)malloc(sizeof(temp_t)*n);
         memcpy(tmp, input, n*sizeof(temp_t));
+        return tmp;
+    }
+    return NULL;
+}
+
+double* copyDA(double* input, int n)
+{
+    if ( n > 0 )
+    {
+        double* tmp= (double*)malloc(sizeof(double)*n);
+        memcpy(tmp, input, n*sizeof(double));
         return tmp;
     }
     return NULL;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include "openbest-ds/memFunctions.h"
 #include "openbest-ds/basicAlgorithms.h"
 
 void swap(real *x,real *y)
@@ -485,4 +486,115 @@ void matrixMultiplicationNF(float* a, int na1, int na2, float* b, int nb1, int n
     *c= x;
     *nc1= na1;
     *nc2= nb2;
+}
+
+void matrixMultiplicationND(double* a, int na1, int na2, double* b, int nb1, int nb2, double** c, int* nc1, int* nc2)
+{
+    //tprintf("A: %d %d, b: %d %d\n", na1, na2, nb1, nb2);
+    double* x= dnalloc(na1 * nb2);
+    if ( x == NULL )
+        eprintf("dnalloc failed in matrixMultiplicationND");
+
+    int i, j, k;
+
+    #pragma omp parallel for
+    for ( i= 0; i < na1; ++i )
+        for ( j= 0; j < nb2; ++j )
+        {
+            x[i*nb2 + j]= 0;
+            for ( k= 0; k < na2; ++k )
+            {
+                x[i*nb2 + j]+= a[i*na2 + k]*b[k*nb2 + j];
+            }
+        }
+
+    *c= x;
+    *nc1= na1;
+    *nc2= nb2;
+}
+
+
+double* transposeMatrixND(double* a, int n1, int n2)
+{
+    double* tmp= dnalloc(n1*n2);
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+        for ( j= 0; j < n2; ++j )
+            tmp[j*n1 + i]= a[i*n2 + j];
+    return tmp;
+}
+
+void matrixSubtractND(double* a, int na1, int na2,
+                      double* b, int nb1, int nb2,
+                      double** c, int* nc1, int* nc2)
+{
+    double* tmp= dnalloc(na1*na2);
+    int i;
+    for ( i= 0; i < na1*na2; ++i )
+        tmp[i]= a[i] - b[i];
+    *c= tmp;
+    *nc1= na1;
+    *nc2= na2;
+}
+
+void matrixSubtractVectorND(double* a, int na1, int na2,
+                            double* b, int nb1, int nb2,
+                            double** c, int* nc1, int* nc2)
+{
+    double* tmp= dnalloc(na1*na2);
+    int i, j, k;
+    if ( nb2 == 1 )
+    {
+        for( i= 0; i < na2; ++i )
+            for ( j= 0; j < na1; ++j )
+            {
+                tmp[j*na2 + i]= a[j*na2 + i] - b[j];
+            }
+        *c= tmp;
+        *nc1= na1;
+        *nc2= na2;
+    }
+    else
+    {
+        for ( i= 0; i < na1; ++i )
+            for ( j= 0; j < na2; ++j )
+            {
+                tmp[i*na2 + j]= a[i*na2 + j] - b[j];
+            }
+        *c= tmp;
+        *nc1= na1;
+        *nc2= na2;
+    }
+}
+
+void matrixMultiplicationByVector(double* a, int na1, int na2,
+                                  double* b, int nb,
+                                  double** c, int* nc)
+{
+    double* tmp= dnalloc(na1);
+    int i, j, k;
+    for ( i= 0; i < na1; ++i )
+    {
+        tmp[i]= 0;
+        for ( j= 0; j < na2; ++j )
+            tmp[i]+= a[i*na2 + j] * b[j];
+    }
+    *c= tmp;
+    *nc= na1;
+}
+
+void vectorMultiplicationByMatrix(double* a, int na,
+                                  double* b, int nb1, int nb2,
+                                  double**c, int* nc)
+{
+    double* tmp= dnalloc(nb2);
+    int i, j, k;
+    for ( i= 0; i < nb2; ++i )
+    {
+        tmp[i]= 0;
+        for ( j= 0; j < nb1; ++j )
+            tmp[i]+= b[j*nb2 + i] * a[j];
+    }
+    *c= tmp;
+    *nc= nb2;
 }

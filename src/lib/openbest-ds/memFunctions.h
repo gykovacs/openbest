@@ -103,6 +103,14 @@ void sets(short* p, int n, short v);
 void setf(flag_t* p, int n, flag_t v);
 
 /**
+  * sets the elements of the parameter array to a specific value
+  * @param p input array
+  * @param n length of the input array
+  * @param v value to set the elements of the array to
+  */
+void setd(double* p, int n, double v);
+
+/**
   * returns a newly allocated area with the copied contents of the parameter array
   * @param input input array to copy
   * @param n length of the input array
@@ -150,6 +158,7 @@ char* copyCA(char* input, int n);
   */
 temp_t* copyTA(temp_t* input, int n);
 
+double* copyDA(double* input, int n);
 
 
 #endif

@@ -1,0 +1,68 @@
+#ifndef _BERKELEY_AVERAGE_RESULTS_H_
+#define _BERKELEY_AVERAGE_RESULTS_H_
+
+#include "openbest-ds/config-ds.h"
+#include "openbest-ds/geoPoint2.h"
+
+typedef struct
+{
+    double network_completeness;
+    double quality_of_fit;
+    double data_points;
+    double time_parameters;
+    double baseline_parameters;
+    double adjusted_quality_of_fit;
+    double reduced_baseline_parameters;
+
+    real* record_weights;
+    int n_record_weights;
+
+    real* site_weights;
+    int n_site_weights;
+
+    real* times_monthly;
+    int n_times_monthly;
+
+    real* values_monthly;
+    int n_values_monthly;
+
+    real* times_annual;
+    int n_times_annual;
+
+    real* values_annual;
+    int n_values_annual;
+
+    real* times_five_year;
+    int n_times_five_year;
+
+    real* values_five_year;
+    int n_values_five_year;
+
+    real* times_ten_year;
+    int n_times_ten_year;
+
+    real* values_ten_year;
+    int n_values_ten_year;
+
+    real* times_twenty_year;
+    int n_times_twenty_year;
+
+    real* values_twenty_year;
+    int n_values_twenty_year;
+
+    real* baseline;
+    int n_baseline;
+
+    real* coverage_summary;
+    int n_coverage_summary;
+
+    geoPoint2** location_pts;
+    int n_location_pts;
+
+    bool* occurance_table;
+    int n_occurance_table1;
+    int n_occurance_table2;
+
+} berkeleyAverageResults;
+
+#endif
