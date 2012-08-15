@@ -1,8 +1,25 @@
 #ifndef _BERKELEY_AVERAGE_RESULTS_H_
 #define _BERKELEY_AVERAGE_RESULTS_H_
 
+#include <time.h>
+
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/geoPoint2.h"
+#include "openbest-av/berkeleyAverageOptions.h"
+
+typedef struct
+{
+    int* break_positions;
+    int n_break_positions;
+    int* break_flags;
+    int n_break_flags;
+    real* baseline;
+    int n_baseline;
+    real* record_weight;
+    int n_record_weight;
+    real* site_weight;
+    int n_site_weight;
+} baselineStruct;
 
 typedef struct
 {
@@ -50,8 +67,8 @@ typedef struct
     real* values_twenty_year;
     int n_values_twenty_year;
 
-    real* baseline;
-    int n_baseline;
+    real* baselines;
+    int n_baselines;
 
     real* coverage_summary;
     int n_coverage_summary;
@@ -62,6 +79,27 @@ typedef struct
     bool* occurance_table;
     int n_occurance_table1;
     int n_occurance_table2;
+
+    berkeleyAverageOptions* options;
+
+    time_t execution_started;
+    int initial_time_series;
+    int post_scalpel_time_series;
+
+    baselineStruct* baselinesS;
+    int n_baselinesS;
+
+    real* gap_baseline_shifts;
+    int n_gap_baseline_shifts;
+
+    real* move_baseline_shifts;
+    int n_move_baseline_shifts;
+
+    real* tob_baseline_shifts;
+    int n_tob_baseline_shifts;
+
+    real* empirical_baseline_shifts;
+    int n_empirical_baseline_shifts;
 
 } berkeleyAverageResults;
 

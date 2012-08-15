@@ -1237,8 +1237,8 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
                           &(results->times_twenty_year), &(results->n_times_twenty_year),
                           &(results->values_twenty_year), &(results->n_values_twenty_year));
 
-    results->baseline= baseline;
-    results->n_baseline= n_baseline;
+    results->baselines= baseline;
+    results->n_baselines= n_baseline;
 
     if ( options->fullBaselineMapping )
     {

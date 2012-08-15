@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SUBDIRS(sampleDataset)
+SUBDIRS(sampleDataset berkeleyAverage)
 
 SET(CMAKE_VERBOSE_MAKEFILE on)
