@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "openbest-ds/memFunctions.h"
 #include "openbest-ds/stationSite2.h"
 #include "openbest-ds/primaryKeyTables.h"
 

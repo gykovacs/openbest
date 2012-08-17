@@ -1,4 +1,6 @@
 #include "openbest-ds/matrix3.h"
+#include <stdlib.h>
+#include <math.h>
 
 matrix3 createMatrix3(real a, real b, real c, real d, real e, real f, real g, real h, real i)
 {

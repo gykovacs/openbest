@@ -10,6 +10,7 @@
 #include "openbest-ds/printOut.h"
 #include "openbest-av/equationSolvers.h"
 #include "openbest-av/idealGrid.h"
+#include "openbest-ds/mathFunctions.h"
 
 int boptionsTest(int argc, char** argv)
 {
@@ -211,6 +212,21 @@ int conditionNumberTest(int argc, char** argv)
     return 0;
 }
 
+int polyvalTest(int argc, char** argv)
+{
+    berkeleyAverageOptions* options= createBerkeleyAverageOptionsQuick();
+
+    real* p= options->correlationParameters;
+    int n_p= options->n_correlationParameters;
+    real maxd= options->correlationLimitDistance;
+
+    real res= polyval(p, n_p, 2.0);
+
+    printf("%f\n", res);
+
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     optionTable* ot= createOptionTable();
@@ -226,6 +242,7 @@ int main(int argc, char** argv)
     bool solveeq3= false;
     bool idealgrid= false;
     bool condnum= false;
+    bool polyval= false;
 
     int err;
 
@@ -237,6 +254,7 @@ int main(int argc, char** argv)
     addOption(ot, "--solveeq3", OPTION_BOOL, (char*)&solveeq3, 0, "equation solver test 3");
     addOption(ot, "--idealgrid", OPTION_BOOL, (char*)&idealgrid, 0, "ideal grid test");
     addOption(ot, "--condnum", OPTION_BOOL, (char*)&condnum, 0, "condition number");
+    addOption(ot, "--polyval", OPTION_BOOL, (char*)&polyval, 0, "polyval");
 
     if ( processArgs(ot, &argc, argv) )
     {
@@ -260,6 +278,8 @@ int main(int argc, char** argv)
         err= idealGridTest(argc, argv);
     else if ( condnum )
         err= conditionNumberTest(argc, argv);
+    else if ( polyval )
+        err= polyvalTest(argc, argv);
 
     destroyOptionTable(ot);
 

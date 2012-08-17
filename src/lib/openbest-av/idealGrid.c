@@ -5,6 +5,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void idealGrid(int num, real** latitudeIO, int* n_latitude, real** longitudeIO, int* n_longitude)
 {

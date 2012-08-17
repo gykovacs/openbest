@@ -1,4 +1,6 @@
 #include <float.h>
+#include <math.h>
+#include <stdlib.h>
 
 #include "openbest-av/buildMatrices.h"
 
@@ -17,6 +19,8 @@ void buildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_array,
                    double** temperature_constantsIO, int* n_temperature_constantsIO,
                    double** record_weightIO, int* n_record_weightIO)
 {
+    tprintf("Begin of Build Matrices\n");
+
     int matlabPoolSize= 1;
 
     if ( matlabPoolSize > 1 )
@@ -40,6 +44,8 @@ void buildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_array,
                             temperature_constantsIO, n_temperature_constantsIO,
                             record_weightIO, n_record_weightIO);
     }
+
+    tprintf("End of Build Matrices\n");
 }
 
 void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_array,
@@ -92,8 +98,8 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
 
     // Loop over stations
 
-    double* record_weight= dnalloc(len_t);
-    int n_record_weight= len_t;
+    double* record_weight= dnalloc(len_s);
+    int n_record_weight= len_s;
     setd(record_weight, n_record_weight, 0);
 
     int temp_blocking_size= 2500;
@@ -118,11 +124,13 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
 
             int ii;
             for ( i= j; i < max; ++i )
+            {
+                ii= i - j;
                 for ( k= 0; k < n_new_spatial_table2; ++k )
                 {
-                    ii= i - j;
                     sp_weight_temp[ii*n_new_spatial_table2 + k]= new_spatial_table[i*n_new_spatial_table2 + k];
                 }
+            }
             n_sp_weight_temp1= max - j;
             n_sp_weight_temp2= n_new_spatial_table2;
         }
@@ -145,8 +153,6 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
 
         real* outlier_weight= rnalloc(n_data);
         int n_outlier_weight= n_data;
-
-        //deb();
         set(outlier_weight, n_outlier_weight, 1);
 
         if ( !first && options->useOutlierWeighting )
@@ -168,25 +174,20 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
             n_local_table= n_data;
         }
 
-        //dec();
         // Add entries corresponding to
         // (spatial correlation_table)*(data(t,x) - baseline(x) - mean_temp(t))
 
         s= dnalloc(n_monthnum);
         n_s= n_monthnum;
-        //tprintf("n_monthnum: %dx%d %d\n", n_sp_weight_temp1, n_sp_weight_temp2, n_monthnum);
-        /*getchar();
-        for ( i= 0; i < n_monthnum; ++i )
-            printf("%d ", monthnum[i]);
-        printf("\n");*/
+
         int idx= j%temp_blocking_size;
         for ( i= 0; i < n_monthnum; ++i )
-            s[i]= sp_weight_temp[idx*n_sp_weight_temp2 + (int)(monthnum[i])];
+            s[i]= sp_weight_temp[idx*n_sp_weight_temp2 + monthnum[i]];
 
         //def();
         double sum= 0;
         for ( i= 0; i < n_s; ++i )
-            sum+= fabs(s[i] * outlier_weight[i]);
+            sum+= fabs(s[i]) * outlier_weight[i];
         record_weight[j]= sum;
 
         //deg();
@@ -206,7 +207,6 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
             temperature_constant[(int)(monthnum[i])]+= s[i]*data[i];
     }
 
-    def();
     *record_weightIO= record_weight;
     *base_weightsIO= base_weights;
     *base_constantsIO= base_constants;

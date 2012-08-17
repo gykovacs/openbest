@@ -1,8 +1,9 @@
 #include "openbest-ds/geoPoint2.h"
+#include <stdlib.h>
 
 geoPoint2* createGeoPoint2N()
 {
-  geoPoint2* p= (geoPoint*)malloc(sizeof(geoPoint2));
+  geoPoint2* p= (geoPoint2*)malloc(sizeof(geoPoint2));
   if ( !p )
     eprintf("malloc failed in createGeoPointN");
   p->lat_uncertainty= p->long_uncertainty= p->elev_uncertainty= p->latitude= p->longitude= p->elevation= p->x= p->y= p->z= FLT_MAX;
@@ -61,7 +62,7 @@ void computeXYZ_GP2(geoPoint2* pt)
   if ( pt->elevation < 0 )
       pt->elevation= 0;
   real R= pt->elevation;
-  if ( pt->elevation != FLT_MAX )
+  if ( pt->elevation != FLT_MAX && pt->elevation >= -1000 && pt->elevation <= 10000)
   {
     R= earth_radius + pt->elevation/1000;
   }

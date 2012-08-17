@@ -336,7 +336,11 @@ real polyval(real* p, int n_p, real x)
 {
     int i;
     real res= 0;
+    //printf("%f %d\n", x, n_p);
     for ( i= 0; i < n_p; ++i )
+    {
+        //printf("%f\n", pow(x, n_p - i));
         res+= p[i]*pow(x, n_p - i - 1);
+    }
     return res;
 }

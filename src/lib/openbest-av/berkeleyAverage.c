@@ -7,6 +7,7 @@
 #include "openbest-ds/mathFunctions.h"
 #include "openbest-ds/basicAlgorithms.h"
 #include "openbest-av/berkeleyAverageResults.h"
+#include "openbest-av/berkeleyAverageCore.h"
 
 berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationElement2IO, stationSite2p** ssIO, int* n_stationSite2IO, berkeleyAverageOptions* options)
 {

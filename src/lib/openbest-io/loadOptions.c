@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include "openbest-ds/memFunctions.h"
 
 #include "openbest-io/loadOptions.h"
 

@@ -1,4 +1,6 @@
 #include "openbest-ds/tile.h"
+#include <stdlib.h>
+#include <math.h>
 
 tile createTile(real a, real b, real c, real d)
 {

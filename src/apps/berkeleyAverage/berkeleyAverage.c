@@ -20,6 +20,7 @@
 #include "openbest-io/loadData.h"
 #include "openbest-ds/makeSingleValued.h"
 #include "openbest-av/scalpelMethods.h"
+#include "openbest-ds/printOut.h"
 
 
 #include "openbest-ds/optionTable.h"
@@ -57,13 +58,34 @@ int berkeleyAverageFunction(int argc, char** argv)
 
     int i;
     stationElement2p tmp;
-    tprintf("Making dataset to be single valued\n");
+
+
     for ( i= 0; i < n_stationElement2; ++i )
+        if ( isMultiValued(se[i]) )
+        {
+            destroySE2(se[i]);
+            destroySS2(ss[i]);
+            se[i]= NULL;
+            ss[i]= NULL;
+        }
+
+    int nse2= 0;
+    for ( i= 0; i < n_stationElement2; ++i )
+        if ( se[i] != NULL )
+        {
+            se[nse2]= se[i];
+            ss[nse2++]= ss[i];
+        }
+    n_stationElement2= nse2;
+    n_stationSite2= nse2;
+
+    tprintf("Making dataset to be single valued\n");
+    /*for ( i= 0; i < n_stationElement2; ++i )
     {
         tmp= makeSingleValued(se[i], NULL, 0);
         destroySE2(se[i]);
         se[i]= tmp;
-    }
+    }*/
     tprintf("Converting to single valued finished\n");
 
     berkeleyAverageResults* results;

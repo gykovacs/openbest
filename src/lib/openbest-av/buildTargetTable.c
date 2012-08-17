@@ -1,6 +1,9 @@
+#include <math.h>
+
 #include "openbest-av/buildTargetTable.h"
 #include "openbest-ds/mathFunctions.h"
 #include "openbest-ds/memFunctions.h"
+#include "openbest-ds/printOut.h"
 
 void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, int n_map, berkeleyAverageOptions* options, float** target_map, int* n_target_map1, int* n_target_map2, int** nearest, int* n_nearest)
 {
@@ -44,6 +47,10 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
     real* p= options->correlationParameters;
     int n_p= options->n_correlationParameters;
     real maxd= options->correlationLimitDistance;
+
+    /*printArrayR("p", p, n_p);
+    printf("%f\n", maxd);
+    getchar();*/
 
     // Eliminate station locations with no usable data
     real* R= rnalloc(n_targx*3);

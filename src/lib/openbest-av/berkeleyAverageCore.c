@@ -47,6 +47,10 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         }
     }
 
+
+    /*displayTempDataSE2(se, n_se);
+    getchar();*/
+
     int min_stations= options->minStations;
     int min_months= options->minMonths;
     int matlabPoolSize= 1;
@@ -65,8 +69,20 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     // TODO: options->useSeed
 
     for ( i= 0; i < n_se; ++i )
+    {
         printf("%d ", se[i]->n_dates);
+        //displaySE2(se[i]);
+        //getchar();
+    }
     printf("\n");
+    for ( i= 0; i < n_ss; ++i )
+    {
+        //printf("%f,%f,%f ", ss[i]->location->x, ss[i]->location->y, ss[i]->location->z);
+        //printf("%f %f %f\n", ss[i]->location->latitude, ss[i]->location->longitude, ss[i]->location->elevation);
+    }
+    /*printf("\n");
+    getchar();*/
+
 
     tprintf("Beginning Berkeley Average Core Process\n");
 
@@ -91,7 +107,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     // Remove any data points that are flagged with indicators of the "bad flags list" These points are not considered at all doing the averaging process
     tprintf("Remove bad flagged data points\n");
-    removeBadFlaggedDataV(se, n_se, bf, n_bf);
+    //removeBadFlaggedDataV(se, n_se, bf, n_bf);
     tprintf("End of removing bad flagged data points\n");
 
     int orig_length= n_se;
@@ -512,10 +528,17 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         data_array[i]= se[i]->data;
     }
 
+    /*for ( i= 0; i < n_n_data_array; ++i )
+    {
+        printf("%d ", n_data_array[i]);
+        for ( j= 0; j < n_data_array[i]; ++j )
+            printf("%f ", data_array[i][j]);
+        printf("\n");
+    }
+
+    getchar();*/
+
     // Further collapse locations according to grid approximation rules
-
-
-    tprintf("End of Berkeley Average Core Process\n");
 
     geoPoint2p* locations_collapsed;
     int n_locations_collapsed;
@@ -600,6 +623,8 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_correlation_table;
     float nugget;
     buildCovarianceTable(locations_short, n_locations_short, options, &correlation_table, &n_correlation_table, &nugget);
+    /*printArray2Float("correlation_table", correlation_table, n_correlation_table, n_correlation_table);
+    tprintf("%f\n", nugget);*/
 
     /*for ( i= 0; i < n_correlation_table; ++i )
     {
@@ -617,17 +642,13 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_target_map1, n_target_map2;
     int n_near_index;
     buildTargetTable(locations_short, n_locations_short, map_pts, n_map_pts, options, &target_map, &n_target_map1, &n_target_map2, &near_index, &n_near_index);
+    printArray2Float("target_map", target_map, n_target_map1, n_target_map2);
+//    printArrayI("near_index", near_index, n_near_index);
     tprintf("buildTargetTable finished: n_target_map1,2 %d %d, n_near_index: %d\n", n_target_map1, n_target_map2, n_near_index);
+
     // target_map - size: n_target_map x n_near_index
 
     printf("%d %d %d\n", n_target_map1, n_target_map2, n_near_index);
-    /*for ( i= 0; i < n_target_map1; ++i )
-    {
-        for ( j= 0; j < n_target_map2; ++j )
-            printf("%f ", target_map[i*n_target_map2 + j]);
-        printf("\n");
-    }
-    getchar();*/
 
     int* near_index_new= inalloc(n_expand_map);
     for ( i= 0; i < n_expand_map; ++i )
@@ -702,8 +723,8 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         sum_areal_weight+= areal_weight[i];
 
     tprintf("areal_weight: %d; target_map: %d, %d\n", n_areal_weight, n_target_map1, n_target_map2);
-    //getchar();
-    real* target= rnalloc(n_target_map2);
+
+    float* target= (float*)malloc(sizeof(float)*n_target_map2);
     int n_target= n_target_map2;
     for ( i= 0; i < n_target_map2; ++i )
     {
@@ -713,10 +734,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         target[i]/= sum_areal_weight;
     }
 
-    for ( i= 0; i < n_target; ++i )
-        printf("%f ", target[i]);
-    printf("\n");
-
     // Spatial weights for the global average
     tprintf("Spatial weights for the global average\n");
 
@@ -725,18 +742,15 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_spatial_table2;
 
     buildSpatialMap(correlation_table, n_correlation_table,
-                    target_map, 1, n_target,
+                    target, 1, n_target,
                     occurance_table, n_occurance_table1, n_occurance_table2,
                     expand_map, n_expand_map, nugget, options,
                     &spatial_table, &n_spatial_table1, &n_spatial_table2,
                     NULL, NULL, NULL);
 
-    /*for ( i= 0; i < n_spatial_table1; ++i )
-    {
-        for ( j= 0; j < n_spatial_table2; ++j )
-            printf("%g ", spatial_table[i*n_spatial_table2 + j]);
-        printf("\n");
-    }*/
+    tprintf("spatial_table: %d %d\n", n_spatial_table1, n_spatial_table2);
+    printArray2DFile("spatial_table", spatial_table, n_spatial_table1, n_spatial_table2);
+    getchar();
 
     real* coverage_summary= rnalloc(n_spatial_table2);
     int n_coverage_summary= n_spatial_table2;
@@ -747,7 +761,10 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     for ( i= 0; i < n_spatial_table2; ++i )
         coverage_summary[i]*= completeness;
 
-    printArrayR("coverage_summary", coverage_summary, n_coverage_summary);
+    tprintf("coverage_summary\n");
+    printArrayRFile("coverage_summary", coverage_summary, n_coverage_summary);
+    getchar();
+//    printArrayR("coverage_summary", coverage_summary, n_coverage_summary);
 
     double* spatial_maps;
     int n_spatial_maps1;
@@ -813,9 +830,9 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_input_list2= n_results_list2;
 
     float* map;
-    int n_map;
+    int n_map= 0;
     float* map_dist;
-    int n_map_dist;
+    int n_map_dist= 0;
 
     if ( options->fullBaselineMapping )
     {
@@ -954,6 +971,9 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
                 for ( j= 0; j < n_spatial_table2; ++j )
                     new_spatial_table[i*n_spatial_table2 + j]= spatial_table[i*n_spatial_table2 + j] * site_weight[i];
 
+            tprintf("new_spatial_table %d %d\n", n_new_spatial_table1, n_new_spatial_table2);
+            printArray2DFile("new_spatial_table", new_spatial_table, n_new_spatial_table1, n_new_spatial_table2);
+
             if ( options->localMode )
             {
                 // TODO
@@ -990,10 +1010,15 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         n_temperature_map1= n_temperature_map2= n_temperature_map;
 
         tprintf("base_weights: %d\n", n_base_weights);
+        printArrayDFile("base_weights", base_weights, n_base_weights);
         tprintf("base_constants: %d\n", n_base_constants);
+        printArrayDFile("base_constants", base_constants, n_base_constants);
         tprintf("temperature_map: %d %d\n", n_temperature_map, n_temperature_map);
+        printArray2DFile("temperature_map", temperature_map, n_temperature_map, n_temperature_map);
         tprintf("temperature_constant: %d\n", n_temperature_constant);
+        printArrayDFile("temperature_constant", temperature_constant, n_temperature_constant);
         tprintf("record_weight: %d\n", n_record_weight);
+        printArrayDFile("record_weight", record_weight, n_record_weight);
 
         tprintf("occurance_table: %d,%d\n", n_occurance_table1, n_occurance_table2);
         tprintf("all_station_mix: %d\n", n_all_station_mix);
@@ -1030,6 +1055,14 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
                    all_station_mix, n_all_station_mix,
 
                    &t_res, &n_t_res, &b_res, &n_b_res);
+
+        for ( i= 0; i < n_t_res; ++i )
+            printf("%f ", t_res[i]);
+        printf("\n");
+        for ( i= 0; i < n_b_res; ++i )
+            printf("%f ", b_res[i]);
+        printf("\n");
+        getchar();
 
         if ( options->fullBaselineMapping )
         {
@@ -1215,6 +1248,10 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     results->n_site_weights= n_site_weights;
 
     // Store results in result structure
+
+    for ( i= 0; i < n_t_res; ++i )
+        printf("%f ", t_res[i]);
+    printf("\n");
 
     results->times_monthly= time_values;
     results->n_times_monthly= n_time_values;

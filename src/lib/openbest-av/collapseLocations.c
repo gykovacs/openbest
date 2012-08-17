@@ -1,4 +1,6 @@
 #include "openbest-av/collapseLocations.h"
+#include "openbest-ds/memFunctions.h"
+#include <stdlib.h>
 
 geoPoint2* centerGP2NV(geoPoint2** v, int n_v, int* indeces, int n_indeces)
 {

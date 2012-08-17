@@ -836,3 +836,19 @@ void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf)
     se->n_sources= realloc(se->n_sources, sizeof(char)*j);
     se->sources= realloc(se->sources, sizeof(flag_t*)*j);
 }
+
+void displayTempDataSE2(stationElement2p* se, int n)
+{
+    int i, j;
+    for ( j= 0; j < n; ++j )
+    {
+        if ( se[j]->n_data == 36 || se[j]->n_data == 35 )
+        {
+        printf("%d %d --------", j, se[j]->n_data);
+        for ( i= 0; i < se[j]->n_data; ++i )
+            //if ( se[j]->data[i] < -80 || se[j]->data[i] > 60 )
+                printf("%f ", se[j]->data[i]);
+        printf("\n");
+        }
+    }
+}

@@ -1,4 +1,7 @@
 #include "openbest-ds/timeRange.h"
+#include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
 
 timeRange createTimeRangeN()
 {

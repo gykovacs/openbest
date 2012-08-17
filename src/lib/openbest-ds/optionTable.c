@@ -163,7 +163,6 @@ void displayOptionsReverse(option* o)
 {
   if ( o->next )
     displayOptionsReverse(o->next);
-  printf("%t");
   displayO(o);
 }
 

@@ -261,4 +261,8 @@ void vectorMultiplicationByMatrix(double* a, int na,
                                   double* b, int nb1, int nb2,
                                   double**c, int* nc);
 
+double* transposeMatrixNFloatD(float* a, int n1, int n2);
+
+float* transposeMatrixNFloat(float* a, int n1, int n2);
+
 #endif

@@ -1,5 +1,7 @@
 #include "openbest-ds/makeSingleValued.h"
+#include "openbest-ds/memFunctions.h"
 #include <string.h>
+#include <limits.h>
 
 stationElement2* makeSingleValued(stationElement2* se, int* bf, int n)
 {
@@ -23,7 +25,7 @@ stationElement2* structureMerge(stationElement2* se)
 
 void getIndexValueS(short* M, int* mask, int size1, int c, short* v, bool* est)
 {
-    short* v1= (short*)(snalloc(size1));
+    short* v1= (short*)snalloc(size1);
     short* v2= (short*)snalloc(size1);
 
     int i, j, k;
@@ -357,9 +359,9 @@ stationElement2* mergeCore(stationElement2* se, int* bf, int n, char* action, st
     set(data, ld*c, 0);
     real* unc= copyRA(data, ld*c);  //dimensions: ld x c, stride: c, type: real
     short* num= snalloc(ld*c);   // dimensions: ld x c, stride: c, type: short
-    sets(num, ld*c, FLT_MAX);
+    sets(num, ld*c, SHRT_MAX);
     char* tob= cnalloc(ld*c);   // dimensions: ld x c, stride: c, type: char
-    setc(tob, ld*c, FLT_MAX);
+    setc(tob, ld*c, CHAR_MAX);
     flag_t* flagged= fnalloc(ld*c); // dimensions: ld x c, stride: c, type: flag_t
     setf(flagged, ld*c, false);
     flag_t* orig_flagged= anyismember(se->flags, se->n_flags, se->n_n_flags, bf, n); // dimensions: ld x 1, stride: 1

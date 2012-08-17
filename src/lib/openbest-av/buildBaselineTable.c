@@ -32,12 +32,8 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
             num_months[i]+= occurance_table[i*n_occurance_table2 + j];
     int n_num_months= n_occurance_table1;
 
-    for ( i= 0; i < n_num_months; ++i )
-        printf("%d ", num_months[i]);
-    printf("\n");
-    //getchar();
-
     int len_R= n_correlation_table;
+
     if ( options->clusterMode )
     {
         //TODO
@@ -46,121 +42,39 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     {
         //converions of correlation_table and target_map to double representation
     }
+
     // Total mix
     double mix_term= 1.0 - nugget;
     int* cnts= inalloc(len_R);
+    int n_cnts= len_R;
     seti(cnts, len_R, 0);
+
+    // Each data point counts as a duplication as the base values is
+    // "repeated" according to the number of times it occurs.
     for ( k= 0; k < n_expand_map; ++k )
-    {
-        // Each data point counts as a duplication as the base values is
-        // "repeated" according to the number of times it occurs.
-        cnts[expand_map[k]]= cnts[expand_map[k]] + num_months[k];
-    }
-
-
+        cnts[expand_map[k]]+= num_months[k];
 
     for ( k= 0; k < n_correlation_table; ++k )
-    {
-        /*if (!num_months[k] )
-            printf("%d ", num_months[k]);*/
-        if ( num_months[k] != 0 )
-            correlation_table[k*n_correlation_table + k]= (1.0 + (cnts[k]-1.0)*mix_term)/((double)cnts[k]);
-        else
-            correlation_table[k*n_correlation_table + k]= 0;
-    }
-    //getchar();
+        correlation_table[k*n_correlation_table + k]= (1.0 + (cnts[k]-1.0)*mix_term)/((double)cnts[k]);
 
     // Determine baseline mixing values at each grid point
-    double* correlation_table_T= dnalloc(n_correlation_table*n_correlation_table);
-    double* target_map_T= dnalloc(n_target_map2 * n_target_map1);
-    double* base_map= dnalloc(n_correlation_table * n_target_map1);
-    if ( correlation_table_T == NULL || target_map_T == NULL || base_map == NULL )
-        eprintf("malloc failed in buildBaselineTable\n");
+    double* correlation_table_T= transposeMatrixNFloatD(correlation_table, n_correlation_table, n_correlation_table);
+    double* target_map_T= transposeMatrixNFloatD(target_map, n_target_map1, n_target_map2);
+    double* base_map= NULL;
+    double* base_mapT= dnalloc(n_correlation_table * n_target_map1);
+
     int n_base_map1= n_target_map1;
     int n_base_map2= n_correlation_table;
-
-    //Check if correlation_table is symmetric
-    /*for ( i= 0; i < n_correlation_table; ++i )
-        for ( j= 0; j < n_correlation_table; ++j )
-            if ( correlation_table[i*n_correlation_table + j] != correlation_table[j*n_correlation_table + i] )
-            {
-                printf(".");
-                fflush(stdout);
-            }
-    getchar();*/
+    int n_base_mapT1= n_correlation_table;
+    int n_base_mapT2= n_target_map1;
 
     tprintf("size of correlation table: %d\n", n_correlation_table);
 
-    for ( i= 0; i < n_correlation_table; ++i )
-        for ( j= 0; j < n_correlation_table; ++j )
-            correlation_table_T[j*n_correlation_table + i]= correlation_table[i*n_correlation_table + j];
-
-    /*for ( i= 0; i < n_correlation_table; ++i )
-    {
-        for ( j= 0; j < n_correlation_table; ++j )
-        {
-            printf("%f ", correlation_table[i*n_correlation_table + j]);
-        }
-        printf("\n");
-    }
-    getchar();*/
     tprintf("solving linear equation systems with A: (%dx%d), b: (%d)\n", n_correlation_table, n_correlation_table, n_target_map2);
-    for ( j= 0; j < n_target_map1; ++j )
-        for ( i= 0; i < n_target_map2; ++i )
-            target_map_T[i*n_target_map1 + j]= target_map[j*n_target_map2 + i];
-    /*for ( i= 0; i < n_target_map1; ++i )
-    {*/
 
+    solveLinEqHD(correlation_table_T, n_correlation_table, n_correlation_table, target_map_T, n_target_map1, base_mapT);
 
-    FILE* ctable= fopen("correlation_table.txt", "w");
-    for ( i= 0; i < n_correlation_table; ++i )
-    {
-        for ( j= 0; j < n_correlation_table; ++j )
-            fprintf(ctable, "%g ", correlation_table_T[i*n_correlation_table + j]);
-        fprintf(ctable, "\n");
-    }
-    fclose(ctable);
-    FILE* targetmap= fopen("targetmap.txt", "w");
-    for ( i= 0; i < n_target_map1; ++i )
-    {
-        for ( j= 0; j < n_target_map2; ++j )
-        {
-            fprintf(targetmap, "%g ", target_map_T[j*n_target_map1 + i]);
-        }
-        fprintf(targetmap, "\n");
-    }
-    fclose(targetmap);
-
-        //printf("%d ", i); fflush(stdout);
-        solveLinEqHD(correlation_table_T, n_correlation_table, n_correlation_table, target_map_T, n_target_map1, base_map);
-        /*for ( j= 0; j < n_target_map2; ++j )
-            printf("%f ", base_map[i*n_target_map2 + j]);
-        printf("\n");
-        getchar();*/
-    //}
-    tprintf("solutions finished\n");
-    /*for ( j= 0; j < n_target_map2; ++j )
-    {
-        for ( i= 0; i < n_target_map1; ++i )
-            printf("%f ", base_map[i*n_target_map2 + j]);
-        printf("\n");
-    }
-    getchar();*/
-    /*double* base_map2= dnalloc(n_base_map1*n_base_map2);
-    for ( i= 0; i < n_base_map1; ++i )
-        for ( j= 0; j < n_base_map2; ++j )
-            base_map2[j*n_base_map1 + i]= base_map[i*n_base_map2 + j];
-    base_map= base_map2;
-
-    for ( i= 0; i < n_base_map1*n_base_map2; ++i )
-        if ( base_map[i] != base_map[i] )
-        {
-            printf("%d ", i); fflush(stdout);
-        }*/
-
-    for ( i= 0; i < n_correlation_table; ++i )
-        printf("%f ", base_map[i]);
-    printf("\n");
+    base_map= transposeMatrixND(base_mapT, n_base_mapT1, n_base_mapT2);
 
     if ( options->clusterMode )
     {
@@ -176,23 +90,15 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
             cov_map[i]+= base_map[i*n_base_map2 + j];
     }
 
-    printf("cov_map: \n");
-    for ( i= 0; i < n_cov_map; ++i )
-        printf("%f ", cov_map[i]);
-    printf("\n");
-
     // Some additional diagnostic parameters
-    tprintf("base_map: %d,%d; mask: %d\n", n_base_map1, n_base_map2, n_mask);
     double completeness= 0;
     double a= 0, sum_mask= 0;
     for ( i= 0; i < n_base_map1; ++i )
         for ( j= 0; j < n_base_map2; ++j )
-        {
             a+= mask[i]*base_map[i*n_base_map2 + j];
-        }
     for ( i= 0; i < n_mask; ++i )
         sum_mask+= mask[i];
-    tprintf("%f %f\n", a, sum_mask);
+
     completeness= a/sum_mask;
 
     tprintf("completeness: %f\n", completeness);
@@ -206,30 +112,24 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     // Perform numerical integral to generate final baseline mixing coefficients
     tprintf("Perform numerical integral to generate final baseline mixing coefficients\n");
 
-    dea();
     real* baseline_weights= rnalloc(n_base_map2);
     int n_baseline_weights= n_base_map2;
     for ( i= 0; i < n_base_map2; ++i )
     {
         baseline_weights[i]= 0;
         for ( j= 0; j < n_base_map1; ++j )
-        {
             baseline_weights[i]+= mask[j]*base_map[j*n_base_map2 + i];
-        }
     }
 
-    dea();
     sum_mask= 0;
     for ( i= 0; i < n_mask; ++i )
         sum_mask+= mask[i];
     for ( i= 0; i < n_baseline_weights; ++i )
         baseline_weights[i]/= sum_mask;
 
-    deb();
     for ( i= 0; i < n_baseline_weights; ++i )
         baseline_weights[i]/= cnts[i];
 
-    dec();
     real* baseline_weights2= rnalloc(n_expand_map);
     for ( i= 0; i < n_expand_map; ++i )
         baseline_weights2[i]= baseline_weights[expand_map[i]]*num_months[i];
@@ -237,42 +137,27 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
     baseline_weights= baseline_weights2;
     n_baseline_weights= n_expand_map;
 
-    for ( i= 0; i < n_baseline_weights; ++i )
-        printf("%f ", baseline_weights[i]);
-    printf("\n");
-
-    tprintf("target_map: %d, %d\n", n_target_map1, n_target_map2);
     double* target2= dnalloc(n_target_map2);
-    set(target2, n_target_map2, 0);
+    setd(target2, n_target_map2, 0);
     for ( i= 0; i < n_target_map1; ++i )
         for ( j= 0; j < n_target_map2; ++j )
             target2[j]+= target_map[i*n_target_map2 + j];
 
     for ( i= 0; i < n_target_map2; ++i )
-        target2[i]= target2[i]/(double)(n_target_map2);
-
-    printf("target2\n");
-    for ( i= 0; i < n_target_map2; ++i )
-        printf("%f ", target2[i]);
-    printf("\n");
+        target2[i]= target2[i]/(double)(n_target_map1);
 
     tprintf("computing global completeness: correlation_table: %d,%d; target2: %d\n", n_correlation_table, n_correlation_table, n_target_map2);
 
-    for ( i= 0; i < n_correlation_table; ++i )
-        for ( j= 0; j < n_correlation_table; ++j )
-            correlation_table_T[j*n_correlation_table + i]= correlation_table[i*n_correlation_table + j];
+    free(correlation_table_T);
+    correlation_table_T= transposeMatrixNFloatD(correlation_table, n_correlation_table, n_correlation_table);
 
     double* tmpM= dnalloc(n_correlation_table);
-
 
     solveLinEqHD(correlation_table_T, n_correlation_table, n_correlation_table, target2, 1, tmpM);
     double global_completeness= 0;
     for ( i= 0; i < n_correlation_table; ++i )
-    {
-        printf("%f ", tmpM[i]);
         global_completeness+= tmpM[i];
-    }
-    printf("\n");
+
     tprintf("global completeness: %f\n", global_completeness);
 
     if ( options->clusterMode )

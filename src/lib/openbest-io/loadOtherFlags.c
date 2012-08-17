@@ -1,5 +1,7 @@
 #include "openbest-io/loadOtherFlags.h"
 #include "openbest-ds/primaryKeyTables.h"
+#include "openbest-ds/memFunctions.h"
+#include <string.h>
 
 void loadBadFlags()
 {

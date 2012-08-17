@@ -524,6 +524,27 @@ double* transposeMatrixND(double* a, int n1, int n2)
     return tmp;
 }
 
+double* transposeMatrixNFloatD(float* a, int n1, int n2)
+{
+    double* tmp= dnalloc((n1*n2));
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+        for ( j= 0; j < n2; ++j )
+            tmp[j*n1 + i]= a[i*n2 + j];
+    return tmp;
+}
+
+float* transposeMatrixNFloat(float* a, int n1, int n2)
+{
+    float* tmp= (float*)malloc(sizeof(float)*(n1*n2));
+    int i, j;
+    for ( i= 0; i < n1; ++i )
+        for ( j= 0; j < n2; ++j )
+            tmp[j*n1 + i]= a[i*n2 + j];
+    return tmp;
+}
+
+
 void matrixSubtractND(double* a, int na1, int na2,
                       double* b, int nb1, int nb2,
                       double** c, int* nc1, int* nc2)

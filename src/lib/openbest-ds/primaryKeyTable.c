@@ -1,5 +1,7 @@
 #include <string.h>
+#include <stdlib.h>
 
+#include "openbest-ds/memFunctions.h"
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/primaryKeyTable.h"
 
@@ -111,14 +113,16 @@ int lookupValuePKT(primaryKeyTable* pkt, char* key)
 primaryKeyTable createPrimaryKeyTableN()
 {
   primaryKeyTable pkt;
-  pkt.vtk= pkt.ktv= NULL;
+  pkt.vtk= NULL;
+  pkt.ktv= NULL;
   return pkt;
 }
 
 primaryKeyTable* createPrimaryKeyTableP()
 {
   primaryKeyTable* pkt= (primaryKeyTable*)malloc(sizeof(primaryKeyTable));
-  pkt->vtk= pkt->ktv= NULL;
+  pkt->vtk= NULL;
+  pkt->ktv= NULL;
   return pkt;
 }
 

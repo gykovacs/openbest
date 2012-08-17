@@ -3,7 +3,7 @@
 #include "openbest-av/performFit.h"
 #include "openbest-av/equationSolvers.h"
 
-performFit(double* base_map, int n_base_map1, int n_base_map2,
+void performFit(double* base_map, int n_base_map1, int n_base_map2,
            double* base_constants, int n_base_constants,
            double* temperature_map, int n_temperature_map1, int n_temperature_map2,
            double* temperature_constant, int n_temperature_constant,
@@ -13,6 +13,13 @@ performFit(double* base_map, int n_base_map1, int n_base_map2,
            real** t_resIO, int* n_t_resIO, real** b_resIO, int* n_b_resIO)
 {
     tprintf("Begin of Perform Fit\n");
+
+    printArray2DFile("base_map", base_map, n_base_map1, n_base_map2);
+    printArrayDFile("base_constants", base_constants, n_base_constants);
+    printArray2DFile("temperature_map", temperature_map, n_temperature_map1, n_temperature_map2);
+    printArrayDFile("temperature_constant", temperature_constant, n_temperature_constant);
+    printArray2DFile("cross_map", cross_map, n_cross_map1, n_cross_map2);
+    printArrayRFile("all_station_mix", all_station_mix, n_all_station_mix);
 
     int pool_size= 1;
 
@@ -125,7 +132,12 @@ performFit(double* base_map, int n_base_map1, int n_base_map2,
     int n_new_map= n_f;
 
     dei();
-    while ( conditionNumberEstimateD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2) > 1e6 )
+
+    printArray2DFile("temperature_map_mix", temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
+    printArrayDFile("temperature_constant_mix", temperature_constant_mix, n_temperature_constant_mix);
+    printArrayIFile("new_map", new_map, n_new_map);
+    getchar();
+    /*while ( conditionNumberEstimateD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2) > 1e6 )
     {
         //Remove first line from temperature_map_mix
         for ( i= n_temperature_map_mix2; i < n_temperature_map_mix1*n_temperature_map_mix2; ++i )
@@ -145,7 +157,7 @@ performFit(double* base_map, int n_base_map1, int n_base_map2,
         for ( i= 1; i < n_new_map; ++i )
             new_map[i-1]= new_map[i];
         --n_new_map;
-    }
+    }*/
 
     // Use parallel processing if available
     if ( 0 && pool_size > 1 )
@@ -155,8 +167,8 @@ performFit(double* base_map, int n_base_map1, int n_base_map2,
 
     dej();
     // Solve for temperature series
-    double* t_fit= dnalloc(n_temperature_map_mix2);
-    int n_t_fit= n_temperature_map_mix2;
+    double* t_fit= dnalloc(n_temperature_map_mix1);
+    int n_t_fit= n_temperature_map_mix1;
     solveLinEqHD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2, temperature_constant_mix, 1, t_fit);
 
     real* t_res= rnalloc(len_t);
@@ -190,7 +202,7 @@ performFit(double* base_map, int n_base_map1, int n_base_map2,
     dea();
     double* tmpb;
     int n_tmpb;
-    matrixMultiplicationByVector(base_map2, n_base_map22, n_base_map21, t_res2, n_new_map, &tmpb, &n_tmpb);
+    matrixMultiplicationByVector(base_map2, n_base_map21, n_base_map22, t_res2, n_t_res2, &tmpb, &n_tmpb);
 
     deb();
     real* b_res= rnalloc(n_base_constants);

@@ -2,6 +2,7 @@
 
 #include "openbest-ds/config-ds.h"
 #include "openbest-io/loadData.h"
+#include "openbest-ds/memFunctions.h"
 
 #define MAX_LENGTH_OF_TIME_SERIES 40000
 #define MAX_DATA_FLAGS 30
@@ -377,13 +378,13 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
               if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
               p[n]->n_sources= (char*)malloc(sizeof(char)*tsn);
               if ( p[n]->n_sources == NULL ) eprintf("malloc failed in loadData");
-              p[n]->sources= (char**)malloc(sizeof(char*)*tsn);
+              p[n]->sources= (flag_t**)malloc(sizeof(flag_t*)*tsn);
               if ( p[n]->sources == NULL ) eprintf("malloc failed in loadData");
               p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= p[n]->n_n_sources= tsn;
           }
 
           ++n;
-          p[n]= (stationSite2*)createSE2N();
+          p[n]= (stationElement2*)createSE2N();
           tsn= 0;
           p[n]->site= id;
       }
@@ -407,12 +408,16 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
       uncp[tsn]= rtmp;
 
       //observations
+      int s;
       tmp= strtok(NULL, delims);
-      sscanf(tmp, "%d", &(obsp[tsn]));
+      sscanf(tmp, "%d", &s);
+      (obsp[tsn])= s;
 
+      int t;
       //time of observation
       tmp= strtok(NULL, delims);
-      sscanf(tmp, "%d", &(tobp[tsn]));
+      sscanf(tmp, "%d", &t);
+      (tobp[tsn])= t;
 
       ++tsn;
       last_id= id;
@@ -441,7 +446,7 @@ void loadStationElement2(stationElement2p** se, int* n_stationElement2)
         if ( p[n]->flags == NULL ) eprintf("malloc failed in loadData");
         p[n]->n_sources= (char*)malloc(sizeof(char)*tsn);
         if ( p[n]->n_sources == NULL ) eprintf("malloc failed in loadData");
-        p[n]->sources= (char**)malloc(sizeof(char*)*tsn);
+        p[n]->sources= (flag_t**)malloc(sizeof(flag_t*)*tsn);
         if ( p[n]->sources == NULL ) eprintf("malloc failed in loadData");
         p[n]->n_dates= p[n]->n_time_of_observation= p[n]->n_data= p[n]->n_num_measurements= p[n]->n_uncertainty= p[n]->n_n_flags= p[n]->n_n_sources= tsn;
     }

@@ -7,6 +7,7 @@
 #include "openbest-ds/memFunctions.h"
 #include "openbest-av/equationSolvers.h"
 #include "openbest-ds/printOut.h"
+#include "openbest-ds/basicAlgorithms.h"
 
 #include <openbest-av/lapacke/lapacke.h>
 
@@ -68,6 +69,33 @@ void solveLinEqHD(double* A, int rows, int columns, double* b, int b_columns, do
     //solveLinEqSquare2(A, rows, columns, x, rows, b_columns);
     solveLinEqNonSquareLAPACK(A, rows, columns, bb, rows, b_columns);
     memcpy(x, bb, sizeof(double)*b_columns * columns);
+}
+
+void solveLinEqHDAxb(double* A, int rows, int columns, double* b, int b_columns, double* x)
+{
+    double* bb= dnalloc(rows * b_columns);
+    memcpy(bb, b, sizeof(double)*rows * b_columns);
+    //solveLinEqSquare2(A, rows, columns, x, rows, b_columns);
+    solveLinEqNonSquareLAPACK(A, rows, columns, bb, rows, b_columns);
+    memcpy(x, bb, sizeof(double)*b_columns * columns);
+}
+
+void solveLinEqHDxAb(double* A, int rows, int columns, double* b, int b_columns, double* x)
+{
+    double* bb= dnalloc(rows * b_columns);
+    memcpy(bb, b, sizeof(double)*rows * b_columns);
+
+    double* AT= transposeMatrixND(A, rows, columns);
+    double* bT= transposeMatrixND(b, rows, b_columns);
+
+    solveLinEqNonSquareLAPACK(AT, columns, rows, bb, b_columns, rows);
+
+    double* xT= transposeMatrixND(bb, b_columns, rows);
+
+    memcpy(x, xT, sizeof(double)*b_columns * columns);
+    free(xT);
+    free(bT);
+    free(AT);
 }
 
 void solveLinEqSquare(double* A, int rows, int columns, double* bb, double* xx)

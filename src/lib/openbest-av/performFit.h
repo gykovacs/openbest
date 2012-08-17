@@ -8,7 +8,7 @@
 #include "openbest-ds/basicAlgorithms.h"
 #include "openbest-av/berkeleyAverageOptions.h"
 
-performFit(double* base_map, int n_base_map1, int n_base_map2,
+void performFit(double* base_map, int n_base_map1, int n_base_map2,
            double* base_constants, int n_base_constants,
            double* temperature_map, int n_temperature_map1, int n_temperature_map2,
            double* temperature_constant, int n_temperature_constant,

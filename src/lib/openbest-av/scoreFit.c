@@ -3,7 +3,7 @@
 #include "openbest-av/scoreFit.h"
 
 void scoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
-              real** dates_array, int* n_dates_array, int n_n_dates_array,
+              int** dates_array, int* n_dates_array, int n_n_dates_array,
               real* t_res, int n_t_res,
               real* b_res, int n_b_res,
               double* new_spatial_table, int n_new_spatial_table1, int n_new_spatial_table2,
@@ -41,7 +41,7 @@ void scoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
 
 
 void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
-              real** dates_array, int* n_dates_array, int n_n_dates_array,
+              int** dates_array, int* n_dates_array, int n_n_dates_array,
               real* t_res, int n_t_res,
               real* b_res, int n_b_res,
               double* new_spatial_table, int n_new_spatial_table1, int n_new_spatial_table2,

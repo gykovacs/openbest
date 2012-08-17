@@ -217,4 +217,6 @@ void removeBadFlaggedDataV(stationElement2p* se, int n, int* bf, int n_bf);
   */
 void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf);
 
+void displayTempDataSE2(stationElement2p* se, int n);
+
 #endif

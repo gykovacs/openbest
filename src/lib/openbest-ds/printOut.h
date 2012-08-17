@@ -55,4 +55,25 @@ void printArrayR(char* name, real* a, int n);
 
 void printArray2R(char* name, real* a, int n1, int n2);
 
+void printArrayIFile(char* name, int* a, int n);
+
+void printArray2IFile(char* name, int* a, int n1, int n2);
+
+void printArrayBFile(char* name, bool* a, int n);
+
+void printArray2BFile(char* name, bool* a, int n1, int n2);
+
+void printArrayFloatFile(char* name, float* a, int n);
+
+void printArray2FloatFile(char* name, float* a, int n1, int n2);
+
+void printArrayDFile(char* name, double* a, int n);
+
+void printArray2DFile(char* name, double* a, int n1, int n2);
+
+void printArrayRFile(char* name, real* a, int n);
+
+void printArray2RFile(char* name, real* a, int n1, int n2);
+
+
 #endif

@@ -6,6 +6,10 @@ void solveLinEq(double* A, int rows, int columns, double* b, double* x);
 
 void solveLinEqHD(double* A, int rows, int columns, double* b, int b_columns, double* x);
 
+void solveLinEqHDAxb(double* A, int rows, int columns, double* b, int b_columns, double* x);
+
+void solveLinEqHDxAb(double* A, int rows, int columns, double* b, int b_columns, double* x);
+
 void solveLinEqSquare(double* A, int rows, int columns, double* b, double* x);
 
 void solveLinEqNonSquare(double* A, int rows, int columns, double* b, double* x);
