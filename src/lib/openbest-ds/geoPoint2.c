@@ -62,7 +62,7 @@ void computeXYZ_GP2(geoPoint2* pt)
   if ( pt->elevation < 0 )
       pt->elevation= 0;
   real R= pt->elevation;
-  if ( pt->elevation != FLT_MAX && pt->elevation >= -1000 && pt->elevation <= 10000)
+  if ( pt->elevation != FLT_MAX && pt->elevation != -FLT_MAX && pt->elevation >= -1000 && pt->elevation <= 10000)
   {
     R= earth_radius + pt->elevation/1000;
   }
@@ -152,7 +152,7 @@ void setGeoPoint2(geoPoint2* gp, real latitude, real longitude, real elevation, 
 
 bool isValidGP2(geoPoint2* gp)
 {
-    if ( gp->latitude == -99 || gp->longitude == -99 )
+    if ( gp->latitude <= -999 || gp->longitude <= -999 || gp->latitude >= 999 || gp->longitude >= 999 )
         return false;
     return true;
 }

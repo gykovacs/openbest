@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <float.h>
 #include <gsl/gsl_linalg.h>
 
 #include "openbest-ds/memFunctions.h"
@@ -277,21 +278,43 @@ void invertMatrixFloatP(float* a, int rows, int columns)
 
 double conditionNumberEstimateD(double* a, int rows, int columns)
 {
+    int k;
+    for ( k= 0; k < rows*columns; ++k )
+        if ( a[k] > 10000 || a[k] < -10000 )
+            printf("error: %f ", a[k]);
     int n_ipiv= rows < columns ? rows : columns;
     int* ipiv= inalloc(n_ipiv);
 
-    int err= LAPACKE_dgetrf(LAPACK_ROW_MAJOR, rows, columns, a, rows, ipiv);
-    tprintf("err: %d\n", err);
+    double* atmp= dnalloc(rows*columns);
+    memcpy(atmp, a, sizeof(double)*rows*columns);
 
-    double anorm= fabs(a[0]);
+    double anorm= fabs(atmp[0]);
     int i;
     for ( i= 0; i < rows*columns; ++i )
-        if ( anorm < fabs(a[i]) )
-            anorm= fabs(a[i]);
+        if ( anorm < fabs(atmp[i]) )
+            anorm= fabs(atmp[i]);
+
+    int err= LAPACKE_dgetrf(LAPACK_ROW_MAJOR, rows, columns, atmp, rows, ipiv);
+    tprintf("err: %d\n", err);
+    if ( err )
+    {
+        free(atmp);
+        return FLT_MAX;
+    }
+
+
 
     double rcond;
-    err= LAPACKE_dgecon(LAPACK_ROW_MAJOR, '1', columns, a, rows, anorm, &rcond);
+    err= LAPACKE_dgecon(LAPACK_ROW_MAJOR, '1', columns, atmp, rows, anorm, &rcond);
     tprintf("err: %d\n", err);
+    if ( err )
+    {
+        free(atmp);
+        return FLT_MAX;
+    }
 
+    free(atmp);
+    //tprintf("cond: %f\n", rcond);
     return rcond;
 }
+

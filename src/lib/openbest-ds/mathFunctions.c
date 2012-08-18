@@ -307,7 +307,7 @@ temp_t stdT(temp_t* a, int n)
 {
     if ( n == 0 )
         return 0;
-    temp_t e= 0;
+    /*temp_t e= 0;
     temp_t e2= 0;
     int i;
     for ( i= 0; i < n; ++i )
@@ -317,7 +317,18 @@ temp_t stdT(temp_t* a, int n)
     }
     e/= n;
     e2/= n;
-    return sqrt(e2 - e*e);
+    return sqrt(e2 - e*e);*/
+    temp_t mean= 0;
+    int i;
+    for ( i= 0; i < n; ++i )
+        mean+= a[i];
+    mean/= n;
+
+    temp_t var= 0;
+    for ( i= 0; i < n; ++i )
+        var+= (a[i] - mean)*(a[i] - mean);
+    var/= n;
+    return sqrt(var);
 }
 
 real sign(real x)

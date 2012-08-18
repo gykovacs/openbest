@@ -4,10 +4,10 @@
 #include "openbest-ds/basicAlgorithms.h"
 #include "openbest-av/equationSolvers.h"
 
-//#define CONSTANT1 50
-#define CONSTANT1 20
-//#define CONSTANT2 0.7
-#define CONSTANT2 0.4
+#define CONSTANT1 50
+//#define CONSTANT1 20
+#define CONSTANT2 0.7
+//#define CONSTANT2 0.4
 
 void buildSpatialMap(float* weight, int n_weight,
                      float* target_map, int n_target_map1, int n_target_map2,

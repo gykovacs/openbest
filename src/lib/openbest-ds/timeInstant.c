@@ -411,5 +411,5 @@ real monthNum(real year)
 
 real yearNum(real month)
 {
-    return (month / 12.0) - 1.0/24.0 + 1600;
+    return ((month) / 12.0) - 1.0/24.0 + 1600;
 }

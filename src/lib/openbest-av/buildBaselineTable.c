@@ -121,6 +121,8 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
             baseline_weights[i]+= mask[j]*base_map[j*n_base_map2 + i];
     }
 
+
+
     sum_mask= 0;
     for ( i= 0; i < n_mask; ++i )
         sum_mask+= mask[i];
@@ -129,6 +131,8 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
 
     for ( i= 0; i < n_baseline_weights; ++i )
         baseline_weights[i]/= cnts[i];
+
+
 
     real* baseline_weights2= rnalloc(n_expand_map);
     for ( i= 0; i < n_expand_map; ++i )

@@ -19,6 +19,7 @@
 #include "openbest-av/buildMatrices.h"
 #include "openbest-av/performFit.h"
 #include "openbest-av/movingAverages.h"
+#include "openbest-ds/timeInstant.h"
 
 berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO, stationSite2p** ssIO, int* n_ssIO, berkeleyAverageOptions* options)
 {
@@ -33,7 +34,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     tprintf("Berkeley Average Core called with %d time series\n", n_se);
 
-    for ( i= 0; i < n_se; ++i )
+    /*for ( i= 0; i < n_se; ++i )
     {
         if ( !isMonthly(se[i]) )
         {
@@ -45,8 +46,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
             eprintf("Only single-valued time series are supported\n");
             return;
         }
-    }
-
+    }*/
 
     /*displayTempDataSE2(se, n_se);
     getchar();*/
@@ -68,22 +68,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     // TODO: options->useSeed
 
-    for ( i= 0; i < n_se; ++i )
-    {
-        printf("%d ", se[i]->n_dates);
-        //displaySE2(se[i]);
-        //getchar();
-    }
-    printf("\n");
-    for ( i= 0; i < n_ss; ++i )
-    {
-        //printf("%f,%f,%f ", ss[i]->location->x, ss[i]->location->y, ss[i]->location->z);
-        //printf("%f %f %f\n", ss[i]->location->latitude, ss[i]->location->longitude, ss[i]->location->elevation);
-    }
-    /*printf("\n");
-    getchar();*/
-
-
     tprintf("Beginning Berkeley Average Core Process\n");
 
     // Convert locations to geoPoint format
@@ -99,6 +83,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     real* time_values= rnalloc(n_time_values);
     for ( i= 0; i < n_time_values; ++i )
         time_values[i]= ((int)min_month + i)/12.0 - 1.0/24.0 + 1600;
+    printArrayRFile("time_values", time_values, n_time_values);
     tprintf("Month range: %f - %f; first and last time value: %f %f\n", min_month, max_month, time_values[0], time_values[n_time_values-1]);
 
     // Get bad flag list
@@ -131,51 +116,30 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
             orig_map[i]= false;
 
     sum_orig_map= 0;
-        for ( i= 0; i < n_orig_map; ++i )
-            sum_orig_map+= orig_map[i];
-        tprintf("sum orig_map > 7: %d\n", sum_orig_map);
-
-    /*printf("ORIG_MAP: ");
-    for ( i= 0; i < n_se; ++i )
-        if ( orig_map[i] )
-            printf("%d ", i);
-    printf("\n");*/
+    for ( i= 0; i < n_orig_map; ++i )
+        sum_orig_map+= orig_map[i];
+    tprintf("sum orig_map > 7: %d\n", sum_orig_map);
 
     // Create a table of data occurances, used to generate spatial weights
     bool* occurance_table= bnalloc(n_se*n_time_values); // dimensions: n_se x n_time_values; stride: n_time_values
+    int n_occurance_table1= n_se;
+    int n_occurance_table2= n_time_values;
     setb(occurance_table, n_se*n_time_values, false);
     for ( i= 0; i < n_se; ++i )
         if ( orig_map[i] )
         {
             for ( j= 0; j < se[i]->n_dates; ++j )
             {
-                real monthnum= monthNum(se[i]->dates[j]) - min_month;
-                occurance_table[i*n_time_values + (int)monthnum]= true;
+                int monthnum= monthNum(se[i]->dates[j]) - min_month;
+                occurance_table[i*n_time_values + monthnum]= true;
             }
         }
 
-/*    for ( i= 0; i < n_se; ++i )
-    {
-        for ( j= 0; j < n_time_values; ++j )
-            fprintf(stderr, "%d ", occurance_table[i*n_time_values + j]);
-        fprintf(stderr, "\n");
-    }
-    getchar();*/
-
-    int sum_occ_table= 0;
-    for ( i= 0; i < n_se * n_time_values; ++i )
-        sum_occ_table+= occurance_table[i];
-    tprintf("sum occ table: %d\n", sum_occ_table);
-    //getchar();
-
-    /*int tmp;
-    for ( i= 0; i < n_se; ++i )
-    {
-        tmp= 0;
-        for ( j= 0; j < n_time_values; ++j )
-            tmp+= occurance_table[i*n_time_values + j];
-        printf("%d ", tmp); fflush(stdout);
-    }*/
+    int sum_occ= 0;
+    for ( i= 0; i < n_occurance_table1*n_occurance_table2; ++i )
+        sum_occ+= occurance_table[i];
+    tprintf("sum_occ: %d\n", sum_occ);
+    getchar();
 
     // Apply station length and minimum number of measurement requirements
     tprintf("Apply station length and minimum number of measurement requirements\n");
@@ -205,24 +169,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
             }
         }
 
-        /*printf("\nORIG_MAP: ");
-        for ( i= 0; i < n_se; ++i )
-            if ( orig_map[i] )
-                printf("%d ", i);
-        printf("\n");
-
-        printf("\n============================\n");
-        int tmp;
-        for ( i= 0; i < n_se; ++i )
-        {
-            tmp= 0;
-            for ( j= 0; j < n_time_values; ++j )
-                tmp+= occurance_table[i*n_time_values + j];
-            printf("%d ", tmp); fflush(stdout);
-        }
-        printf("\n============================\n");*/
-
-        // Remove time steps where fewer than min_stations reported data
         setb(change, n_se, false);
 
         n_not_fittable= 0;
@@ -232,18 +178,12 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
             for ( j= 0; j < n_se; ++j )
                 sum+= occurance_table[j*n_time_values + i];
 
-            //printf(".%d.", sum);
-
             if ( sum < min_stations )
                 not_fittable[n_not_fittable++]= i;
 
         }
 
-        /*for ( i= 0; i < n_not_fittable; ++i )
-            printf("%d ", not_fittable[i]);
-        printf("\n");*/
-
-        real monthnum;
+        int monthnum;
         int n_select= 0;
         for ( i= 0; i < n_se; ++i )
         {
@@ -252,18 +192,16 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
             {
                 monthnum= monthNum(se[i]->dates[j]) - min_month;
                 for ( k= 0; k < n_not_fittable; ++k )
-                    if ( (int)monthnum == not_fittable[k] )
+                    if ( monthnum == not_fittable[k] )
                         break;
                 if ( k == n_not_fittable )
-                {
                     select[n_select++]= j;
-                }
             }
             if ( n_select != se[i]->n_dates )
             {
-                //printf("%d\n", n_select);
+                printf("."); fflush(stdout);
                 stationElement2p seTmp= createSE2Select(se[i], select, n_select);
-                //printf("%d %d\n", se[i]->n_dates, seTmp->n_dates);
+                printf(","); fflush(stdout);
                 destroySE2(se[i]);
                 se[i]= seTmp;
                 change[i]= true;
@@ -272,24 +210,13 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         int sum_changed= false;
         for ( i= 0; i < n_se; ++i )
             sum_changed+= change[i];
-        //printf(" %d ", sum_changed); fflush(stdout);
+
         changed= changed || sum_changed;
 
         for ( i= 0; i < n_se; ++i )
             for ( j= 0; j < n_not_fittable; ++j )
                 occurance_table[i*n_time_values + not_fittable[j]]= false;
     }
-
-    sum_orig_map= 0;
-        for ( i= 0; i < n_orig_map; ++i )
-            sum_orig_map+= orig_map[i];
-        tprintf("sum orig_map changed: %d\n", sum_orig_map);
-
-    sum_occ_table=0;
-    for ( i= 0; i < n_se * n_time_values; ++i )
-        sum_occ_table+= occurance_table[i];
-    tprintf("sum occ table: %d\n", sum_occ_table);
-    //getchar();
 
     free(change);
     free(select);
@@ -299,8 +226,10 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     // Update the various time and occurance tables to deal with times removed in the previous step
     tprintf("Updating time and occurance talbes...\n");
 
+
+
     int* MM= inalloc(n_time_values);
-    int n_MM= (int)(max_month - min_month);
+    int n_MM= (int)(max_month - min_month + 1);
     for ( i= (int)min_month; i <= (int)max_month; ++i )
         MM[i - (int)min_month]= i;
     for ( i= 0; i < n_not_fittable; ++i )
@@ -318,8 +247,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         }
     }
 
-
-
     free(not_fittable);
     free(MM);
 
@@ -328,71 +255,46 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_times2= (int)(max_month - min_month) + 1;
     real* times2= rnalloc(n_times2);
     for ( i= 0; i < n_times2; ++i )
-        times2[i]= ((int)min_month + i + 1)/12.0 - 1.0/24.0 + 1600;
+        times2[i]= ((int)min_month + i)/12.0 - 1.0/24.0 + 1600;
 
-    //dea();
+    tprintf("times2 0, end: %f, %f\n", times2[0], times2[n_times2 - 1]);
+    getchar();
+
     int* drop= inalloc(n_time_values);
     int n_drop= 0;
 
-    /*printf("time_values:\n");
-    for ( i= 0; i < n_time_values; ++i )
-        printf("%f ", time_values[i]);
-    printf("\n");
-    for ( i= 0; i < n_times2; ++i )
-        printf("%f ", times2[i]);
-    printf("\n");*/
-
-    //deb();
     for ( k= 0; k < n_time_values; ++k )
     {
         for ( i= 0; i < n_times2; ++i )
-        {
             if ( times2[i] == time_values[k] )
                 break;
-        }
         if ( i == n_times2 )
             drop[n_drop++]= k;
     }
 
-    /*printf("drop: \n");
-    for ( i= 0; i < n_drop; ++i )
-        printf("%d ", drop[i]);
-    printf("\n");
-    dec();*/
     free(time_values);
     time_values= times2;
 
-    //ded();
     for ( i= 0; i < n_se; ++i )
         for ( j= 0; j < n_drop; ++j )
             occurance_table[i*n_time_values + drop[j]]= 255;
 
-    //dee();
     bool* occurance_table2= bnalloc(n_times2*n_se);
     for ( i= 0; i < n_se; ++i )
     {
         k= 0;
         for ( j= 0; j < n_time_values; ++j )
         {
-            //printf("%d ", occurance_table[i*n_time_values + j]);
             if ( occurance_table[i*n_time_values + j] != 255 )
                 occurance_table2[i*n_times2+k++]= occurance_table[i*n_time_values + j];
         }
-        //printf("%d,%d ", k, n_times2); fflush(stdout);
     }
 
-    //def();
     free(occurance_table);
     occurance_table= occurance_table2;
     n_time_values= n_times2;
-
-    /*for ( i= 0; i < n_se; ++i )
-    {
-        for ( j= 0; j < n_time_values; ++j )
-            fprintf(stderr, "%d ", occurance_table[i*n_time_values + j]);
-        fprintf(stderr, "\n");
-    }
-    getchar();*/
+    n_occurance_table1= n_se;
+    n_occurance_table2= n_times2;
 
     //Collapse redundant locations
     tprintf("Collapse redundant locations\n");
@@ -412,13 +314,22 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     int* locHashes= inalloc(n_locations);
     for ( i= 0; i < n_locations; ++i )
-        locHashes[i]= (((int)(locations[i]->latitude*100000)+(int)(locations[i]->longitude*100000))+(int)(locations[i]->elevation*100000))%13333;
+        locHashes[i]= (((int)(locations[i]->latitude*100000)+(int)(locations[i]->longitude*100000))+(int)(locations[i]->elevation*100000))%13453;
 
     int* collapsed;
     int* expand_map;
     int n_collapsed;
     int n_expand_map;
     uniqueIAN2(locHashes, n_locations, &collapsed, &n_collapsed, &expand_map, &n_expand_map);
+    /*collapsed= inalloc(n_locations);
+    expand_map= inalloc(n_locations);
+    for ( i= 0; i < n_locations; ++i )
+        collapsed[i]= expand_map[i]= i;
+    n_collapsed= n_locations;
+    n_expand_map= n_locations;*/
+
+    printArrayIFile("collapsed", collapsed, n_collapsed);
+    printArrayIFile("expand_map", expand_map, n_expand_map);
 
     geoPoint2** locations_short= (geoPoint2**)malloc(sizeof(geoPoint2*)*n_collapsed);
     for ( i= 0; i < n_collapsed; ++i )
@@ -436,9 +347,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         if ( orig_map[i] == true )
             n_se2++;
 
-    printf("%d\n", n_orig_map);
-    printf("sum orig_map: %d\n", n_se2);
-
     occurance_table2= bnalloc(n_time_values*n_se2);
     j= 0;
     for ( i= 0; i < n_orig_map; ++i )
@@ -452,7 +360,19 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         }
     }
 
+    sum_occ= 0;
+    for ( i= 0; i < n_occurance_table1*n_occurance_table2; ++i )
+        sum_occ+= occurance_table[i];
+    tprintf("sum_occ: %d\n", sum_occ);
+    sum_orig_map= 0;
+    for ( i= 0; i < n_orig_map; ++i )
+        sum_orig_map+= orig_map[i];
+    tprintf("orig_map: %d\n", sum_orig_map);
+    getchar();
+
     occurance_table= occurance_table2;
+    n_occurance_table1= n_se2;
+    n_occurance_table2= n_time_values;
     stationElement2p* se2= (stationElement2p*)malloc(sizeof(stationElement2p*)*n_se2);
     j= 0;
     for ( i= 0; i < n_se; ++i )
@@ -461,12 +381,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     se= se2;
     n_se= n_se2;
-
-    sum_occ_table=0;
-    for ( i= 0; i < n_se * n_time_values; ++i )
-        sum_occ_table+= occurance_table2[i];
-    tprintf("sum occ table: %d\n", sum_occ_table);
-    //getchar();
 
     tprintf("Elmination of station locations finished\n");
     tprintf("occurance_table: %d x %d; se: %d; locations: %d; locations_short: %d\n", n_time_values, n_se, n_se, n_locations, num_sites);
@@ -528,19 +442,14 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         data_array[i]= se[i]->data;
     }
 
-    /*for ( i= 0; i < n_n_data_array; ++i )
-    {
-        printf("%d ", n_data_array[i]);
-        for ( j= 0; j < n_data_array[i]; ++j )
-            printf("%f ", data_array[i][j]);
-        printf("\n");
-    }
-
+/*    printf("n_se: %d; n_locations: %d\n", n_se, n_locations);
+    for ( i= 0; i < n_se; ++i )
+        printf("%f %d %f %f %f %f\n", yearNum(dates_array[i][0]+min_month), dates_array[i][0], data_array[i][0], locations[i]->latitude, locations[i]->longitude, locations[i]->elevation);
     getchar();*/
 
     // Further collapse locations according to grid approximation rules
 
-    geoPoint2p* locations_collapsed;
+    /*geoPoint2p* locations_collapsed;
     int n_locations_collapsed;
     int* collapse_indices;
     int n_collapse_indices;
@@ -550,7 +459,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     locations_short= locations_collapsed;
     n_locations_short= n_locations_collapsed;
     for ( i= 0; i < n_expand_map; ++i )
-        expand_map[i]= collapse_indices[expand_map[i]];
+        expand_map[i]= collapse_indices[expand_map[i]];*/
 
     real* lat2;
     int n_lat2;
@@ -561,11 +470,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_map_pts= n_lat2;
     for ( i= 0; i < n_lat2; ++i )
         map_pts[i]= createGeoPoint22(lat2[i], long2[i]);
-    /*for ( i= 0; i < n_lat2; ++i )
-    {
-        printf("%f %f %f %f %f\n", map_pts[i]->latitude, map_pts[i]->longitude, map_pts[i]->x, map_pts[i]->y, map_pts[i]->z);
-        getchar();
-    }*/
 
     free(lat2);
     free(long2);
@@ -604,51 +508,43 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     real* map_lat= NULL;
     if ( options->fullBaselineMapping )
     {
-        site_elev= rnalloc(n_locations);
-        site_lat= rnalloc(n_locations);
-        map_lat= rnalloc(n_map_pts);
-
-        for ( i= 0; i < n_locations; ++i )
-        {
-            site_elev[i]= assignElevation(locations[i]);
-            site_lat[i]= locations[i]->latitude;
-            map_lat[i]= map_pts[i]->latitude;
-        }
+        // TODO
     }
 
     tprintf("Averaging: %d records used from %d sites\n", n_n_data_array, num_sites);
     tprintf("%d sites used for network approximation\n", n_locations_short);
 
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////BEGINNING OF VALIDATED   ////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+
     float* correlation_table;
     int n_correlation_table;
     float nugget;
-    buildCovarianceTable(locations_short, n_locations_short, options, &correlation_table, &n_correlation_table, &nugget);
-    /*printArray2Float("correlation_table", correlation_table, n_correlation_table, n_correlation_table);
-    tprintf("%f\n", nugget);*/
-
-    /*for ( i= 0; i < n_correlation_table; ++i )
     {
-        for ( j= 0; j < n_correlation_table; ++j )
-        {
-            printf("%f ", correlation_table[i*n_correlation_table + j]);
-        }
-        printf("\n");
+        FILE* lsfile= fopen("locations_short", "wt");
+        for ( i= 0; i < n_locations_short; ++i )
+            fprintf(lsfile, "%f %f %f\n", locations_short[i]->latitude, locations_short[i]->longitude, locations_short[i]->elevation);
+        fclose(lsfile);
     }
-    getchar();*/
+
+    buildCovarianceTable(locations_short, n_locations_short, options, &correlation_table, &n_correlation_table, &nugget);
+    printArray2FloatFile("correlation_table", correlation_table, n_correlation_table, n_correlation_table);
+    tprintf("nugget: %f\n", nugget);
+    getchar();
 
     // Build spatial target function
     float* target_map;
     int* near_index;
     int n_target_map1, n_target_map2;
     int n_near_index;
+
     buildTargetTable(locations_short, n_locations_short, map_pts, n_map_pts, options, &target_map, &n_target_map1, &n_target_map2, &near_index, &n_near_index);
-    printArray2Float("target_map", target_map, n_target_map1, n_target_map2);
-//    printArrayI("near_index", near_index, n_near_index);
+    printArray2FloatFile("target_map", target_map, n_target_map1, n_target_map2);
+    printArrayIFile("near_index", near_index, n_near_index);
+    printArrayIFile("expand_map", expand_map, n_expand_map);
     tprintf("buildTargetTable finished: n_target_map1,2 %d %d, n_near_index: %d\n", n_target_map1, n_target_map2, n_near_index);
-
-    // target_map - size: n_target_map x n_near_index
-
-    printf("%d %d %d\n", n_target_map1, n_target_map2, n_near_index);
 
     int* near_index_new= inalloc(n_expand_map);
     for ( i= 0; i < n_expand_map; ++i )
@@ -657,10 +553,8 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     near_index= near_index_new;
     n_near_index= n_expand_map;
 
-    tprintf("free-ing locations_short, locations_collapsed\n");
     free(locations_short);
     //free(locations_collapsed);
-    tprintf("free finished\n");
 
     // Variable for storing spatial weights
     // spatial_map - I did not find any use of this structure in the rest of the code, so I ignore it's reimplementation
@@ -696,6 +590,17 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     }
     else
     {
+        printArray2FloatFile("correlation_table", correlation_table, n_correlation_table, n_correlation_table);
+        printArray2FloatFile("target_map", target_map, n_target_map1, n_target_map2);
+        printArray2BFile("occurance_table", occurance_table, n_occurance_table1, n_occurance_table2);
+        printArrayIFile("expand_map", expand_map, n_expand_map);
+        printArrayRFile("areal_weight", areal_weight, n_areal_weight);
+
+        tprintf("correlation_table: %d %d\n", n_correlation_table, n_correlation_table);
+        tprintf("target_map: %d %d\n", n_target_map1, n_target_map2);
+        tprintf("occurance_table: %d %d\n", n_occurance_table1, n_occurance_table2);
+        tprintf("expand_map: %d\n", n_expand_map);
+        tprintf("areal_weight: %d\n", n_areal_weight);
         buildBaselineTable(correlation_table, n_correlation_table,
                            target_map, n_target_map1, n_target_map2,
                            occurance_table, n_se2, n_time_values,
@@ -708,9 +613,18 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
                            &coverage_map, &n_coverage_map,
                            &base_weights_map, &n_base_weights_map1, &n_base_weights_map2,
                            NULL, NULL);
+
+        tprintf("all_station_mix: %d\n", n_all_station_mix);
+        tprintf("coverage_map: %d\n", n_coverage_map);
+        tprintf("base_weights_map: %d %d\n", n_base_weights_map1, n_base_weights_map2);
+        printArrayRFile("all_station_mix", all_station_mix, n_all_station_mix);
+        printArrayRFile("coverage_map", coverage_map, n_coverage_map);
+        printArray2DFile("base_weights_map", base_weights_map, n_base_weights_map1, n_base_weights_map2);
+        getchar();
     }
-    int n_occurance_table1= n_se2;
-    int n_occurance_table2= n_time_values;
+
+    n_occurance_table1= n_se2;
+    n_occurance_table2= n_time_values;
     // Crop fit region if requested
     if ( options->limitEmpiricalFitRegion )
         for ( i= 0; i < n_coverage_map; ++i )
@@ -750,7 +664,6 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
     tprintf("spatial_table: %d %d\n", n_spatial_table1, n_spatial_table2);
     printArray2DFile("spatial_table", spatial_table, n_spatial_table1, n_spatial_table2);
-    getchar();
 
     real* coverage_summary= rnalloc(n_spatial_table2);
     int n_coverage_summary= n_spatial_table2;
@@ -764,7 +677,10 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     tprintf("coverage_summary\n");
     printArrayRFile("coverage_summary", coverage_summary, n_coverage_summary);
     getchar();
-//    printArrayR("coverage_summary", coverage_summary, n_coverage_summary);
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////END OF VALIDATED///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 
     double* spatial_maps;
     int n_spatial_maps1;
@@ -798,6 +714,8 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int len_t= n_time_values;
     int len_s= n_n_data_array;
 
+    tprintf("len_t, len_s: %d, %d\n", len_t, len_s);
+
     bool first= true;
     bool done= false;
 
@@ -805,14 +723,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
     int n_window= 0;
     if ( options->useIterativeReweighting )
     {
-        for ( i= 0; i < n_occurance_table2; ++i )
-        {
-            float sum= 0;
-            for ( j= 0; j < n_occurance_table1; ++j )
-                sum+= occurance_table[j*n_occurance_table2 + i];
-            if ( sum >= options->precisionTargetMinStations )
-                window[n_window++]= i;
-        }
+        // TODO
     }
 
     tprintf("Compute Temperature Fit\n");
@@ -989,7 +900,35 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
                 n_new_spatial_dist2= n_new_spatial_table2;
             }
         }
-        printf("eee\n"); fflush(stdout);
+
+        {
+            FILE* daf= fopen("data_array", "wt");
+            fprintf(daf, "%d\n", n_n_data_array);
+            for ( i= 0; i < n_n_data_array; ++i )
+            {
+                fprintf(daf, "%d ", n_data_array[i]);
+                for ( j= 0; j < n_data_array[i]; ++j )
+                    fprintf(daf, "%f ", data_array[i][j]);
+                fprintf(daf, "\n");
+            }
+            fclose(daf);
+            FILE* def= fopen("dates_array", "wt");
+            fprintf(def, "%d\n", n_n_dates_array);
+            for ( i= 0; i < n_n_dates_array; ++i )
+            {
+                fprintf(def, "%d ", n_dates_array[i]);
+                for ( j= 0; j < n_dates_array[i]; ++j )
+                    fprintf(def, "%d ", dates_array[i][j]);
+                fprintf(def, "\n");
+            }
+            fclose(def);
+            printArray2DFile("new_spatial_dist", new_spatial_dist, n_new_spatial_dist1, n_new_spatial_dist2);
+            printArrayFloatFile("map_dist", map_dist, n_map_dist);
+            printArrayIFile("near_index", near_index, n_near_index);
+            printArrayRFile("t_res", t_res, n_t_res);
+            printArrayRFile("b_res", b_res, n_b_res);
+            tprintf("sigma: %f, sigma_full: %f\n", sigma, sigma_full);
+        }
         // Build the matrices used to solve the contraint problem
         buildMatrices(data_array, n_data_array, n_n_data_array,
                       dates_array, n_dates_array, n_n_dates_array,
@@ -1020,6 +959,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         tprintf("record_weight: %d\n", n_record_weight);
         printArrayDFile("record_weight", record_weight, n_record_weight);
 
+        getchar();
         tprintf("occurance_table: %d,%d\n", n_occurance_table1, n_occurance_table2);
         tprintf("all_station_mix: %d\n", n_all_station_mix);
 
@@ -1043,6 +983,11 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
         for ( i= 0; i < n_base_constants; ++i )
             base_constants[i]/= base_weights[i];
+
+        printArray2DFile("base_map", base_map, n_base_map1, n_base_map2);
+        printArrayDFile("base_constants", base_constants, n_base_constants);
+        tprintf("base_map: %d, %d; base_constants: %d\n", n_base_map1, n_base_map2, n_base_constants);
+        getchar();
 
         free(t_res);
         free(b_res);
@@ -1096,6 +1041,12 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
         double ssd;
         int data_points;
 
+        printArrayRFile("t_res", t_res, n_t_res);
+        printArrayRFile("b_res", b_res, n_b_res);
+        printArray2DFile("new_spatial_dist", new_spatial_dist, n_new_spatial_dist1, n_new_spatial_dist2);
+        printArrayDFile("map_dist", map_dist, n_map_dist);
+        printArrayIFile("near_index", near_index, n_near_index);
+
         scoreFit(data_array, n_data_array, n_n_data_array,
                  dates_array, n_dates_array, n_n_dates_array,
                  t_res, n_t_res,
@@ -1111,6 +1062,7 @@ berkeleyAverageResults* berkeleyAverageCore(stationElement2p** seIO, int* n_seIO
 
         tprintf("ssd: %f, data_points: %d\n", ssd, data_points);
         printArray2R("base_adjustment_scale", base_adjustment_scale, n_base_adjustment_scale1, n_base_adjustment_scale2);
+        getchar();
 
         double n_isnan_res2= 0;
         for ( i= 0; i < n_res2; ++i )

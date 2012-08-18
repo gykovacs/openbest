@@ -5,6 +5,8 @@ void buildCovarianceTable(geoPoint2** locations, int n_locations, berkeleyAverag
 {
     tprintf("Begin of Build Covariance Table\n");
 
+    tprintf("%f %f %f\n", locations[0]->latitude, locations[0]->longitude, locations[0]->elevation);
+
     // Precomputed monthly covariance information
     real* p= options->correlationParameters;
     int n_p= options->n_correlationParameters;

@@ -303,6 +303,11 @@ int uniqueFullTest(int argc, char** argv)
     for ( i= 0; i < n_expand_map; ++i )
         printf("%d ", t[collapsed[expand_map[i]]]);
     printf("\n");
+    for ( i= 0; i < n_collapsed; ++i )
+        printf("%d ", collapsed[i]);
+    printf("\n");
+    for ( i= 0; i < n_expand_map; ++i )
+        printf("%d ", expand_map[i]);
 
     return 0;
 }
@@ -348,6 +353,14 @@ int linearEquationTest(int argc, char** argv)
     return 0;
 }
 
+int time2Test(int argc, char** argv)
+{
+    double year= 1984.125;
+    printf("%f\n", monthNum(year));
+    printf("%f\n", yearNum(monthNum(year)));
+    return 0;
+}
+
 /**
 * This simple test application calls a test function from the openbest-ds (data structures) shared object file.
 */
@@ -373,6 +386,7 @@ int main(int argc, char** argv)
     bool uniqueFull= false;
     bool roundM= false;
     bool lineq= false;
+    bool time2= false;
     int err;
     
     addOption(ot, "--hello", OPTION_BOOL, (char*)&hello, 0, "hello world function to test linking");
@@ -390,6 +404,7 @@ int main(int argc, char** argv)
     addOption(ot, "--uniqueFull", OPTION_BOOL, (char*)&uniqueFull, 0, "unique full functionalities test");
     addOption(ot, "--round", OPTION_BOOL, (char*)&roundM, 0, "round test");
     addOption(ot, "--lineq", OPTION_BOOL, (char*)&lineq, 0, "linear equation system");
+    addOption(ot, "--time2", OPTION_BOOL, (char*)&time2, 0, "time 2 test");
     
     if ( processArgs(ot, &argc, argv) )
     {
@@ -427,6 +442,8 @@ int main(int argc, char** argv)
       err= roundTest(argc, argv);
     else if ( lineq )
       err= linearEquationTest(argc, argv);
+    else if ( time2 )
+        err= time2Test(argc, argv);
 
     destroyOptionTable(ot);
     
