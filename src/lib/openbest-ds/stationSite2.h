@@ -5,6 +5,9 @@
 #include "openbest-ds/geoPoint2.h"
 #include "openbest-ds/timeInstant.h"
 
+#define DECLARED_MOVE 1
+#define SUSPECTED_MOVE 2
+
 /**
   * struct for stationSite2 class
   */

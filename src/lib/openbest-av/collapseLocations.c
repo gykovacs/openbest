@@ -91,11 +91,6 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
             multiple[i]+= mask[i*n_locations + j];
     }
 
-    printf("multiple: \n");
-    for ( i= 0; i < n_locations; ++i )
-        printf("%d ", multiple[i]);
-    printf("\n");
-
     bool* bad= bnalloc(len_D);
     setb(bad, len_D, false);
     bool* kill= bad;
@@ -137,7 +132,7 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
 
     while ( next > 1 )
     {
-        tprintf("loop: next - %d\n", next);
+//        tprintf("loop: next - %d\n", next);
         n_f= 0;
         for ( j= 0; j < len_D; ++j )
             if ( mask[fk[0]*len_D + j] && !bad[j] )
@@ -154,12 +149,6 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
 
         for ( i= 0; i < n_f; ++i )
             sel[i]= dd[i] < max_move;
-/*        for ( i= 0; i < n_f; ++i )
-            printf("%f,%f ", dd[i], max_move);
-        printf("\n");
-        for ( i= 0; i < n_f; ++i )
-            printf("%d ", sel[i]);
-        printf("\n");*/
 
         for ( i= 0; i < n_f; ++i )
             if ( !sel[i] )
@@ -232,25 +221,15 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
         maxIA2(multiple, len_D, &next, fk, &n_fk);
     }
 
-    /*for ( i= 0; i < len_D; ++i )
-        printf("%d ", kill[i]);
-    printf("\n");*/
-
     for ( i= 0; i < len_D; ++i )
         if ( kill[i] )
-        {
             targets[i]= NULL;
-            //index_list[i]= -1;
-        }
 
     j= 0;
     for ( i= 0; i < len_D; ++i )
     {
         if ( targets[i] != NULL )
-        {
             targets[j++]= targets[i];
-            //index_list[j++]= index_list[i];
-        }
     }
     n_targets= j;
 

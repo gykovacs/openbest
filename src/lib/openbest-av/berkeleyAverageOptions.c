@@ -114,11 +114,6 @@ berkeleyAverageOptions* createBAON1(char* mode)
         p->clusterMode= false;
 
         p->fullBaselineMapping= false;
-
-        p->useScalpel= false;
-        //TODO: clear
-        /*p->scalpelEmpirical= true;
-        p->scalpelEmpiricalMaxPairs= 20;*/
     }
     else if ( strcmp(mode, "weighted") == 0 )
     {

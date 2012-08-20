@@ -44,8 +44,8 @@ void processResults(berkeleyAverageResults* results)
     printf("data_points: %f\n", results->data_points);
     printf("time_parameters: %f\n", results->time_parameters);
     printf("baseline_parameters: %f\n", results->baseline_parameters);
-    printf("initial_time_series: %f\n", results->initial_time_series);
-    printf("post_scalpel_time_series: %f\n", results->post_scalpel_time_series);
+    printf("initial_time_series: %d\n", results->initial_time_series);
+    printf("post_scalpel_time_series: %d\n", results->post_scalpel_time_series);
 }
 
 int berkeleyAverageFunction(int argc, char** argv)
@@ -114,7 +114,7 @@ int berkeleyAverageTestFunction(int argc, char** argv)
     stationElement2p* se;
     int n_stationElement2;
 
-    loadData(&ss, &n_stationSite2, &se, &n_stationElement2);
+    loadPreliminaryData();
 
     berkeleyAverageOptions* bao;
 
@@ -123,25 +123,7 @@ int berkeleyAverageTestFunction(int argc, char** argv)
 
     stationElement2p tmp;
 
-
-    /*for ( i= 0; i < n_stationElement2; ++i )
-        if ( isMultiValued(se[i]) )
-        {
-            destroySE2(se[i]);
-            destroySS2(ss[i]);
-            se[i]= NULL;
-            ss[i]= NULL;
-        }
-
-    int nse2= 0;
-    for ( i= 0; i < n_stationElement2; ++i )
-        if ( se[i] != NULL )
-        {
-            se[nse2]= se[i];
-            ss[nse2++]= ss[i];
-        }
-    n_stationElement2= nse2;
-    n_stationSite2= nse2;*/
+    tprintf("reading station elements...\n");
 
     FILE* fse= fopen(argv[1], "r");
     int n;
@@ -149,70 +131,84 @@ int berkeleyAverageTestFunction(int argc, char** argv)
     se= (stationElement2**)malloc(sizeof(stationElement2*)*n);
     int i, j, k, m;
     float a, b, c;
+    int d, e, f;
+    char line[1000];
     for ( i= 0; i < n; ++i )
     {
-        se[i]= createSE2N();
-        fscanf(fse, "%d", &m);
-        se[i]->n_data= m;
-        se[i]->n_dates= m;
-        se[i]->n_time_of_observation= m;
-        se[i]->n_uncertainty= m;
-        se[i]->n_num_measurements= m;
-        se[i]->n_n_flags= m;
-        se[i]->n_flags= cnalloc(m);
-        setc(se[i]->n_flags, m, 0);
-        se[i]->flags= (flag_t**)malloc(sizeof(flag_t*)*m);
-        for ( j= 0; j < m; ++j )
-            se[i]->flags[j]= NULL;
-        se[i]->n_n_sources= m;
-        se[i]->n_sources= cnalloc(m);
-        se[i]->sources= (flag_t**)malloc(sizeof(flag_t*)*m);
-        for ( j= 0; j < m; ++j )
-            se[i]->sources[j]= NULL;
-        setc(se[i]->n_sources, m, 0);
-        se[i]->num_measurements= snalloc(m);
-        se[i]->uncertainty= rnalloc(m);
-        se[i]->time_of_observation= cnalloc(m);
-        se[i]->dates= rnalloc(m);
-        se[i]->data= tnalloc(m);
+        fscanf(fse, "%d\n", &m);
+        se[i]= createSE2NM(m);
 
         for ( j= 0; j < m; ++j )
         {
-            fscanf(fse, "%f %f", &a, &b);
+            fgets(line, 1000, fse);
+            f= sscanf(line, "%f %f %f %d %d", &a, &b, &c, &d, &e);
             se[i]->dates[j]= a;
             se[i]->data[j]= b;
+            se[i]->uncertainty[j]= c;
+            if ( f > 3 )
+                se[i]->time_of_observation[j]= d;
+            else
+                se[i]->time_of_observation[j]= -99;
+            if ( f > 4 )
+                se[i]->num_measurements[j]= e;
+            else
+                se[i]->num_measurements[j]= -99;
         }
     }
     fclose(fse);
 
+    tprintf("reading station sites...\n");
     int nn;
+    int tmps;
     fse= fopen(argv[2], "r");
     fscanf(fse, "%d", &nn);
-    char line[1000];
     ss= (stationSite2**)malloc(sizeof(stationSite2*)*nn);
     for ( i= 0; i < nn; ++i )
     {
         ss[i]= createSS2N();
-            k= fscanf(fse, "%f %f %f", &a, &b, &c);
-            if ( k == 3 && c == c )
-                ss[i]->location= createGeoPoint23(a, b, c);
-            else
+        k= fscanf(fse, "%f %f %f", &a, &b, &c);
+        if ( k == 3 && c == c )
+            ss[i]->location= createGeoPoint23(a, b, c);
+        else
+        {
+            ss[i]->location= createGeoPoint22(a, b);
+        }
+        fscanf(fse, "%d\n", &d);
+        ss[i]->relocations= rnalloc(d);
+        ss[i]->relocation_types= fnalloc(d);
+        if ( d > 0 )
+        {
+            fgets(line, 1000, fse);
+            tmps= 0;
+            for ( j= 0; j < d; ++j )
             {
-                printf(".");
-                ss[i]->location= createGeoPoint22(a, b);
+                sscanf(line + tmps, "%f%n", &a, &tmps);
+                ss[i]->relocations[j]= a;
+                ss[i]->relocation_types[j]= DECLARED_MOVE;
             }
-            printf("%f %f %f %f %f %f\n", ss[i]->location->latitude,
-                   ss[i]->location->longitude,
-                   ss[i]->location->elevation,
-                   ss[i]->location->x,
-                   ss[i]->location->y,
-                   ss[i]->location->z);
+        }
+        fscanf(fse, "%d\n", &e);
+        if ( e > 0 )
+        {
+            ss[i]->relocations= (real*)realloc(ss[i]->relocations, sizeof(real)*(d + e));
+            ss[i]->relocation_types= (flag_t*)realloc(ss[i]->relocation_types, sizeof(flag_t)*(d + e));
+            fgets(line, 1000, fse);
+            tmps= 0;
+            for ( j= 0; j < e; ++j )
+            {
+                sscanf(line + tmps, "%f%n", &a, &tmps);
+                ss[i]->relocations[j]= a;
+                ss[i]->relocation_types[j]= SUSPECTED_MOVE;
+            }
+        }
+        ss[i]->n_relocations= d + e;
     }
-    getchar();
     fclose(fse);
 
     n_stationElement2= n;
     n_stationSite2= nn;
+
+    tprintf("reading finished\n");
 
     tprintf("Making dataset to be single valued\n");
     /*for ( i= 0; i < n_stationElement2; ++i )
@@ -225,9 +221,22 @@ int berkeleyAverageTestFunction(int argc, char** argv)
 
     berkeleyAverageResults* results;
 
+    bao->useScalpel=true;
+    bao->scalpelGaps= false;
+    bao->scalpelDeclaredMoves= false;
+    bao->scalpelSuspectedMoves= false;
+    bao->scalpelTOBChanges=false;
+    bao->scalpelMetadata= false;
+
     results= berkeleyAverage(&se, &n_stationElement2, &ss, &n_stationSite2, bao);
 
     processResults(results);
+
+    destroyBAR(results);
+
+    destroySE2V(se, n_stationElement2);
+
+    destroySS2V(ss, n_stationSite2);
 
     return 0;
 }
@@ -242,8 +251,8 @@ int main(int argc, char** argv)
     setPrefix(ot, "berkeleyAverage application");
     addUsage(ot, "berkeleyAverage <option-name> arg1 arg2 ...");
     
-    bool berkeleyav;
-    bool berkeleyavtest;
+    bool berkeleyav= false;
+    bool berkeleyavtest= false;
     
     addOption(ot, "--berkeleyav", OPTION_BOOL, (char*)&berkeleyav, 0, "run berkeley average algorithm");
     addOption(ot, "--berkeleyavtest", OPTION_BOOL, (char*)&berkeleyavtest, 0, "run berkeley average algorithm");

@@ -165,7 +165,6 @@ void destroySS2V(stationSite2p* ss, int n)
                 //displaySS2(ss[i]);
             printf("-------"); fflush(stdout);
             }*/
-
             destroySS2(ss[i]);
         }
         free(ss);

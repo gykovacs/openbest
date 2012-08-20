@@ -64,6 +64,8 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
                 }
             }
 
+            back_map2= inalloc(*n_stationElement2IO);
+            start_pos2= inalloc(*n_stationElement2IO);
             // Declared and suspected station moves
             splitStationMoves(seIO, n_stationElement2IO, ssIO, n_stationSite2IO, options->scalpelDeclaredMoves, options->scalpelSuspectedMoves, &back_map2, &start_pos2);
 
@@ -83,6 +85,12 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         }
         else
         {
+            back_map1= inalloc(*n_stationElement2IO);
+            back_map2= inalloc(*n_stationElement2IO);
+            back_map3= inalloc(*n_stationElement2IO);
+            start_pos1= inalloc(*n_stationElement2IO);
+            start_pos2= inalloc(*n_stationElement2IO);
+            start_pos3= inalloc(*n_stationElement2IO);
             for ( i= 0; i < *n_stationElement2IO; ++i )
             {
                 back_map1[i]= back_map2[i]= back_map3[i]= i;
@@ -113,7 +121,7 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         int n= *n_stationElement2IO;
         back_map= back_map4;
         start_pos= start_pos4;
-        int* break_flags= inalloc(n);
+        break_flags= inalloc(n);
         seti(break_flags, n, 0);
         for ( i= 0; i < n; ++i )
             if ( start_pos4[i] != 1 )
@@ -147,6 +155,8 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         n_start_pos= n;
         n_break_flags= n;
 
+
+
         free(back_map1);
         free(start_pos1);
         free(back_map2);
@@ -158,6 +168,7 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
     }
     else
     {
+        tprintf("No scalpel methods run\n");
         start_pos= inalloc(*n_stationElement2IO);
         seti(start_pos, *n_stationElement2IO, 0);
         break_flags= inalloc(*n_stationElement2IO);
@@ -170,6 +181,8 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         n_break_flags= *n_stationElement2IO;
         n_start_pos= *n_stationElement2IO;
     }
+
+    //return NULL;
 
     berkeleyAverageResults* results;
 
@@ -184,19 +197,14 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
 
     // Reconstruct the baselines and shift statistics
     int* un= copyIA(back_map, n_back_map);
-    int n_un;
+    int n_un= n_back_map;
+    tprintf("n_back_map: %d\n", n_back_map);
     uniqueIA(&un, &n_un);
 
     int max_un= maxI(un, n_un);
-    baselineStruct* baselines= (baselineStruct*)malloc(sizeof(baselineStruct)*max_un);
-    int n_baselines= max_un;
-
-    if ( start_pos )
-        free(start_pos);
-    if ( break_flags )
-        free(break_flags);
-    if ( back_map )
-        free(back_map);
+    tprintf("max_un: %d\n", max_un);
+    baselineStruct* baselines= (baselineStruct*)malloc(sizeof(baselineStruct)*(max_un+1));
+    int n_baselines= max_un+1;
 
     real* emp_shifts= rnalloc(*n_stationElement2IO);
     int n_emp_shifts= *n_stationElement2IO;
@@ -215,6 +223,15 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
     // Group baseline information by original site.
     int* f= inalloc(n_back_map);
     int n_f;
+
+    for ( k= 0; k < n_baselines; ++k )
+        initBS(&(baselines[k]));
+
+    /*tprintf("n_un: %d\n", n_un);
+    printArrayI("un", un, n_un);
+    printArrayI("back_map", back_map, n_back_map);
+    printArrayI("start_pos", start_pos, n_start_pos);
+    printArrayI("break_flags", break_flags, n_break_flags);*/
     for ( k= 0; k < n_un; ++k )
     {
         n_f= 0;
@@ -230,15 +247,23 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         baselines[un[k]].n_break_positions= baselines[un[k]].n_break_flags=
                 baselines[un[k]].n_baseline= baselines[un[k]].n_record_weight=
                 baselines[un[k]].n_site_weight= n_f;
+        printf("%d ", n_f);
+        printArrayI("f", f, n_f);
         for ( i= 0; i < n_f; ++i )
         {
+            printf("%d ", start_pos[f[i]]); fflush(stdout);
             baselines[un[k]].break_positions[i]= start_pos[f[i]];
+            printf("%d ", break_flags[f[i]]); fflush(stdout);
             baselines[un[k]].break_flags[i]= break_flags[f[i]];
+            printf("%f ", results->baselines[f[i]]); fflush(stdout);
             baselines[un[k]].baseline[i]= results->baselines[f[i]];
+            printf("%f ", results->record_weights[f[i]]); fflush(stdout);
             baselines[un[k]].record_weight[i]= results->record_weights[f[i]];
+            printf("%f ", results->site_weights[f[i]]); fflush(stdout);
             baselines[un[k]].site_weight[i]= results->site_weights[f[i]];
         }
 
+        dea();
         real sum= 0;
         for ( j= 0; j < baselines[un[k]].n_record_weight; ++j )
             if ( baselines[un[k]].record_weight[j] != -FLT_MAX )
@@ -249,7 +274,9 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         int m;
         int* f2= inalloc(baselines[un[k]].n_break_flags);
         int n_f2= 0;
-        for ( m= 0; m < 4; ++i )
+
+        deb();
+        for ( m= 0; m < 4; ++m )
         {
             for ( i= 0; i < baselines[un[k]].n_break_flags; ++i )
                 if ( baselines[un[k]].break_flags[i] == m )
@@ -288,6 +315,7 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
                 }
             }
 
+            dec();
             // Store some summary data on the effect of scalpel
             switch (m)
             {
@@ -311,6 +339,13 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         }
         free(f2);
     }
+
+    if ( start_pos )
+        free(start_pos);
+    if ( break_flags )
+        free(break_flags);
+    if ( back_map )
+        free(back_map);
 
     // Update results structure with structured baseline results
     results->baselinesS= baselines;
@@ -394,6 +429,8 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
                     results->empirical_baseline_shifts[(results->n_empirical_baseline_shifts)++]= emp_shifts[i];
         }
     }
+
+    dee();
 
     // If requested, perform uncertainty calculation.
     if ( options->computeUncertainty )

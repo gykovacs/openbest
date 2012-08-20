@@ -135,7 +135,6 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
             n_sp_weight_temp2= n_new_spatial_table2;
         }
 
-        //dea();
         if ( !first && b_res[j] == -FLT_MAX )
             continue;
 
@@ -184,20 +183,17 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
         for ( i= 0; i < n_monthnum; ++i )
             s[i]= sp_weight_temp[idx*n_sp_weight_temp2 + monthnum[i]];
 
-        //def();
         double sum= 0;
         for ( i= 0; i < n_s; ++i )
             sum+= fabs(s[i]) * outlier_weight[i];
         record_weight[j]= sum;
 
-        //deg();
         base_weights[j]= base_weights[j] + n_s;
 
         sum= 0;
         for ( i= 0; i < n_local_table; ++i )
             sum+= local_table[i];
 
-        //ded();
         base_constants[j]= base_constants[j] + sum;
 
         for ( i= 0; i < n_monthnum; ++i )

@@ -54,6 +54,12 @@ void splitStationBreaks(stationElement2p** seIO, int* n_stationElement2IO, stati
         group[last_pos]= 0;
 
         setf(flagged, n, false);
+
+        //printArrayI("f", f, n_f);
+
+        for ( i= 0; i < n_f; ++i )
+            flagged[f[i]]= true;
+
         seti(group, n, 0);
 
         while ( cur_pos < n )
@@ -194,15 +200,24 @@ void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, statio
             {
                 n_cuts= 0;
                 for ( i= 0; i < ss[k]->n_relocations; ++i )
-                    if ( ss[k]->relocation_types[i] == 1 )
-                        cuts[n_cuts++]= ss[k]->relocation_types[i];
+                    if ( ss[k]->relocation_types[i] == DECLARED_MOVE )
+                        cuts[n_cuts++]= ss[k]->relocations[i];
             }
-            else
+            else if ( suspected_moves )
             {
                 n_cuts= 0;
                 for ( i= 0; i < ss[k]->n_relocations; ++i )
-                    if ( ss[k]->relocation_types[i] == 2 )
-                        cuts[n_cuts++]= ss[k]->relocation_types[i];
+                    if ( ss[k]->relocation_types[i] == SUSPECTED_MOVE )
+                        cuts[n_cuts++]= ss[k]->relocations[i];
+            }
+            else
+            {
+                se2[cnt]= se[k];
+                ss2[cnt]= ss[k];
+                back_map[cnt]= k;
+                start_pos[cnt]= 0;
+                ++cnt;
+                continue;
             }
 
             dates= se[k]->dates;
@@ -217,7 +232,7 @@ void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, statio
 
             cnt_start= cnt;
 
-            for ( j= 0; j < n_cuts2 - 1; ++j )
+            for ( j= 0; j < n_cuts2-1; ++j )
             {
                 n_f= 0;
                 for ( i= 0; i < se[k]->n_dates; ++i )
@@ -240,7 +255,6 @@ void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, statio
             se[k]= NULL;
             for ( j= cnt_start; j < cnt; ++j )
             {
-                //ss2[j]= ss[k];
                 ss2[j]= createSS2NC(ss[k]);
                 back_map[j]= k;
             }
@@ -273,6 +287,7 @@ void splitStationMoves(stationElement2p** seIO, int* n_stationElement2IO, statio
     *n_stationSite2IO= cnt;
     *back_mapIO= back_map;
     *start_posIO= start_pos;
+
 
     tprintf("%d stations in result\n", cnt);
     tprintf("End of Split Station Moves\n");

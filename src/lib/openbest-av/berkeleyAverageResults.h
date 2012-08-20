@@ -2,9 +2,13 @@
 #define _BERKELEY_AVERAGE_RESULTS_H_
 
 #include <time.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "openbest-ds/config-ds.h"
 #include "openbest-ds/geoPoint2.h"
+#include "openbest-ds/memFunctions.h"
+#include "openbest-ds/printOut.h"
 #include "openbest-av/berkeleyAverageOptions.h"
 
 typedef struct
@@ -102,5 +106,15 @@ typedef struct
     int n_empirical_baseline_shifts;
 
 } berkeleyAverageResults;
+
+void destroyBS(baselineStruct* bs);
+
+baselineStruct* createBS();
+
+void initBS(baselineStruct* bs);
+
+void destroyBAR(berkeleyAverageResults* bar);
+
+berkeleyAverageResults* createBAR();
 
 #endif

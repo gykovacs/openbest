@@ -99,6 +99,39 @@ stationElement2* createSE2N()
     return tmp;
 }
 
+stationElement2* createSE2NM(int m)
+{
+    int j;
+
+    stationElement2* se;
+
+    se= createSE2N();
+    se->n_data= m;
+    se->n_dates= m;
+    se->n_time_of_observation= m;
+    se->n_uncertainty= m;
+    se->n_num_measurements= m;
+    se->n_n_flags= m;
+    se->n_flags= cnalloc(m);
+    setc(se->n_flags, m, 0);
+    se->flags= (flag_t**)malloc(sizeof(flag_t*)*m);
+    for ( j= 0; j < m; ++j )
+        se->flags[j]= NULL;
+    se->n_n_sources= m;
+    se->n_sources= cnalloc(m);
+    se->sources= (flag_t**)malloc(sizeof(flag_t*)*m);
+    for ( j= 0; j < m; ++j )
+        se->sources[j]= NULL;
+    setc(se->n_sources, m, 0);
+    se->num_measurements= snalloc(m);
+    se->uncertainty= rnalloc(m);
+    se->time_of_observation= cnalloc(m);
+    se->dates= rnalloc(m);
+    se->data= tnalloc(m);
+
+    return se;
+}
+
 stationElement2* createSE2Test()
 {
     stationElement2* tmp= createSE2N();

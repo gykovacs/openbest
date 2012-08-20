@@ -142,7 +142,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
     printArray2DFile("temperature_map_mix", temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
     printArrayDFile("temperature_constant_mix", temperature_constant_mix, n_temperature_constant_mix);
     printArrayIFile("new_map", new_map, n_new_map);
-    getchar();
     double cond= conditionNumberEstimateD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
     tprintf("cond: %f\n", cond);
     while ( cond > 1e6 )
@@ -216,7 +215,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
     solveLinEqHD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2, temperature_constant_mix, 1, t_fit);
 
     printArrayD("t_fit", t_fit, n_t_fit);
-    getchar();
 
     real* t_res= rnalloc(len_t);
     int n_t_res= len_t;

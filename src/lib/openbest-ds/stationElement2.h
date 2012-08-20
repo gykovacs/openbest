@@ -85,6 +85,8 @@ stationElement2* createSE2N();
   */
 stationElement2* createSE2Test();
 
+stationElement2* createSE2NM(int m);
+
 /**
   * copies the contents of the parameter stationElement2 into a new instance
   * @param se instance to copy
