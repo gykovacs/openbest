@@ -1,5 +1,6 @@
 function [ nr ] = exportBESTdata( se, sites, number, mode)
 %exportBESTdata exports BEST data to data files
+#nr - number of time series exported
 
 len= length(se);
 nr= min(number, len);
