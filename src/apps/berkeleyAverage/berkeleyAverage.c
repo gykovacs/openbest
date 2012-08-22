@@ -284,9 +284,7 @@ int berkeleyAverageFunction(int argc, char** argv)
 
     destroySS2V(ss, n_stationSite2);
 
-    tprintf("aaa\n");
     finalizeDS();
-    tprintf("bbb\n");
 
     return 0;
 }
