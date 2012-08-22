@@ -3,21 +3,25 @@
 #include <stdarg.h>
 
 #include "openbest-ds/printOut.h"
+#include "openbest-ds/config-ds.h"
 
 int tprintf(const char* fmt, ...)
 {
-    time_t rawtime;
-    struct tm * timeinfo;
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
+    if ( printOut )
+    {
+        time_t rawtime;
+        struct tm * timeinfo;
+        time ( &rawtime );
+        timeinfo = localtime ( &rawtime );
 
-    va_list arg;
-    va_start(arg, fmt);
-    printf("%02d:%02d:%02d ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-    vprintf(fmt, arg);
-    va_end(arg);
+        va_list arg;
+        va_start(arg, fmt);
+        printf("%02d:%02d:%02d ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+        vprintf(fmt, arg);
+        va_end(arg);
 
-    fflush(stdout);
+        fflush(stdout);
+    }
 
     return 0;
 }
@@ -187,11 +191,6 @@ void printArray2R(char* name, real* a, int n1, int n2)
     }
 }
 
-
-
-
-
-
 void printArrayIFile(char* name, int* a, int n)
 {
     FILE* f= fopen(name, "w");
@@ -214,7 +213,7 @@ void printArray2IFile(char* name, int* a, int n1, int n2)
     for ( i= 0; i < n1; ++i )
     {
         for ( j= 0; j < n2; ++j )
-            fprintf("%d ", a[i*n2 + j]);
+            fprintf(f, "%d ", a[i*n2 + j]);
         fprintf(f, "\n");
     }
     fclose(f);

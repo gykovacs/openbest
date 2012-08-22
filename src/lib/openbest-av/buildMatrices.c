@@ -106,11 +106,11 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
 
     int i, j, k;
 
-    double* sp_weight_temp;
+    double* sp_weight_temp= NULL;
     int n_sp_weight_temp1;
     int n_sp_weight_temp2;
 
-    double* s;
+    double* s= NULL;
     int n_s1;
     int n_s2;
     int n_s;
@@ -119,7 +119,9 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
     {
         if ( j % temp_blocking_size == 0 )
         {
+            if ( sp_weight_temp) free(sp_weight_temp);
             int max= (j + temp_blocking_size) < n_new_spatial_table1 ? (j + temp_blocking_size) : n_new_spatial_table1;
+            if ( sp_weight_temp ) free(sp_weight_temp);
             sp_weight_temp= dnalloc(n_new_spatial_table2 * (max - j));
 
             int ii;
@@ -176,6 +178,7 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
         // Add entries corresponding to
         // (spatial correlation_table)*(data(t,x) - baseline(x) - mean_temp(t))
 
+        if ( s ) free(s);
         s= dnalloc(n_monthnum);
         n_s= n_monthnum;
 
@@ -201,7 +204,12 @@ void reallyBuildMatrices(temp_t** data_array, int* n_data_array, int n_n_data_ar
 
         for ( i= 0; i < n_monthnum; ++i )
             temperature_constant[(int)(monthnum[i])]+= s[i]*data[i];
+
+        free(outlier_weight);
     }
+
+    if ( s ) free(s);
+    if ( sp_weight_temp ) free(sp_weight_temp);
 
     *record_weightIO= record_weight;
     *base_weightsIO= base_weights;

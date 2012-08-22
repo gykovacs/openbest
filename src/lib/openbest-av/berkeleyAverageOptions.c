@@ -12,7 +12,7 @@ berkeleyAverageOptions* createBAON()
     p->localMode= true;
     //p->gridSize= 16000;
     p->gridSize= 2000;
-    p->gridApproximationDistance= 4000;
+    p->gridApproximationDistance= 2000;
     //p->useLandMask= true;
     p->useLandMask= false;
     p->minMonths= 2;
@@ -332,6 +332,7 @@ void berkeleyAverageOptionsConsistency(berkeleyAverageOptions* p)
 
 void displayBAO(berkeleyAverageOptions* b)
 {
+    int i;
     tprintf("BASIC MAPPING OPTIONS\n");
     tprintf("localMode: %d\n", b->localMode);
     tprintf("gridSize: %d\n", b->gridSize);
@@ -342,16 +343,21 @@ void displayBAO(berkeleyAverageOptions* b)
     tprintf("minStations: %d\n", b->minStations);
     tprintf("CORRELATION FUNCTION PARAMTERIZATION\n");
     tprintf("correlationParameters: %d - \n", b->n_correlationParameters);
-    int i;
-    for ( i= 0; i < b->n_correlationParameters; ++i )
-        printf("%g ", b->correlationParameters[i]);
-    printf("\n");
+    if ( printOut )
+    {
+        for ( i= 0; i < b->n_correlationParameters; ++i )
+            printf("%g ", b->correlationParameters[i]);
+        printf("\n");
+    }
     tprintf("correlationLimitDistance: %f\n", b->correlationLimitDistance);
     tprintf("BAD FLAGS:\n");
     tprintf("badFlags: %d - ", b->n_badFlags);
-    for ( i= 0; i < b->n_badFlags; ++i )
-        printf("%d ", b->badFlags[i]);
-    printf("\n");
+    if ( printOut )
+    {
+        for ( i= 0; i < b->n_badFlags; ++i )
+            printf("%d ", b->badFlags[i]);
+        printf("\n");
+    }
     tprintf("SITE WEIGHTING PARAMETERS\n");
     tprintf("useSiteWeighting: %d\n", b->useSiteWeighting);
     tprintf("siteWeightingGlobalCutoffMultiplier: %f\n", b->siteWeightingGlobalCutoffMultiplier);
@@ -389,13 +395,19 @@ void displayBAO(berkeleyAverageOptions* b)
     tprintf("useBroydenMethod: %d\n", b->useBroydenMethod);
     tprintf("useSeed: %d\n", b->useSeed);
     tprintf("seedMonthlyTimes: %d - ", b->seedMonthlyTimes);
-    for ( i= 0; i < b->n_seedMonthlyTimes; ++i )
-        printf("%f ", b->seedMonthlyTimes[i]);
-    printf("\n");
+    if ( printOut )
+    {
+        for ( i= 0; i < b->n_seedMonthlyTimes; ++i )
+            printf("%f ", b->seedMonthlyTimes[i]);
+        printf("\n");
+    }
     tprintf("seedMonthlyValues: %d - ", b->seedMonthlyValues);
-    for ( i= 0; i < b->n_seedMonthlyValues; ++i )
-        printf("%f ", b->seedMonthlyValues[i]);
-    printf("\n");
+    if ( printOut )
+    {
+        for ( i= 0; i < b->n_seedMonthlyValues; ++i )
+            printf("%f ", b->seedMonthlyValues[i]);
+        printf("\n");
+    }
     tprintf("SPATIAL MAP APPROXIMATION PARAMETERS\n");
     tprintf("spatialMapsEmptyCellCut: %f\n", b->spatialMapsEmptyCellCut);
     tprintf("spatialMapsTrivialMaxCut: %f\n", b->spatialMapsTrivialMaxCut);
@@ -408,9 +420,12 @@ void displayBAO(berkeleyAverageOptions* b)
     tprintf("BASELINE MAPPING OPTIONS\n");
     tprintf("fullBaselineMapping: %d\n", b->fullBaselineMapping);
     tprintf("fullBaselineTargetLats: %d - ", b->n_fullBaselineTargetLats);
-    for ( i= 0; i < b->n_fullBaselineTargetLats; ++i )
-        printf("%f ", b->fullBaselineTargetLats[i]);
-    printf("\n");
+    if ( printOut )
+    {
+        for ( i= 0; i < b->n_fullBaselineTargetLats; ++i )
+            printf("%f ", b->fullBaselineTargetLats[i]);
+        printf("\n");
+    }
     tprintf("fullBaselineAltitudeDegree: %d\n", b->fullBaselineAltitudeDegree);
     tprintf("UNCERTAINTY COMPUTATION OPTIONS\n");
     tprintf("computeUncertainty: %d\n", b->computeUncertainty);

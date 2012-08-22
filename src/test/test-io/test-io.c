@@ -18,6 +18,7 @@
 #include "openbest-io/loadOtherFlags.h"
 #include "openbest-io/loadData.h"
 #include "openbest-io/config-io.h"
+#include "openbest-ds/printOut.h"
 
 #include "openbest-ds/optionTable.h"
 

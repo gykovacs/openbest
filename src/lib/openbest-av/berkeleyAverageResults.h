@@ -11,6 +11,7 @@
 #include "openbest-ds/printOut.h"
 #include "openbest-av/berkeleyAverageOptions.h"
 
+/** structure to represent baselines*/
 typedef struct
 {
     int* break_positions;
@@ -25,6 +26,7 @@ typedef struct
     int n_site_weight;
 } baselineStruct;
 
+/** structure for the results of the BEST algorithm*/
 typedef struct
 {
     double network_completeness;
@@ -107,14 +109,34 @@ typedef struct
 
 } berkeleyAverageResults;
 
+/**
+  * destroys baselineStruct object
+  * @param bs baselineStruct object to destroy
+  */
 void destroyBS(baselineStruct* bs);
 
+/**
+  * creates baselineStruct object
+  * @returns pointer to new baselineStruct object
+  */
 baselineStruct* createBS();
 
+/**
+  * initializes the parameter baselineStruct object
+  * @param bs pointer to baselineStruct instance
+  */
 void initBS(baselineStruct* bs);
 
+/**
+  * destroys the berkeleyAverageResults instance
+  * @param bar berkeleyAverageResults to destroy
+  */
 void destroyBAR(berkeleyAverageResults* bar);
 
+/**
+  * creates a new berkeleyAverageResults instance
+  * @returns pointer to the new berkeleyAverageResults object
+  */
 berkeleyAverageResults* createBAR();
 
 #endif

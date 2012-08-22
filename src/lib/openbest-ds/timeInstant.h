@@ -197,8 +197,18 @@ timeInstant addIntervalN(timeInstant* t, real value, int type);
  */ 
 timeInstant* addIntervalP(timeInstant* t, real value, int type);
 
+/**
+  * returns the monthNum of the parameter year number
+  * @param year date of month with fractions: e.g. 1990 + 1/24 - 1990. jan
+  * @returns the number of the month
+  */
 real monthNum(real year);
 
+/**
+  * returns the year of the parameter month number
+  * @param monthNum month numger
+  * @returns the year number: e.g. 1990.jan - 1990 + 1/24
+  */
 real yearNum(real monthNum);
 
 #endif

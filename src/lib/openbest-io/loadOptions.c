@@ -34,7 +34,6 @@ void load_r_p(real** t, int* n)
     while ( !feof(f) )
     {
         fscanf(f, "%f", &rtmp);
-        printf("%g\n", rtmp);
         (*t)[(*n)++]= rtmp;
     }
 

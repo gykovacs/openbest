@@ -126,6 +126,7 @@ void destroyBAR(berkeleyAverageResults* bar)
         free(bar->record_weights);
     if ( bar->site_weights )
         free(bar->site_weights);
+
     if ( bar->times_monthly )
         free(bar->times_monthly);
     if ( bar->values_monthly )
@@ -146,6 +147,7 @@ void destroyBAR(berkeleyAverageResults* bar)
         free(bar->times_twenty_year);
     if ( bar->values_twenty_year)
         free(bar->values_twenty_year);
+
     if ( bar->baselines )
         free(bar->baselines);
     if ( bar->coverage_summary )

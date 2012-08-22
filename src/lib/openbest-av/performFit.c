@@ -14,12 +14,12 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
 {
     tprintf("Begin of Perform Fit\n");
 
-    printArray2DFile("base_map", base_map, n_base_map1, n_base_map2);
+    /*printArray2DFile("base_map", base_map, n_base_map1, n_base_map2);
     printArrayDFile("base_constants", base_constants, n_base_constants);
     printArray2DFile("temperature_map", temperature_map, n_temperature_map1, n_temperature_map2);
     printArrayDFile("temperature_constant", temperature_constant, n_temperature_constant);
     printArray2DFile("cross_map", cross_map, n_cross_map1, n_cross_map2);
-    printArrayRFile("all_station_mix", all_station_mix, n_all_station_mix);
+    printArrayRFile("all_station_mix", all_station_mix, n_all_station_mix);*/
 
     int pool_size= 1;
 
@@ -37,18 +37,14 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
             base_mix[i]+= all_station_mix[j]*base_map[j*n_base_map2 + i];
     }
 
-    dea();
-
     double base_mix_constant= 0;
     for ( i= 0; i < n_base_constants; ++i )
         base_mix_constant+= base_constants[i] * all_station_mix[i];
 
-    dea();
     double* cross_mapT= transposeMatrixND(cross_map, n_cross_map1, n_cross_map2);
     int n_cross_mapT1= n_cross_map2;
     int n_cross_mapT2= n_cross_map1;
 
-    dek();
     tprintf("cross_mapT: %d,%d; base_map: %d,%d\n", n_cross_mapT1, n_cross_mapT2, n_base_map1, n_base_map2);
     double* mix_map;
     int n_mix_map1;
@@ -58,7 +54,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
                            base_map, n_base_map1, n_base_map2,
                            &mix_map, &n_mix_map1, &n_mix_map2);
 
-    deb();
     double* tmpa;
     int n_tmpa1;
     int n_tmpa2;
@@ -66,9 +61,9 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
                      mix_map, n_mix_map1, n_mix_map2,
                      &tmpa, &n_tmpa1, &n_tmpa2);
 
-    printArray2DFile("tmpa", tmpa, n_tmpa1, n_tmpa2);
+    //printArray2DFile("tmpa", tmpa, n_tmpa1, n_tmpa2);
     tprintf("tmpa: %d %d; base_mix: %d\n", n_tmpa1, n_tmpa2, n_base_mix);
-    dec();
+
     double* temperature_map_mix;
     int n_temperature_map_mix1= n_tmpa1;
     int n_temperature_map_mix2= n_tmpa2;
@@ -84,7 +79,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
                                  base_constants, n_base_constants,
                                  &tmpa, &n_tmpa1);
 
-    //dee();
     double* temperature_constant_mix= dnalloc(n_tmpa1);
     int n_temperature_constant_mix= n_tmpa1;
 
@@ -93,7 +87,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
 
     int len_t= n_temperature_constant;
 
-    //def();
     // Eliminate any entries that are unconstrained
     // gykovacs implemented it using f to contain the complementer
     int* f= inalloc(n_temperature_map_mix1);
@@ -108,9 +101,8 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
             f[n_f++]= i;
     }
 
-    printArrayI("f", f, n_f);
+    //printArrayI("f", f, n_f);
 
-    deg();
     double* temperature_map_mix2= dnalloc(n_f*n_f);
 
     for ( i= 0; i < n_f; ++i )
@@ -125,7 +117,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
     n_temperature_map_mix1= n_f;
     n_temperature_map_mix2= n_f;
 
-    deh();
     for ( i= 0; i < n_f; ++i )
         temperature_constant_mix[i]= temperature_constant_mix[f[i]];
     n_temperature_constant_mix= n_f;
@@ -137,11 +128,9 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
         new_map[i]= new_map[f[i]];
     int n_new_map= n_f;
 
-    dei();
-
-    printArray2DFile("temperature_map_mix", temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
+/*    printArray2DFile("temperature_map_mix", temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
     printArrayDFile("temperature_constant_mix", temperature_constant_mix, n_temperature_constant_mix);
-    printArrayIFile("new_map", new_map, n_new_map);
+    printArrayIFile("new_map", new_map, n_new_map);*/
     double cond= conditionNumberEstimateD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2);
     tprintf("cond: %f\n", cond);
     while ( cond > 1e6 )
@@ -171,50 +160,18 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
         tprintf("cond: %f\n", cond);
     }
 
-    /*{
-        int remove= n_temperature_map_mix1 - 100;
-        double* temperature_map_mix3= dnalloc((n_temperature_map_mix1 - remove) * (n_temperature_map_mix2 - remove));
-        int n_temperature_map_mix31= n_temperature_map_mix1 - remove;
-        int n_temperature_map_mix32= n_temperature_map_mix2 - remove;
-
-        int ii, jj;
-        for ( i= remove; i < n_temperature_map_mix1; ++i )
-            for ( j= remove; j < n_temperature_map_mix2; ++j )
-            {
-                ii= i - remove;
-                jj= j - remove;
-
-                temperature_map_mix3[ii*n_temperature_map_mix32 + jj]= temperature_map_mix[i*n_temperature_map_mix2 + j];
-            }
-        free(temperature_map_mix);
-        temperature_map_mix= temperature_map_mix3;
-        n_temperature_map_mix1= n_temperature_map_mix31;
-        n_temperature_map_mix2= n_temperature_map_mix32;
-
-        for ( i= remove; i < n_new_map; ++i )
-            new_map[i - remove]= new_map[i];
-        n_new_map= n_new_map - remove;
-
-        for ( i= remove; i < n_temperature_constant_mix; ++i )
-            temperature_constant_mix[i - remove]= temperature_constant_mix[i];
-        n_temperature_constant_mix-= remove;
-    }*/
-
-
-
     // Use parallel processing if available
     if ( 0 && pool_size > 1 )
     {
         // TODO
     }
 
-    dej();
     // Solve for temperature series
     double* t_fit= dnalloc(n_temperature_map_mix1);
     int n_t_fit= n_temperature_map_mix1;
     solveLinEqHD(temperature_map_mix, n_temperature_map_mix1, n_temperature_map_mix2, temperature_constant_mix, 1, t_fit);
 
-    printArrayD("t_fit", t_fit, n_t_fit);
+    //printArrayD("t_fit", t_fit, n_t_fit);
 
     real* t_res= rnalloc(len_t);
     int n_t_res= len_t;
@@ -231,7 +188,6 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
             t_res[new_map[i]]= t_fit[i];
     }
 
-    dek();
     // Compute baseline values
     double* base_map2= dnalloc(n_base_map1 * n_new_map);
     for ( i= 0; i < n_base_map1; ++i )
@@ -245,25 +201,21 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
         t_res2[i]= t_res[new_map[i]];
     int n_t_res2= n_new_map;
 
-    dea();
     double* tmpb;
     int n_tmpb;
     matrixMultiplicationByVector(base_map2, n_base_map21, n_base_map22, t_res2, n_t_res2, &tmpb, &n_tmpb);
 
-    deb();
     real* b_res= rnalloc(n_base_constants);
     int n_b_res= n_base_constants;
 
     for ( i= 0; i < n_b_res; ++i )
         b_res[i]= base_constants[i] - tmpb[i];
 
-    dec();
     // Residual zeroing, due to round off error, etc.
     double asmbr= 0;
     for ( i= 0; i < n_b_res; ++i )
         asmbr+= all_station_mix[i]*b_res[i];
 
-    ded();
     for ( i= 0; i < n_t_res; ++i )
         t_res[i]+= asmbr;
     for ( i= 0; i < n_b_res; ++i )
@@ -273,6 +225,19 @@ void performFit(double* base_map, int n_base_map1, int n_base_map2,
     *b_resIO= b_res;
     *n_t_resIO= n_t_res;
     *n_b_resIO= n_b_res;
+
+    free(base_mix);
+    free(cross_mapT);
+    free(mix_map);
+    free(temperature_map_mix);
+    free(temperature_constant_mix);
+    free(new_map);
+    free(t_fit);
+    free(base_map2);
+    free(t_res2);
+    free(tmpb);
+    free(f);
+    free(tmpa);
 
     tprintf("End of Perform Fit\n");
 }

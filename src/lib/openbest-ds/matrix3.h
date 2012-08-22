@@ -95,10 +95,25 @@ void displayM(matrix3* m);
  */ 
 void displayV(vector3* v);
 
+/**
+  * initializes the matrix of rotation around the x-axis with angle a
+  * @param a angle of rotation
+  * @returns the rotation matrix
+  */
 matrix3 initRotX(real a);
 
+/**
+  * initializes the matrix of rotation around the y-axis with angle a
+  * @param a angle of rotation
+  * @returns the rotation matrix
+  */
 matrix3 initRotY(real a);
 
+/**
+  * initializes the matrix of rotation around the z-axis with angle a
+  * @param a angle of rotation
+  * @returns the rotation matrix
+  */
 matrix3 initRotZ(real a);
 
 #endif

@@ -38,17 +38,49 @@ primaryKeyTable* stationRecordTypesPKT;
  */
 primaryKeyTable* matchFlagsPKT;
 
+/**
+  * number of bad flags
+  */
 int n_badFlags;
+
+/**
+  * bad flag names
+  */
 char** badFlags;
+
+/**
+  * bad flag codes array
+  */
 int* iBadFlags;
 
+/**
+  * number of source file codes
+  */
 int n_sourceFileCodes;
+
+/**
+  * source file codes
+  */
 char** sourceFileCodes;
+
+/**
+  * monthly array
+  */
 int* monthly;
 
+/**
+  * number of source record types
+  */
+
 int n_sourceRecordTypes;
+/**
+  * source record types
+  */
 char** sourceRecordTypes;
 
+/**
+  * primary key table for frequency types
+  */
 primaryKeyTable* frequencyTypesPKT;
 
 #endif

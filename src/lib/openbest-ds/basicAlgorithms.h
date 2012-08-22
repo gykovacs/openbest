@@ -227,42 +227,175 @@ void minRA2(real* t, int n_t, real* m, int* fk, int* n_fk);
   */
 void setdiffIA(int* a, int n_a, int* b, int n_b, int* c, int* n_c);
 
+/**
+  * creates a new float array by projecting the rows and columns of the input array along the indexes in the sets i1 and i2
+  * @param a input array
+  * @param n1 rows of the input array
+  * @param n2 columns of the input array
+  * @param i1 index array for rows
+  * @param in1 size of index array for rows
+  * @param i2 index array for columns
+  * @param in2 size of index array for columns
+  * @param b pointer for new array
+  * @param bn1 pointer to the number of rows in the new array
+  * @param bn2 pointer to the number of columns of the new array
+  */
 void createSubArrayIndex2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2);
 
+/**
+  * creates a new float array by projecting the rows and columns of the input array using the logical values in i1 and i2
+  * @param a input array
+  * @param n1 rows of the input array
+  * @param n2 columns of the input array
+  * @param i1 logical array for rows
+  * @param in1 size of logical array for rows
+  * @param i2 logical array for columns
+  * @param in2 size of logical array for columns
+  * @param b pointer for new array
+  * @param bn1 pointer to the number of rows in the new array
+  * @param bn2 pointer to the number of columns of the new array
+  */
 void createSubArrayMask2Float(float* a, int n1, int n2, int* i1, int in1, int* i2, int in2, float** b, int* bn1, int* bn2);
 
+/**
+  * creates a new integer array from array a by selecting the elements indexed by the indices in idx
+  * @param a input array
+  * @param n size of the input array
+  * @param idx index array
+  * @param n_idx size of the index array
+  * @param b pointer to output array
+  * @param bn pointer to the number of elements in the output array
+  */
 void createSubArrayIndexI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
 
+/**
+  * creates a new integer array from array a by selecting the elements using the logical array idx
+  * @param a input array
+  * @param n size of the input array
+  * @param idx logical array
+  * @param n_idx size of the idx array
+  * @param b pointer to output array
+  * @param bn pointer to the number of elements in the output array
+  */
 void createSubArrayMaskI(int* a, int n, int* idx, int n_idx, int** b, int* bn);
 
+/**
+  * row-columns matrix multiplication for float
+  * @param a left side matrix
+  * @param na1 number of rows of a
+  * @param na2 number of columns of a
+  * @param b right side matrix
+  * @param nb1 number of rows of b
+  * @param nb2 number of columns of b
+  * @param c pointer to output array (matrix)
+  * @param nc1 pointer to rows of c
+  * @param nc2 pointer to columns of c
+  */
 void matrixMultiplicationNF(float* a, int na1, int na2,
                             float* b, int nb1, int nb2,
                             float** c, int* nc1, int* nc2);
 
+/**
+  * row-columns matrix multiplication for double
+  * @param a left side matrix
+  * @param na1 number of rows of a
+  * @param na2 number of columns of a
+  * @param b right side matrix
+  * @param nb1 number of rows of b
+  * @param nb2 number of columns of b
+  * @param c pointer to output array (matrix)
+  * @param nc1 pointer to rows of c
+  * @param nc2 pointer to columns of c
+  */
 void matrixMultiplicationND(double* a, int na1, int na2,
                             double* b, int nb1, int nb2,
                             double** c, int* nc1, int* nc2);
 
+/**
+  * transposes a double matrix and returns the pointer of the new matrix
+  * @param a input matrix
+  * @param n1 number of rows of a
+  * @param n2 number of columns of a
+  * @returns pointer to the transposed matrix
+  */
 double* transposeMatrixND(double* a, int n1, int n2);
 
+/**
+  * subtracts the double matrix a from b and returns the result in c
+  * @param a left side matrix
+  * @param na1 number of rows of a
+  * @param na2 number of columns of a
+  * @param b right side matrix
+  * @param nb1 number of rows of b
+  * @param nb2 number of columns of b
+  * @param c pointer to output array (matrix)
+  * @param nc1 pointer to rows of c
+  * @param nc2 pointer to columns of c
+  */
 void matrixSubtractND(double* a, int na1, int na2,
                       double* b, int nb1, int nb2,
                       double** c, int* nc1, int* nc2);
 
+/**
+  * subtracts the vector b from each row of the matrix a, the result is returned in c
+  * @param a left side matrix
+  * @param na1 number of rows of a
+  * @param na2 number of columns of a
+  * @param b right side matrix
+  * @param nb1 number of rows of b
+  * @param nb2 number of columns of b
+  * @param c pointer to output array (matrix)
+  * @param nc1 pointer to rows of c
+  * @param nc2 pointer to columns of c
+  */
 void matrixSubtractVectorND(double* a, int na1, int na2,
                             double* b, int nb1, int nb2,
                             double** c, int* nc1, int* nc2);
 
+/**
+  * matrix multiplication by vector from the right side
+  * @param a left side matrix
+  * @param na1 number of rows of a
+  * @param na2 number of columns of a
+  * @param b right side vector
+  * @param nb number of elements in b
+  * @param c pointer to output array (vector)
+  * @param nc pointer to the number of elements of c
+  */
 void matrixMultiplicationByVector(double* a, int na1, int na2,
                                   double* b, int nb,
                                   double** c, int* nc);
 
+/**
+  * matrix multiplication by vector from the left side
+  * @param a left side vector
+  * @param na number of elements of a
+  * @param b right side matrix
+  * @param nb1 number of rows in b
+  * @param nb2 number of columns in b
+  * @param c pointer to output array (vector)
+  * @param nc pointer to the number of elements of c
+  */
 void vectorMultiplicationByMatrix(double* a, int na,
                                   double* b, int nb1, int nb2,
                                   double**c, int* nc);
 
+/**
+  * transposes a float matrix to a new, double matrix
+  * @param a input matrix
+  * @param n1 number of rows of a
+  * @param n2 number of columns of a
+  * @returns pointer to the transposed matrix
+  */
 double* transposeMatrixNFloatD(float* a, int n1, int n2);
 
+/**
+  * transposes a float matrix to a new, float matrix
+  * @param a input matrix
+  * @param n1 number of rows of a
+  * @param n2 number of columns of a
+  * @return pointer to the transposed matrix
+  */
 float* transposeMatrixNFloat(float* a, int n1, int n2);
 
 #endif

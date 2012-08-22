@@ -102,13 +102,6 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
     int** index_list= (int**)malloc(sizeof(int*)*len_D);
     int* n_index_list= (int*)malloc(sizeof(int)*len_D);
 
-    /*for ( i= 0; i < len_D; ++i )
-    {
-        index_list[i]= (int*)malloc(sizeof(int)*1000);
-        index_list[i][0]= i;
-        n_index_list[i]= 1;
-    }*/
-
     // Repeatedly loop of location list removing closely associated groups
     // until all locations are separated by at least the min separation distance.
 
@@ -181,6 +174,8 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
                     multiple[i]= 0;
 
             maxIA2(multiple, len_D, &next, fk, &n_fk);
+
+            free(target);
             continue;
         }
         else if ( sum == 2 && n_f > 1 )
@@ -223,7 +218,11 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
 
     for ( i= 0; i < len_D; ++i )
         if ( kill[i] )
+        {
+            if ( targets[i] )
+                free(targets[i]);
             targets[i]= NULL;
+        }
 
     j= 0;
     for ( i= 0; i < len_D; ++i )
@@ -306,6 +305,8 @@ void collapseLocations(geoPoint2** locations, int n_locations, double max_move, 
                 break;
         if ( k == n_bad2 )
             targets[j++]= targets[i];
+        else
+            free(targets[i]);
     }
 
     n_targets= j;

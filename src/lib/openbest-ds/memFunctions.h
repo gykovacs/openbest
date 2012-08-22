@@ -52,6 +52,11 @@ temp_t* tnalloc(int n);
   */
 bool* bnalloc(int n);
 
+/**
+  * allocates memory for n double variable
+  * @param n number of double variables to allocate space for
+  * @returns pointer to the allocated area
+  */
 double* dnalloc(int n);
 
 /**
@@ -158,6 +163,12 @@ char* copyCA(char* input, int n);
   */
 temp_t* copyTA(temp_t* input, int n);
 
+/**
+  * returns a newly allocated area with the copied contents of the parameter array
+  * @param input input array to copy
+  * @param n length of the input array
+  * @returns pointer to the newly allocated and copied array
+  */
 double* copyDA(double* input, int n);
 
 

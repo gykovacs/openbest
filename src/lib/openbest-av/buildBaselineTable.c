@@ -195,5 +195,13 @@ void buildBaselineTable(float* correlation_table, int n_correlation_table,
         // TODO
     }
 
+    free(num_months);
+    free(target_map_T);
+    free(correlation_table_T);
+    free(base_mapT);
+    free(cnts);
+    free(target2);
+    free(tmpM);
+
     tprintf("End of Build Baseline Table\n");
 }

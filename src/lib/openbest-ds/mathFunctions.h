@@ -258,8 +258,20 @@ real stdR(real* a, int n);
   */
 temp_t stdT(temp_t* a, int n);
 
+/**
+  * returns the sign of the parameter x
+  * @param x input number
+  * @returns sign (+1/-1) of x
+  */
 real sign(real x);
 
+/**
+  * computes the value of a polynomial at x with coefficients p
+  * @param array of polynomial coefficients
+  * @param n_p length of p
+  * @param x value to evaluate at
+  * @returns value of the polynomial at x
+  */
 real polyval(real* p, int n_p, real x);
 
 //int round(real x );

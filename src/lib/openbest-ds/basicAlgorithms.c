@@ -356,6 +356,7 @@ void uniqueIAN2(int* input, int n, int** collapsed, int* n_collapsed, int** expa
             if ( input[i] == input[(*collapsed)[j]] )
                 (*expand_map)[i]= j;
     *n_expand_map= n;
+    free(t);
 }
 
 void maxIA2(int* t, int n_t, int* m, int* fk, int* n_fk)

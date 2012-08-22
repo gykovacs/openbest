@@ -178,7 +178,7 @@ void setPostfix(optionTable* ot, char* postfix)
 
 void addUsage(optionTable* ot, char* usages)
 {
-    strcat(ot->usages, "\t\t");
+    strcat(ot->usages, "");
     strcat(ot->usages, usages);
 }
 

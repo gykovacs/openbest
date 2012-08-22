@@ -7,7 +7,6 @@
 /**
   * loads the match flags from matchFlags2.txt to matchFlagsPKT
   */
-
 void loadMatchFlagsPKT();
 
 #endif

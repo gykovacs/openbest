@@ -85,6 +85,11 @@ stationElement2* createSE2N();
   */
 stationElement2* createSE2Test();
 
+/**
+  * creates a stationElement2 instance capable to contain m data elements
+  * @param m number of elements in the stationElement2 object
+  * @returns pointer to the new instance
+  */
 stationElement2* createSE2NM(int m);
 
 /**
@@ -218,7 +223,5 @@ void removeBadFlaggedDataV(stationElement2p* se, int n, int* bf, int n_bf);
   * @param n_bf length of array bf
   */
 void removeBadFlaggedData(stationElement2p se, int* bf, int n_bf);
-
-void displayTempDataSE2(stationElement2p* se, int n);
 
 #endif

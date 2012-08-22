@@ -82,11 +82,11 @@ void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
 
     int i, j, k;
 
-    double* sp_weight_temp;
+    double* sp_weight_temp= NULL;
     int n_sp_weight_temp1;
     int n_sp_weight_temp2;
 
-    double* s;
+    double* s= NULL;
     int n_s1;
     int n_s2;
     int n_s;
@@ -96,6 +96,7 @@ void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
         if ( j % temp_blocking_size == 0 )
         {
             int max= (j + temp_blocking_size) < n_new_spatial_table1 ? (j + temp_blocking_size) : n_new_spatial_table1;
+            if ( sp_weight_temp ) free(sp_weight_temp);
             sp_weight_temp= dnalloc(n_new_spatial_table2 * (max - j));
 
             int ii;
@@ -154,6 +155,7 @@ void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
         // Add entries corresponding to
         // (spatial correlation_table)*(data(t,x) - baseline(x) - mean_temp(t))
 
+        if ( s ) free(s);
         s= dnalloc(n_monthnum);
         n_s= n_monthnum;
         int idx= j%temp_blocking_size;
@@ -183,6 +185,12 @@ void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
         base_adjustment_scale[j*2 + 1]= sum;
 
         data_points= data_points + n_data;
+
+        free(monthnum);
+        free(data);
+        free(fs);
+        free(local_table);
+        free(d);
     }
 
     *ssdIO= ssd;
@@ -190,4 +198,8 @@ void reallyScoreFit(temp_t** data_array, int* n_data_array, int n_n_data_array,
     *n_base_adjustment_scale1IO= n_base_adjustment_scale1;
     *n_base_adjustment_scale2IO= n_base_adjustment_scale2;
     *data_pointsIO= data_points;
+
+    free(bs);
+    if ( sp_weight_temp ) free(sp_weight_temp);
+    if ( s ) free(s);
 }

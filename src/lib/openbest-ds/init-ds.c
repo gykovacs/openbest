@@ -5,6 +5,8 @@
 
 void initDS()
 {
+  printOut= true;
+
   unknown_value= (char*)malloc(sizeof(char)*(strlen(UNKNOWN_FLAG_STRING)+1));
   strcpy(unknown_value, UNKNOWN_FLAG_STRING);
   compression_area= (char*)malloc(sizeof(char)*COMPRESSION_AREA);

@@ -198,11 +198,9 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
     // Reconstruct the baselines and shift statistics
     int* un= copyIA(back_map, n_back_map);
     int n_un= n_back_map;
-    tprintf("n_back_map: %d\n", n_back_map);
     uniqueIA(&un, &n_un);
 
     int max_un= maxI(un, n_un);
-    tprintf("max_un: %d\n", max_un);
     baselineStruct* baselines= (baselineStruct*)malloc(sizeof(baselineStruct)*(max_un+1));
     int n_baselines= max_un+1;
 
@@ -247,23 +245,16 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         baselines[un[k]].n_break_positions= baselines[un[k]].n_break_flags=
                 baselines[un[k]].n_baseline= baselines[un[k]].n_record_weight=
                 baselines[un[k]].n_site_weight= n_f;
-        printf("%d ", n_f);
-        printArrayI("f", f, n_f);
+
         for ( i= 0; i < n_f; ++i )
         {
-            printf("%d ", start_pos[f[i]]); fflush(stdout);
             baselines[un[k]].break_positions[i]= start_pos[f[i]];
-            printf("%d ", break_flags[f[i]]); fflush(stdout);
             baselines[un[k]].break_flags[i]= break_flags[f[i]];
-            printf("%f ", results->baselines[f[i]]); fflush(stdout);
             baselines[un[k]].baseline[i]= results->baselines[f[i]];
-            printf("%f ", results->record_weights[f[i]]); fflush(stdout);
             baselines[un[k]].record_weight[i]= results->record_weights[f[i]];
-            printf("%f ", results->site_weights[f[i]]); fflush(stdout);
             baselines[un[k]].site_weight[i]= results->site_weights[f[i]];
         }
 
-        dea();
         real sum= 0;
         for ( j= 0; j < baselines[un[k]].n_record_weight; ++j )
             if ( baselines[un[k]].record_weight[j] != -FLT_MAX )
@@ -275,7 +266,6 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         int* f2= inalloc(baselines[un[k]].n_break_flags);
         int n_f2= 0;
 
-        deb();
         for ( m= 0; m < 4; ++m )
         {
             for ( i= 0; i < baselines[un[k]].n_break_flags; ++i )
@@ -315,7 +305,6 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
                 }
             }
 
-            dec();
             // Store some summary data on the effect of scalpel
             switch (m)
             {
@@ -336,6 +325,9 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
                         emp_shifts[f[f2[i]]]= b_end[i] - b_start[i];
                     break;
             }
+            free(b_end);
+            free(b_start);
+            free(fx);
         }
         free(f2);
     }
@@ -350,6 +342,7 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
     // Update results structure with structured baseline results
     results->baselinesS= baselines;
     results->n_baselinesS= n_baselines;
+    free(results->record_weights);
     results->record_weights= new_record_weights;
     results->n_record_weights= n_new_record_weights;
     free(results->site_weights);
@@ -430,7 +423,12 @@ berkeleyAverageResults* berkeleyAverage(stationElement2p** seIO, int* n_stationE
         }
     }
 
-    dee();
+    free(emp_shifts);
+    free(move_shifts);
+    free(tob_shifts);
+    free(gap_shifts);
+    free(un);
+    free(f);
 
     // If requested, perform uncertainty calculation.
     if ( options->computeUncertainty )

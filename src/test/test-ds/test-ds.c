@@ -14,6 +14,7 @@
 #include "openbest-io/loadStationSourceTypes.h"
 #include "openbest-ds/lzfx/lzfx.h"
 #include "openbest-ds/stationElement2.h"
+#include "openbest-ds/memFunctions.h"
 
 #include "openbest-ds/optionTable.h"
 

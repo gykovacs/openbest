@@ -107,5 +107,13 @@ void buildTargetTable(geoPoint2** locations, int n_locations, geoPoint2** map, i
     *n_target_map2= lenR;
     *n_nearest= lenR;
 
+    free(targ_x);
+    free(targ_y);
+    free(targ_z);
+    free(X);
+    free(Y);
+    free(Z);
+    free(R);
+
     tprintf("End of Build Target Map\n");
 }

@@ -66,5 +66,10 @@ void buildCovarianceTable(geoPoint2** locations, int n_locations, berkeleyAverag
 
     *nugget= 1.0 - exp(polyval(p, n_p, 0));
 
+    free(targ_x);
+    free(targ_y);
+    free(targ_z);
+    free(R);
+
     tprintf("End of Build Covariance Table\n");
 }

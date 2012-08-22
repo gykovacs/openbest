@@ -1,0 +1,52 @@
+openbest
+========
+
+This library is a reimplementation of the Berkeley Earth Surface Temperature Software.
+If you have any problems by building the code, running the application, or any questions arose, do not hesitate to contact Gyorgy Kovacs at gyuriofkovacs@gmail.com.
+
+To make things work:
+
+0) REQUIREMENTS and dependencies
+
+    a) The library uses the GNU GSL library for numerical methods. Make sure GNU GSL is installed and available.
+    b) Ths openbest library also uses LAPACK and LAPACKE for some numerical methods. Make sure LAPACK and LAPACKE are installed and available.
+    c) To build the library, CMAKE is required.
+    d) To generate the documentation, doxygen is recommended.
+
+1) DOWNLOAD datasets
+
+    a) Currently the Matlab-exported dataset is working properly, you need to download the files from
+	http://www.inf.unideb.hu/~gykovacs/openbest-dataset.tar.gz
+    b) Data files containing 200 records are provided in the 'dat' directory.
+
+2) BUILD the code
+
+    The build script is cmake-based, thus, in order to build the code, the following commands are to be run:
+
+    cmake .
+    make
+
+    When installing is required, additionally call
+
+    make install
+
+3) SAMPLE the dataset
+
+    The original BEST dataset is extremely large. Current version of the code can not handle this large amount of data on simple desktop computers. In order to sample the dataset, use the 'sampleDataset' application. For the options of the sampleDataset application, see its --help. E.g.:
+
+    sampleDataset se.dat sites.dat se500.dat sites500.dat --sample --matlabdata --n 500 --rand --verbose
+
+4) RUN the berkeleyAverage algorithm
+
+    The output of the algorithm is quiet complex. For the details see the site of the authors of the BEST-software: http://berkeleyearth.org.
+    The algorithm is implemented in the 'berkeleyAverage' application. By specifying the --files option, the results are saved to files having the same names, used in the original BEST-software. The input of the 'berkeleyAverage' application are the sampled stationElement and siteElement data files (se*.dat, ss*.dat). E.g.:
+
+    berkeleyAverage --berkeleyav --quick --summary --files --matlabdata --verbose se500.dat sites500.dat --gridsize 16000
+
+5) PLOT the results
+
+    The easiest way to plot the results is to use gnuplot and the gnuplot scripts given in the plot directory. 
+
+    The names and path of the result files are wired the gnuplot scripts, thus, the proper result files are to be moved or linked into the plot directory, or the gnuplot scripts need to be edited appropriately to work. When the file given in the script is available at the right position, call e.g.:
+    
+    gnuplot monthly.p

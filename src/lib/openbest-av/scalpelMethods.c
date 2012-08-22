@@ -458,7 +458,7 @@ void empiricalCuts(stationElement2p** seIO, int* n_stationElement2IO, stationSit
     tprintf("Scalpel Method Empirical Cuts\n");
     tprintf("Called with %d stations\n", *n_stationSite2IO);
 
-    stationElement2p* se= *seIO;
+    /*stationElement2p* se= *seIO;
     stationSite2p* ss= *ssIO;
 
     int cnt= 0;
@@ -563,10 +563,10 @@ void empiricalCuts(stationElement2p** seIO, int* n_stationElement2IO, stationSit
         int max_block= n < (block + step_size - 1) ? n : (block + step_size - 1);
 
 
-    }
+    }*/
 
     //TODO continue on demand
 
-    tprintf("%d stations in result\n", cnt);
+    //tprintf("%d stations in result\n", cnt);
     tprintf("End of Scalpel Method Empirical Cuts\n");
 }
