@@ -10,8 +10,9 @@ To make things work:
 
     a) The library uses the GNU GSL library for numerical methods. Make sure GNU GSL is installed and available.
     b) Ths openbest library also uses LAPACK and LAPACKE for some numerical methods. Make sure LAPACK and LAPACKE are installed and available.
-    c) To build the library, CMAKE is required.
-    d) To generate the documentation, doxygen is recommended.
+    c) The LAPACK interface also requires the Atlas library to be installed.
+    d) To build the library, CMAKE is required.
+    e) To generate the documentation, doxygen is recommended.
 
 1) DOWNLOAD datasets
 
