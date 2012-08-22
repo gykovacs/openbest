@@ -267,13 +267,6 @@ int berkeleyAverageFunction(int argc, char** argv)
 
     berkeleyAverageResults* results;
 
-    bao->useScalpel=true;
-    bao->scalpelGaps= false;
-    bao->scalpelDeclaredMoves= false;
-    bao->scalpelSuspectedMoves= false;
-    bao->scalpelTOBChanges=false;
-    bao->scalpelMetadata= false;
-
     results= berkeleyAverage(&se, &n_stationElement2, &ss, &n_stationSite2, bao);
 
     processResults(results);
