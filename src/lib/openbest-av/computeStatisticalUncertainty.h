@@ -7,6 +7,6 @@
 
 // Compute statistical uncertainty by either the samping or bootstrapping
 // technique
-
+void computeStatisticalUncertaitny();
 
 #endif
